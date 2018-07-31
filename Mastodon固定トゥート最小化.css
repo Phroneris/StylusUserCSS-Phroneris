@@ -1,0 +1,45 @@
+/*	カラム表示時のユーザーページの固定トゥートを最小化 v1.0.0
+	・消しはしないので「固定トゥートがある」ということはわかる
+	・日時だけ残すので頻繁に目にする場合は更新があれば気付ける
+	・マウスオーバーでフル表示に切り替える
+	（ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、CSS3では先読みを要する親要素や兄要素への作用はできない）
+	・カラム内ユーザーページでだけ有効、カラム内単トゥートページや個別ユーザーページなどには効かない（命名則が違うので）
+	・なんか画像トゥートだとマウスオーバー時にサムネの比率が変になる？ まあクリックで開くのには支障ないし良いか
+*/
+/* 固定トゥート全体 */
+div[data-featured="true"]:not(:hover)
+{
+	border-bottom: 1px solid #393f4f; /* 全体の下線をこちらに回す */
+	height: 34px; /* これがないとなんかラベルの高さが増える */
+}
+/* 「固定されたトゥート」ラベル全体 */
+div[data-featured="true"]:not(:hover) div.status__prepend
+{
+	display: inline-block;
+	padding-bottom: 8px;
+}
+/* 「固定されたトゥート」というラベル文 */
+div[data-featured="true"]:not(:hover) div.status__prepend span
+{
+	display: none;	/* 消さないと日付が長い場合にかぶる */
+}
+/* ラベル以外のトゥート全体（情報、本文、メディア、アクション） */
+div[data-featured="true"]:not(:hover) div.status
+{
+	display: inline-block;
+	position: absolute;
+	right: 10px;
+	padding-right: 0;
+	border: 0; /* 全体の下線をなくす */
+	min-height: 0px; /* 表示に影響はないが、不要な広さが確保されて要素検証時に目障りなので削る */
+}
+/* 情報（時間、名前、アイコン）のうち時間以外 */
+div[data-featured="true"]:not(:hover) div.status div.status__info a:nth-child(n+2)
+{
+	display: none;
+}
+/* 情報以外（本文、メディア、アクション） */
+div[data-featured="true"]:not(:hover) div.status div:nth-of-type(n+2)
+{
+	display: none;
+}
