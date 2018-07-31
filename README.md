@@ -12,11 +12,11 @@ Chrome/Firefox/Opera拡張機能「[Stylus](https://chrome.google.com/webstore/d
 ※ コード冒頭に`==UserStyle==`を含まないもの。拡張子はたぶん`*.css`。
 + 上記方法以外に、コードをGitHub上でコピー→Stylus管理ページで「新スタイルを作成」→ペースト→適当な名前をつけて「保存」でも追加可能。  
   
-### Usercssファイル
+### UserCSSファイル
 ※ コード冒頭に`==UserStyle==`を含むもの。拡張子はたぶん`*.styl`とか。
-+ 上記方法以外に、コードをGitHub上でコピー→Stylus管理ページで「Usercssとして」にチェックを入れて「新スタイルを作成」→出てきたテンプレートを全て消してペースト→「保存」でも追加可能。  
++ 上記方法以外に、コードをGitHub上でコピー→Stylus管理ページで「UserCSSとして」にチェックを入れて「新スタイルを作成」→出てきたテンプレートを全て消してペースト→「保存」でも追加可能。  
   初回はめちゃめちゃエラーが出るが、「保存」すると全ておさまる。
-+ Usercssは、管理ページ等においてスタイル名の横の歯車マークからオプションを指定可能。
++ [UserCSS](https://github.com/openstyles/stylus/wiki/UserCSS)は、管理ページ等においてスタイル名の横の歯車マークからオプションを指定可能。
 
 ## ライセンス
 個別に断りがない限り、[CC0-1.0](http://creativecommons.org/publicdomain/zero/1.0/deed.ja)。
