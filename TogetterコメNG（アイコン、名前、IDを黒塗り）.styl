@@ -1,0 +1,48 @@
+/* ==UserStyle==
+@name			TogetterコメNG（アイコン、名前、IDを黒塗り）
+@description	Togetterコメント欄の特定ユーザーのアイコンと名前とIDを黒塗りする（コメントも消したいけど、CSS3では先読みを要する親要素や兄要素への作用はできない）
+@namespace		https://github.com/Phroneris
+@version		1.0.0
+@author			森の子リスのミーコの大冒険（Phroneris）
+@homepageURL	https://github.com/Phroneris/Stylus
+@supportURL		https://github.com/Phroneris/Stylus/issues
+@license		CC0-1.0
+@preprocessor	stylus
+@var			text users "ID（カンマ区切り）" TwitterJP, Twitter
+@var			checkbox iconNG "黒塗り：アイコン" 1
+@var			checkbox nameNG "黒塗り：名前" 1
+@var			checkbox idNG "黒塗り：ID" 1
+@var			checkbox disableOnHover "マウスオーバーで解除" 1
+==/UserStyle== */
+
+@-moz-document domain("togetter.com")
+	f()
+		for userid in users
+			// ^(\d+[A-Za-z]*)(_\w*)$ みたいなIDが\1と\2に分割された配列になってしまうのを防ぐ。
+			// これのためにusersは半角スペース区切りではなくカンマ区切りにしないといけない。
+			userid = join('', userid)
+			// あとは普通に処理。このuseridの展開にUnknown wordのエラーが出るのが気になるけど…。
+			> a[href$=\'\/{userid}\']
+				if iconNG == 1
+					img
+						filter brightness(0)
+						border-radius 0
+				if nameNG == 1
+					strong
+						background-color black
+						color black
+				if idNG == 1
+					+ a
+						background-color black
+						color black
+						display inline-block
+						margin-left 3px
+	div.list_box
+		> .list_tweet_box
+			> span.user_link
+				p(users)
+				if disableOnHover == 1
+					&:not(:hover)
+						f()
+				else
+						f()
