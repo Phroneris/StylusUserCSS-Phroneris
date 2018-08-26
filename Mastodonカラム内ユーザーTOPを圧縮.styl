@@ -1,0 +1,55 @@
+/* ==UserStyle==
+@name			Mastodonカラム内ユーザーTOPを圧縮
+@description	カラム表示時のユーザーページの上部を色々と圧縮表示
+@namespace		https://github.com/Phroneris
+@version		1.0.1
+@author			森の子リスのミーコの大冒険（Phroneris）
+@homepageURL	https://github.com/Phroneris/Stylus
+@supportURL		https://github.com/Phroneris/Stylus/issues
+@license		CC0-1.0
+@preprocessor	stylus
+
+@var			checkbox smallenPinned "固定トゥートを圧縮表示" 1
+@var			select openStylePinned "┗ 圧縮解除方法" {
+	"クリックや選択": "focus",
+	"マウスオーバー": "hover"
+}
+==/UserStyle== */
+
+@-moz-document domain("gensokyo.town"), domain("otoya.space")
+	if smallenPinned
+		/*	カラム表示時のユーザーページの固定トゥートを最小化
+			・消しはしないので「固定トゥートがある」ということはわかる
+			・日時だけ残すので頻繁に目にする場合は更新があれば気付ける
+			・マウスオーバーでフル表示に切り替える
+			（ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、CSS3では先読みを要する親要素や兄要素への作用はできない）
+			・カラム内ユーザーページでだけ有効、カラム内単トゥートページや個別ユーザーページなどには効かない（命名則が違うので）
+			・なんか画像トゥートだとマウスオーバー時にサムネの比率が変になる？ まあクリックで開くのには支障ないし良いか
+		*/
+		/* 固定トゥート全体 */
+		div[data-featured="true"]:not(:{openStylePinned})
+			border-bottom: 1px solid #393f4f	// 全体の下線をこちらに回す。
+			// height: 34px						// これがないとなんかラベルの高さが増える。	// と思っていたが、下記のafterによってそうならなくなった。
+			/* 「固定されたトゥート」ラベル全体 */
+			div.status__prepend
+				display: inline-block
+				padding-bottom: 8px
+				span
+					display: none				// 「固定されたトゥート」というラベル文。消さないとカラム幅次第では日付が長い場合にかぶる。
+				&::after
+					content: "固定トゥート"		// かぶらない短さ。ほんとはユーザー変数で指定したいけど、日本語文字列を受け付けてくれない…。
+			/* ラベル以外のトゥート全体（情報、本文、メディア、アクション） */
+			div.status
+				display: inline-block
+				position: absolute
+				right: 10px
+				padding-right: 0
+				border: 0						// 全体の下線をなくす。
+				min-height: 0px					// 表示に影響はないが、不要な広さが確保されて要素検証時に目障りなので削る。
+				/* 情報（時間、名前、アイコン）のうち時間以外 */
+				div.status__info a:nth-child(n+2)
+					display: none
+				/* 情報以外（本文、メディア、アクション） */
+				div:nth-of-type(n+2)
+					display: none
+
