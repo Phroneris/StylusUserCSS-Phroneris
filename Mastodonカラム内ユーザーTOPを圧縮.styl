@@ -2,7 +2,7 @@
 @name			Mastodonカラム内ユーザーTOPを圧縮
 @description	カラム表示時のユーザーページの上部を色々と圧縮表示
 @namespace		https://github.com/Phroneris
-@version		1.1.0
+@version		1.1.1
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/Stylus
 @supportURL		https://github.com/Phroneris/Stylus/issues
@@ -24,14 +24,14 @@
 	
 	div.account__header > div
 		/*	プロフィールを圧縮表示
-			・アイコン‐名前‐ID‐文（‐補足欄）の間隔や各行間を詰める。
+			・アイコン‐名前‐ID（‐Botバッジ）‐文（‐補足欄）の間隔や各行間を詰める。
 			・文の空行を詰める。
 		*/
 		if smallenProfile
 			/* プロフィール全体 */
-			userVPad = 20px - 9px
-			userBPad = userVPad - 1px
-			padding-top: userVPad + 2px
+			userTPad = 20px - 5px
+			userBPad = userTPad - 3px
+			padding-top: userTPad
 			padding-bottom: userBPad
 			/* 補足欄（調整） */
 			.account__header__fields
@@ -39,7 +39,7 @@
 				margin-bottom: - userBPad
 			/* アイコン */
 			a.account__header__avatar
-				margin-bottom: 10px - 5px
+				margin-bottom: 10px - 4px
 			/* 名前 */
 			span.account__header__display-name
 				line-height: 27px - 7px
@@ -48,7 +48,12 @@
 			/* ID */
 			span.account__header__username
 				line-height: 18px - 4px
-				margin-bottom: 10px - 1px
+				margin-bottom: 0	// デフォルト10px。下の変数で代用
+			existingBioTop = 10px - 5px
+			/* Botバッジ */
+			div.roles
+				margin-top: existingBioTop
+				margin-bottom: 0
 			/* 文 */
 			div.account__header__content
 				p
@@ -56,9 +61,11 @@
 					forceWrap = 1	// 「見境なく改行」オプションを設けようかと思ったけどいいや、勝手にやる。
 					if forceWrap
 						word-break: break-all
+				> p:first-child:not(:empty)
+					margin-top: existingBioTop
 				/* 文の空行 */
 				> p:nth-last-child(n+2)
-					margin-bottom: 20px - 12px
+					margin-bottom: 20px - 15px
 		if smallenHosoku
 			/* 補足欄を圧縮表示（ほんとは固定トゥートみたいにクリックで畳みたいが、CSS3だけではできなさそう） */
 			div.account__header__fields
