@@ -29,9 +29,9 @@
 		*/
 		if smallenProfile
 			/* プロフィール全体 */
-			userVPad = 20px - 9px
-			userBPad = userVPad - 1px
-			padding-top: userVPad + 2px
+			userTPad = 20px - 5px
+			userBPad = userTPad - 3px
+			padding-top: userTPad
 			padding-bottom: userBPad
 			/* 補足欄（調整） */
 			.account__header__fields
@@ -39,7 +39,7 @@
 				margin-bottom: - userBPad
 			/* アイコン */
 			a.account__header__avatar
-				margin-bottom: 10px - 5px
+				margin-bottom: 10px - 4px
 			/* 名前 */
 			span.account__header__display-name
 				line-height: 27px - 7px
@@ -58,7 +58,7 @@
 						word-break: break-all
 				/* 文の空行 */
 				> p:nth-last-child(n+2)
-					margin-bottom: 20px - 12px
+					margin-bottom: 20px - 15px
 		if smallenHosoku
 			/* 補足欄を圧縮表示（ほんとは固定トゥートみたいにクリックで畳みたいが、CSS3だけではできなさそう） */
 			div.account__header__fields
