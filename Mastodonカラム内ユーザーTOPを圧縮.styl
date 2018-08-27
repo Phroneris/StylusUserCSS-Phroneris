@@ -2,30 +2,111 @@
 @name			Mastodonカラム内ユーザーTOPを圧縮
 @description	カラム表示時のユーザーページの上部を色々と圧縮表示
 @namespace		https://github.com/Phroneris
-@version		1.0.1
+@version		1.1.0
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/Stylus
 @supportURL		https://github.com/Phroneris/Stylus/issues
 @license		CC0-1.0
 @preprocessor	stylus
 
-@var			checkbox smallenPinned "固定トゥートを圧縮表示" 1
-@var			select openStylePinned "┗ 圧縮解除方法" {
+@var			checkbox smallenProfile "圧縮表示：プロフィール" 1
+@var			checkbox smallenHosoku "圧縮表示：補足欄" 1
+@var			checkbox smallenFF "圧縮表示：投稿数・FF数の欄" 1
+@var			checkbox smallenTab "圧縮表示：TL切り替え部" 1
+@var			checkbox smallenPinned "固定トゥートを畳む" 1
+@var			select openStylePinned "┗ 再展開方法" {
 	"クリックや選択": "focus",
 	"マウスオーバー": "hover"
 }
 ==/UserStyle== */
 
 @-moz-document domain("gensokyo.town"), domain("otoya.space")
-	if smallenPinned
-		/*	カラム表示時のユーザーページの固定トゥートを最小化
-			・消しはしないので「固定トゥートがある」ということはわかる
-			・日時だけ残すので頻繁に目にする場合は更新があれば気付ける
-			・マウスオーバーでフル表示に切り替える
-			（ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、CSS3では先読みを要する親要素や兄要素への作用はできない）
-			・カラム内ユーザーページでだけ有効、カラム内単トゥートページや個別ユーザーページなどには効かない（命名則が違うので）
-			・なんか画像トゥートだとマウスオーバー時にサムネの比率が変になる？ まあクリックで開くのには支障ないし良いか
+	
+	div.account__header > div
+		/*	プロフィールを圧縮表示
+			・アイコン‐名前‐ID‐文（‐補足欄）の間隔や各行間を詰める。
+			・文の空行を詰める。
 		*/
+		if smallenProfile
+			/* プロフィール全体 */
+			userVPad = 20px - 9px
+			userBPad = userVPad - 1px
+			padding-top: userVPad + 2px
+			padding-bottom: userBPad
+			/* 補足欄（調整） */
+			.account__header__fields
+				margin-top: userBPad
+				margin-bottom: - userBPad
+			/* アイコン */
+			a.account__header__avatar
+				margin-bottom: 10px - 5px
+			/* 名前 */
+			span.account__header__display-name
+				line-height: 27px - 7px
+				margin-top: 2px
+				margin-bottom - 2px
+			/* ID */
+			span.account__header__username
+				line-height: 18px - 4px
+				margin-bottom: 10px - 1px
+			/* 文 */
+			div.account__header__content
+				p
+					line-height: 18px - 2px
+					forceWrap = 1	// 「見境なく改行」オプションを設けようかと思ったけどいいや、勝手にやる。
+					if forceWrap
+						word-break: break-all
+				/* 文の空行 */
+				> p:nth-last-child(n+2)
+					margin-bottom: 20px - 12px
+		if smallenHosoku
+			/* 補足欄を圧縮表示（ほんとは固定トゥートみたいにクリックで畳みたいが、CSS3だけではできなさそう） */
+			div.account__header__fields
+				border-top: 0px
+				dl
+					border-bottom: 0
+					dt, dd
+						hosokuVPad = 14px - 8px
+						padding: hosokuVPad 20px - 10px hosokuVPad - 3px
+						// &:focus
+						// 	background-color: red
+	/* 投稿数・FF数の欄を圧縮表示 */
+	if smallenFF
+		div.account__action-bar
+			line-height: 0
+			a.account__action-bar__tab, div.account__action-bar-dropdown
+				ffPad = 10px - 3px
+				padding-top: ffPad + 0px
+				padding-bottom: ffPad
+				> span
+					line-height: 18px - 5px
+				> strong
+					line-height: 18px - 4px
+			button	// こいつ正直よくわからない…。
+				// line-height: 0px !important
+				height: 0px !important
+				// position: relative
+				// top: 0px
+	/* TL切り替え部を圧縮表示 */
+	if smallenTab
+		div.account__section-headline > a
+			tabVPad = 15px - 7px
+			padding-top: tabVPad + 1px
+			padding-bottom: tabVPad
+			&.active
+				triWidth = 10px - 3px
+				&::before, &::after
+					border-width: triWidth triWidth + 2px
+
+	/*	固定トゥートを畳む
+		・消しはしないので「固定トゥートがある」ということはわかる。
+		・日時だけ残すので頻繁に目にする場合は更新があれば気付ける。
+		・マウスオーバーでフル表示に切り替える。
+		（ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、CSS3では先読みを要する親要素や兄要素への作用はできない）
+		・カラム内ユーザーページでだけ有効、カラム内単トゥートページや個別ユーザーページなどには効かない（命名則が違うので）。
+		・なんか画像トゥートだとマウスオーバー時にサムネの比率が変になる？ まあクリックで開くのには支障ないし良いか…。
+	*/
+	if smallenPinned
 		/* 固定トゥート全体 */
 		div[data-featured="true"]:not(:{openStylePinned})
 			border-bottom: 1px solid #393f4f	// 全体の下線をこちらに回す。
