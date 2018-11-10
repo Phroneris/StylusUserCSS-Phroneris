@@ -2,7 +2,7 @@
 @name			Mastodonカラム内ユーザーTOPを圧縮
 @description	カラム表示時のユーザーページの上部を色々と圧縮表示
 @namespace		https://github.com/Phroneris
-@version		1.1.1
+@version		1.1.2
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/Stylus
 @supportURL		https://github.com/Phroneris/Stylus/issues
@@ -20,7 +20,7 @@
 }
 ==/UserStyle== */
 
-@-moz-document domain("gensokyo.town"), domain("otoya.space")
+@-moz-document domain("gensokyo.town"), domain("otoya.space"), domain("pawoo.net"), domain("mstdn.jp")
 	
 	div.account__header > div
 		/*	プロフィールを圧縮表示
@@ -84,11 +84,13 @@
 			a.account__action-bar__tab, div.account__action-bar-dropdown
 				ffPad = 10px - 3px
 				padding-top: ffPad + 0px
-				padding-bottom: ffPad
+				padding-bottom: ffPad - 5px
 				> span
 					line-height: 18px - 5px
 				> strong
 					line-height: 18px - 4px
+			a.account__action-bar__tab.active
+				border-bottom-width: 1px
 			button	// こいつ正直よくわからない…。
 				// line-height: 0px !important
 				height: 0px !important
@@ -108,10 +110,10 @@
 	/*	固定トゥートを畳む
 		・消しはしないので「固定トゥートがある」ということはわかる。
 		・日時だけ残すので頻繁に目にする場合は更新があれば気付ける。
-		・マウスオーバーでフル表示に切り替える。
+		・「クリックや選択」または「マウスオーバー」で再展開する。
 		（ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、CSS3では先読みを要する親要素や兄要素への作用はできない）
+		（クリックや選択の場合、トゥート内のリンクやCWや画像をクリックするとトゥート自体の選択が解かれてしまう不具合あり）
 		・カラム内ユーザーページでだけ有効、カラム内単トゥートページや個別ユーザーページなどには効かない（命名則が違うので）。
-		・なんか画像トゥートだとマウスオーバー時にサムネの比率が変になる？ まあクリックで開くのには支障ないし良いか…。
 	*/
 	if smallenPinned
 		/* 固定トゥート全体 */
@@ -137,7 +139,7 @@
 				/* 情報（時間、名前、アイコン）のうち時間以外 */
 				div.status__info a:nth-child(n+2)
 					display: none
-				/* 情報以外（本文、メディア、アクション） */
-				div:nth-of-type(n+2)
+				/* 情報以外（本文、メディア、アクション、リンク先のカード） */
+				div:nth-of-type(n+2), a.status-card
 					display: none
 
