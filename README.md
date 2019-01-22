@@ -1,23 +1,31 @@
 ## 概要
-Chrome/Firefox/Opera拡張機能「[Stylus](https://chrome.google.com/webstore/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne)」で自分が使っているカスタムCSS。
+Chrome/Firefox/Opera拡張機能「[Stylus](https://chrome.google.com/webstore/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne)」で自分が使っているカスタムCSS。  
+よろしければご自由にお使いください。
 
 ## 利用方法
 
 ### 全ファイル共通
-+ 必要に応じて手動で対象サイトを追加すべし（特にMastodon用のもの）。
-+ ファイルをローカルに保存して、Stylus管理ページで「スタイルをインポート」すると追加可能。  
-  このとき表示拡張子は「すべてのファイル」とするのが良い（デフォルトでは`*.json`しか表示されない）。
++ 以下のいずれかの方法でStylusに追加可能。
+  + ファイルをローカルに保存して、Stylus管理ページで「スタイルをインポート」。  
+  + コードをGitHub上でコピーし、Stylus管理ページで「新スタイルを作成」し、ペーストして適当な名前をつけて「保存」。
+  + UserCSSファイルの場合は更に簡単な追加が可能（後述）。
++ 追加後は、必要に応じて手動で対象サイトを指定すべし（特にMastodon用CSSの場合）。
 
 ### ただのCSSファイル
-※ コード冒頭に`==UserStyle==`を含まないもの。拡張子はたぶん`*.css`。
-+ 上記方法以外に、コードをGitHub上でコピー→Stylus管理ページで「新スタイルを作成」→ペースト→適当な名前をつけて「保存」でも追加可能。  
-  `Mozilla形式のコードを貼り付ける`というダイアログが出た場合、「スタイルを上書き」を選ぶ。
+コード冒頭に`==UserStyle==`を含まず、ファイル名が`*(".user"以外).css`のもの。
++ コピペで追加する場合、「Mozilla形式のコードを貼り付ける」というダイアログが出たら「スタイルを上書き」を選ぶ。
 
 ### UserCSSファイル
-※ コード冒頭に`==UserStyle==`を含むもの。拡張子はたぶん`*.styl`とか。
-+ 上記方法以外に、コードをGitHub上でコピー→Stylus管理ページで「UserCSSとして」にチェックを入れて「新スタイルを作成」→出てきたテンプレートを全て消してペースト→「保存」でも追加可能。  
-  初回はめちゃめちゃエラーが出るが、「保存」すると全ておさまる。
-+ [UserCSS](https://github.com/openstyles/stylus/wiki/UserCSS)は、管理ページ等においてスタイル名の横の歯車マークからオプションを指定可能。
+コード冒頭に`==UserStyle==`を含み、ファイル名が`*.user.css`のもの。  
+Stylus内のスタイル名横の歯車マークから、柔軟なオプションを指定できる。ただのCSSと違ってこれが便利。  
+仕様等の[詳細はこちら](https://github.com/openstyles/stylus/wiki/UserCSS)。
++ **UserCSS限定のお手軽な追加方法**：  
+  Stylus導入済みの環境でGitHubの「Raw」などからファイルを直接開くと、自動的にStylusへの追加画面が開く。  
+  その画面の「インストール」ボタンを押せばただちに追加が完了する。
+  + 通常はこの方法を推奨。
++ コピペで追加する場合、新規作成前に「UserCSSとして」にチェックを入れておく必要がある。  
+  そうするとテンプレートが現れるので、その中身を全て消して貼り付ける。  
+  + 初回はめちゃめちゃエラーが出るが、「保存」すると全ておさまる。
 
 ## ライセンス
 個別に断りがない限り、[CC0-1.0](http://creativecommons.org/publicdomain/zero/1.0/deed.ja)。
