@@ -6,8 +6,10 @@
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/Stylus
 @supportURL		https://github.com/Phroneris/Stylus/issues
+@updateURL		https://github.com/Phroneris/Stylus/raw/master/TogetterコメNG（アイコン、名前、IDを黒塗り）.user.css
 @license		CC0-1.0
 @preprocessor	stylus
+
 @var			text users "ID（カンマ区切り）" TwitterJP, Twitter
 @var			checkbox iconNG "黒塗り：アイコン" 1
 @var			checkbox nameNG "黒塗り：名前" 1
