@@ -23,9 +23,9 @@ Stylus内のスタイル名横の歯車マークから、柔軟なオプショ�
   Stylus導入済みの環境でGitHubの「Raw」などからファイルを直接開くと、自動的にStylusへの追加画面が開く。  
   その画面の「インストール」ボタンを押せばただちに追加が完了する。
   + 以下の各リンクから直接どうぞ。
-    + [Mastodonカラム内ユーザーTOPを圧縮.user.css](https://github.com/Phroneris/Stylus/raw/develop/Mastodonカラム内ユーザーTOPを圧縮.user.css)
-    + [Mastodon未収載アイコン変更.user.css](https://github.com/Phroneris/Stylus/raw/develop/Mastodon未収載アイコン変更.user.css)
-    + [TogetterコメNG（アイコン、名前、IDを黒塗り）.user.css](https://github.com/Phroneris/Stylus/raw/develop/TogetterコメNG（アイコン、名前、IDを黒塗り）.user.css)
+    + [Mastodonカラム内ユーザーTOPを圧縮.user.css](https://github.com/Phroneris/Stylus/raw/master/Mastodonカラム内ユーザーTOPを圧縮.user.css)
+    + [Mastodon未収載アイコン変更.user.css](https://github.com/Phroneris/Stylus/raw/master/Mastodon未収載アイコン変更.user.css)
+    + [TogetterコメNG（アイコン、名前、IDを黒塗り）.user.css](https://github.com/Phroneris/Stylus/raw/master/TogetterコメNG（アイコン、名前、IDを黒塗り）.user.css)
 + コピペで追加する場合は、新規作成前に「UserCSSとして」にチェックを入れておく必要がある。  
   そうすると作成時にテンプレートが現れるので、その中身を全て消して貼り付ける。  
   + 初回はめちゃめちゃエラーが出るが、「保存」すると全ておさまる。
