@@ -26,6 +26,7 @@ Stylus内のスタイル名横の歯車マークから、柔軟なオプショ�
     + [Mastodonカラム内ユーザーTOPを圧縮.user.css](https://github.com/Phroneris/Stylus/raw/master/Mastodonカラム内ユーザーTOPを圧縮.user.css)
     + [Mastodon未収載アイコン変更.user.css](https://github.com/Phroneris/Stylus/raw/master/Mastodon未収載アイコン変更.user.css)
     + [TogetterコメNG（アイコン、名前、IDを黒塗り）.user.css](https://github.com/Phroneris/Stylus/raw/master/TogetterコメNG（アイコン、名前、IDを黒塗り）.user.css)
+    + [YouTubeLiveコメント一覧カスタム.user.css](https://github.com/Phroneris/Stylus/raw/master/YouTubeLiveコメント一覧カスタム.user.css)
 + コピペで追加する場合は、新規作成前に「UserCSSとして」にチェックを入れておく必要がある。  
   そうすると作成時にテンプレートが現れるので、その中身を全て消して貼り付ける。  
   + 初回はめちゃめちゃエラーが出るが、「保存」すると全ておさまる。
