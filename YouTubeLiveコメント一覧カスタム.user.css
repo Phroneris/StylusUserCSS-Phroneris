@@ -2,7 +2,7 @@
 @name			YouTubeLiveコメント一覧カスタム
 @description	YouTubeLiveコメント一覧のパーツ削除、高さ変更、ユーザー名省略（マウスオーバーで表示）など
 @namespace		https://github.com/Phroneris
-@version		1.0.0
+@version		1.0.1
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/Stylus
 @supportURL		https://github.com/Phroneris/Stylus/issues
@@ -10,59 +10,66 @@
 @license		CC0-1.0
 @preprocessor	stylus
 
-@var			checkbox chatHeader "上のを隠す" 1,
-@var            checkbox chatSuper "スパチャ時の上のを隠す" 1,
-@var            checkbox chatInput "入力欄を隠す" 0,
-@var            checkbox chatHider "「チャットを非表示」を隠す" 1,
-@var            checkbox chatHeight "コメント一覧の高さを変更する" 1,
-@var            number chatHeight-px "┗ 高さ (px)" 480,
-@var            select chatName "ユーザー名" {
-    "長いものを略す": "cut",
-    "完全に非表示": "hide",
-    "何もしない": "noop"
-},
-@var            number charNameHide-px "┗ 略す場合の上限幅 (px)" 100,
-@var            checkbox all "†卍★もう何もかも消す★卍†" 0
+@var			checkbox chatHeader "上のを隠す" 1
+@var			checkbox chatSuper "スパチャ時の上のを隠す" 1
+@var			checkbox chatInput "入力欄を隠す" 0
+@var			checkbox chatHider "「チャットを非表示」を隠す" 1
+@var			checkbox chatHeight "コメント一覧の高さを変更する" 1
+@var			number chatHeight-px "┗ 高さ (px)" 480
+@var	select chatName "ユーザー名" {
+	"長いものを略す": "cut",
+	"完全に非表示": "hide",
+	"何もしない": "noop"
+}
+@var			number charNameHide-px "┗ 略す場合の上限幅 (px)" 100
+@var			checkbox all "†卍★もう何もかも消す★卍†" 0
 ==/UserStyle== */
 
-@-moz-document domain("youtube.com")
-// ちなみにURL指定をより厳密にしようとするとiframe内に作用できなくて色々効かなくなる
+/* ==ChangeLog==
+	2019/02/21 v1.0.1
+	* このChangeLogを追加
+	* インデントをタブ文字に徹底
+	* @var間にカンマが要らないことを思い出した
+*/
 
-    i = !important
-    n()
-        display: none i
-    
-    if all
-        #chat
-            n()
-    else
-        if chatHeader
-            yt-live-chat-header-renderer
-                n()
-        if chatSuper
-            #ticker
-                n()
-        if chatInput
-            #panel-pages.yt-live-chat-renderer
-                n()
-        if chatHider
-            #show-hide-button.ytd-live-chat-frame
-                n()
-        if chatHeight
-            h = unit(chatHeight-px, px)
-            #chat.ytd-watch-flexy:not([collapsed]).ytd-watch-flexy
-                height: h i
-                max-height: h i
-                min-height: h i
-        if chatName != "noop"
-            yt-live-chat-text-message-renderer:not(:hover) yt-live-chat-author-chip
-                if chatName == "hide"
-                    n()
-                else if chatName == "cut"
-                    span
-                        max-width: unit(charNameHide-px, px)
-                        overflow: hidden
-                        white-space: nowrap
-                        text-overflow: ellipsis;
+@-moz-document domain("youtube.com")
+	// ちなみにURL指定をより厳密にしようとするとiframe内に作用できなくて色々効かなくなる（2019/2/19時点）。
+
+	i = !important
+	n()
+		display: none i
+	
+	if all
+		#chat
+			n()
+	else
+		if chatHeader
+			yt-live-chat-header-renderer
+				n()
+		if chatSuper
+			#ticker
+				n()
+		if chatInput
+			#panel-pages.yt-live-chat-renderer
+				n()
+		if chatHider
+			#show-hide-button.ytd-live-chat-frame
+				n()
+		if chatHeight
+			h = unit(chatHeight-px, px)
+			#chat.ytd-watch-flexy:not([collapsed]).ytd-watch-flexy
+				height: h i
+				max-height: h i
+				min-height: h i
+		if chatName != "noop"
+			yt-live-chat-text-message-renderer:not(:hover) yt-live-chat-author-chip
+				if chatName == "hide"
+					n()
+				else if chatName == "cut"
+					span
+						max-width: unit(charNameHide-px, px)
+						overflow: hidden
+						white-space: nowrap
+						text-overflow: ellipsis;
 
 
