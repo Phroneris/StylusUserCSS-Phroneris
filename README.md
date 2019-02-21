@@ -20,11 +20,11 @@ Chrome/Firefox/Operaで使えるブラウザ拡張機能「[Stylus](https://add0
 
 以下の各リンクを開くと突然インストール画面に飛び、そこで「インストール」を押せばただちに追加が完了する。はず。
 
-+ [Mastodonカラム内ユーザーTOPを圧縮.user.css](https://github.com/Phroneris/Stylus/raw/develop/Mastodonカラム内ユーザーTOPを圧縮.user.css)
-+ [Mastodon未収載アイコン変更.user.css](https://github.com/Phroneris/Stylus/raw/develop/Mastodon未収載アイコン変更.user.css)
-+ [Togetter「興味ありそう」内の広告削除.user.css](https://github.com/Phroneris/Stylus/raw/develop/Togetter「興味ありそう」内の広告削除.user.css)
-+ [TogetterコメNG（アイコン、名前、IDを黒塗り）.user.css](https://github.com/Phroneris/Stylus/raw/develop/TogetterコメNG（アイコン、名前、IDを黒塗り）.user.css)
-+ [YouTubeLiveコメント一覧カスタム.user.css](https://github.com/Phroneris/Stylus/raw/develop/YouTubeLiveコメント一覧カスタム.user.css)  
++ [Mastodonカラム内ユーザーTOPを圧縮.user.css](Mastodonカラム内ユーザーTOPを圧縮.user.css)
++ [Mastodon未収載アイコン変更.user.css](Mastodon未収載アイコン変更.user.css)
++ [Togetter「興味ありそう」内の広告削除.user.css](Togetter「興味ありそう」内の広告削除.user.css)
++ [TogetterコメNG（アイコン、名前、IDを黒塗り）.user.css](TogetterコメNG（アイコン、名前、IDを黒塗り）.user.css)
++ [YouTubeLiveコメント一覧カスタム.user.css](YouTubeLiveコメント一覧カスタム.user.css)  
 
 もしStylus導入済みの環境で上記の直リンクが上手くはたらかなかったら、GitHubの各ファイルの「Raw」などから`*.user.css`の生ファイルを直接開くことで同じ効果が発動する。はず。
 
