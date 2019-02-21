@@ -20,12 +20,11 @@ Chrome/Firefox/Operaで使えるブラウザ拡張機能「[Stylus](https://add0
 
 以下の各リンクを開くと突然インストール画面に飛び、そこで「インストール」を押せばただちに追加が完了する。はず。
 
-+ [![Install directly with Stylus][1] Mastodonカラム内ユーザーTOPを圧縮](usercss/mastodon_compress-usertop.user.css?raw=true)
-+ [![Install directly with Stylus][1] Mastodon未収載アイコン変更](usercss/mastodon_unlisted-icon.user.css?raw=true)
-+ [![Install directly with Stylus][1] Togetter「興味ありそう」内の広告削除](usercss/togetter_no-recommend-ads.user.css?raw=true)
-+ [![Install directly with Stylus][1] TogetterコメNG（アイコン、名前、IDを黒塗り）](usercss/togetter_user-ng.user.css?raw=true)
-+ [![Install directly with Stylus][1] YouTubeLiveコメント一覧カスタム](usercss/youyubelive_comment-list.user.css?raw=true)
-[1]: https://img.shields.io/badge/Install%20directly%20with-Stylus-238b8b.svg
++ [Mastodonカラム内ユーザーTOPを圧縮](usercss/mastodon_compress-usertop.user.css?raw=true)
++ [Mastodon未収載アイコン変更](usercss/mastodon_unlisted-icon.user.css?raw=true)
++ [Togetter「興味ありそう」内の広告削除](usercss/togetter_no-recommend-ads.user.css?raw=true)
++ [TogetterコメNG（アイコン、名前、IDを黒塗り）](usercss/togetter_user-ng.user.css?raw=true)
++ [YouTubeLiveコメント一覧カスタム](usercss/youyubelive_comment-list.user.css?raw=true)
 
 もしStylus導入済みの環境で上記の直リンクが上手くはたらかなかったら、GitHub上の各ファイルの「Raw」などから`/user/*.user.css`の生ファイルを直接開くことで同じ効果が発動する。はず。
 
