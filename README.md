@@ -22,8 +22,8 @@ Chrome/Firefox/Operaで使えるブラウザ拡張機能「[Stylus](https://add0
 
 + [Mastodonカラム内ユーザーTOPを圧縮](usercss/mastodon_compress-usertop.user.css?raw=true)
 + [Mastodon未収載アイコン変更](usercss/mastodon_unlisted-icon.user.css?raw=true)
++ [TogetterコメNG（アイコン、名前、IDを黒塗り）](usercss/togetter_comment-ng.user.css?raw=true)
 + [Togetter「興味ありそう」内の広告削除](usercss/togetter_no-recommend-ads.user.css?raw=true)
-+ [TogetterコメNG（アイコン、名前、IDを黒塗り）](usercss/togetter_user-ng.user.css?raw=true)
 + [YouTubeLiveコメント一覧カスタム](usercss/youyubelive_comment-list.user.css?raw=true)
 
 もしStylus導入済みの環境で上記の直リンクが上手くはたらかなかったら、GitHub上の各ファイルの「Raw」などから`/user/*.user.css`の生ファイルを直接開くことで同じ効果が発動する。はず。
