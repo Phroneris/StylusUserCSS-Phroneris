@@ -2,16 +2,19 @@
 @name			Togetter「興味ありそう」内の広告削除
 @description	記事下部の「＝あなたが興味ありそうなまとめ＝」欄でまとめに交じってくる広告を非表示
 @namespace		https://github.com/Phroneris
-@version		1.0.1
+@version		1.0.2
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/Stylus
 @supportURL		https://github.com/Phroneris/Stylus/issues
-@updateURL		https://github.com/Phroneris/Stylus/raw/master/Togetter「あなたが興味ありそうなまとめ」内の広告削除.user.css
+@updateURL		https://github.com/Phroneris/Stylus/raw/master/usercss/togetter_no-recommend-ads.user.css
 @license		CC0-1.0
 @preprocessor	stylus
 ==/UserStyle== */
 
 /* ==ChangeLog==
+	2019/02/22 v1.0.2
+	* リポジトリ整理に伴い@updateURLを修正
+	
 	2019/02/21 v1.0.1
 	* このChangeLogを追加
 	* UserCSS化（たとえオプションを使わないとしても、編集と導入説明が楽なので）

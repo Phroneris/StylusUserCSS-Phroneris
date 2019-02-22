@@ -2,11 +2,11 @@
 @name			Mastodonカラム内ユーザーTOPを圧縮
 @description	カラム表示時のユーザーページの上部を色々と圧縮表示
 @namespace		https://github.com/Phroneris
-@version		1.1.2
+@version		1.1.3
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/Stylus
 @supportURL		https://github.com/Phroneris/Stylus/issues
-@updateURL		https://github.com/Phroneris/Stylus/raw/master/Mastodonカラム内ユーザーTOPを圧縮.user.css
+@updateURL		https://github.com/Phroneris/Stylus/raw/master/usercss/mastodon_compress-usertop.user.user.css
 @license		CC0-1.0
 @preprocessor	stylus
 
@@ -21,8 +21,18 @@
 }
 ==/UserStyle== */
 
-@-moz-document domain("gensokyo.town"), domain("otoya.space"), domain("pawoo.net"), domain("mstdn.jp")
-	
+/* ==ChangeLog==
+	2019/02/22 v1.1.3
+	* このChangeLogを追加
+	* 対応インスタンスを追加（自分のために）
+	* リポジトリ整理に伴い@updateURLを修正
+*/
+
+@-moz-document domain("gensokyo.town"), domain("otoya.space"), domain("friends.nico"), domain("mstdn.jp"), domain("pawoo.net"), domain("mastodon.social"), domain("qiitadon.com")
+	// ちなみにQiitadonでは固定トゥートを畳めない（2019/2/21時点）。
+	// 場当たり的に対応できなくはないが、より根っこの部分（※）を突き止めるのがめんどい。
+	// （※ QiitadonのMastodonバージョンが古いせいなのか、だとしたらいつ本家の仕様が変わったか、それをCSSだけでどうやって区別できるか、など）
+
 	div.account__header > div
 		/*	プロフィールを圧縮表示
 			・アイコン‐名前‐ID（‐Botバッジ）‐文（‐補足欄）の間隔や各行間を詰める。

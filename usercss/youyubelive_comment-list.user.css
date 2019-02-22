@@ -2,11 +2,11 @@
 @name			YouTubeLiveコメント一覧カスタム
 @description	YouTubeLiveコメント一覧のパーツ削除、高さ変更、ユーザー名省略（マウスオーバーで表示）など
 @namespace		https://github.com/Phroneris
-@version		1.0.1
+@version		1.0.2
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/Stylus
 @supportURL		https://github.com/Phroneris/Stylus/issues
-@updateURL		https://github.com/Phroneris/Stylus/raw/master/YouTubeLiveコメント一覧カスタム.user.css
+@updateURL		https://github.com/Phroneris/Stylus/raw/master/usercss/youyubelive_comment-list.user.css
 @license		CC0-1.0
 @preprocessor	stylus
 
@@ -26,6 +26,9 @@
 ==/UserStyle== */
 
 /* ==ChangeLog==
+	2019/02/22 v1.0.2
+	* リポジトリ整理に伴い@updateURLを修正
+	
 	2019/02/21 v1.0.1
 	* このChangeLogを追加
 	* インデントをタブ文字に徹底

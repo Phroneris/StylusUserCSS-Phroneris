@@ -2,11 +2,11 @@
 @name			Mastodon未収載アイコン変更
 @description	Mastodonの未収載トゥートのブーストアイコンを、公開トゥートとは別のものに変更してわかりやすくする
 @namespace		https://github.com/Phroneris
-@version		1.0.1
+@version		1.0.2
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/Stylus
 @supportURL		https://github.com/Phroneris/Stylus/issues
-@updateURL		https://github.com/Phroneris/Stylus/raw/master/Mastodon未収載アイコン変更.user.css
+@updateURL		https://github.com/Phroneris/Stylus/raw/master/usercss/mastodon_unlisted-icon.user.css
 @license		CC0-1.0
 @preprocessor	stylus
 
@@ -18,6 +18,9 @@
 ==/UserStyle== */
 
 /* ==ChangeLog==
+	2019/02/22 v1.0.2
+	* リポジトリ整理に伴い@updateURLを修正
+	
 	2019/02/21 v1.0.1
 	* このChangeLogを追加
 	* Mastodon v2.7.2でトゥート編集欄の未収載マークが変更されたのをうけて「開ききった鍵」の選択肢を追加
