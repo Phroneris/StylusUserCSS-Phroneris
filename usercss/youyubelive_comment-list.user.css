@@ -2,7 +2,7 @@
 @name			YouTubeLiveコメント一覧カスタム
 @description	YouTubeLiveコメント一覧のパーツ削除、高さ変更、ユーザー名省略（マウスオーバーで表示）など
 @namespace		https://github.com/Phroneris
-@version		1.0.2
+@version		1.0.3
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/Stylus
 @supportURL		https://github.com/Phroneris/Stylus/issues
@@ -21,11 +21,18 @@
 	"完全に非表示": "hide",
 	"何もしない": "noop"
 }
-@var			number charNameHide-px "┗ 略す場合の上限幅 (px)" 100
+@var			checkbox chatNameShowOnHover "┣ マウスオーバーで解除する" 1
+@var			number chatNameHide-px "┗ 略す場合の上限幅 (px)" 100
+@var			checkbox chatWelcome "「チャットへようこそ！」を隠す" 1
 @var			checkbox all "†卍★もう何もかも消す★卍†" 0
 ==/UserStyle== */
 
 /* ==ChangeLog==
+	2019/05/02 v1.0.3
+	* ユーザー名表示のマウスオーバーによる解除を切り替え可能に
+	* "「チャットへようこそ！」を隠す" を追加
+	* 上のを隠してスパチャ時の上のを表示してる場合のスペースを調整
+
 	2019/02/22 v1.0.2
 	* リポジトリ整理に伴い@updateURLを修正
 	
@@ -49,30 +56,44 @@
 		if chatHeader
 			yt-live-chat-header-renderer
 				n()
-		if chatSuper
-			#ticker
+		#ticker
+			if chatSuper
 				n()
+			else if chatHeader
+				#items
+					padding-top: 8px
 		if chatInput
 			#panel-pages.yt-live-chat-renderer
 				n()
 		if chatHider
 			#show-hide-button.ytd-live-chat-frame
 				n()
+		if chatWelcome
+			yt-live-chat-viewer-engagement-message-renderer:not(:hover)
+				#card
+					display: block
+					overflow: hidden
+					height: 3px
+					padding: 0
+					#icon, #content
+						n()
 		if chatHeight
 			h = unit(chatHeight-px, px)
 			#chat.ytd-watch-flexy:not([collapsed]).ytd-watch-flexy
 				height: h i
-				max-height: h i
-				min-height: h i
+				max-height: @height
+				min-height: @height
 		if chatName != "noop"
-			yt-live-chat-text-message-renderer:not(:hover) yt-live-chat-author-chip
-				if chatName == "hide"
-					n()
-				else if chatName == "cut"
-					span
-						max-width: unit(charNameHide-px, px)
-						overflow: hidden
-						white-space: nowrap
-						text-overflow: ellipsis;
+			hv = chatNameShowOnHover ? ":not(:hover)" : ""
+			{"yt-live-chat-text-message-renderer" + hv}
+				yt-live-chat-author-chip
+					if chatName == "hide"
+						n()
+					else if chatName == "cut"
+						span
+							max-width: unit(chatNameHide-px, px)
+							overflow: hidden
+							white-space: nowrap
+							text-overflow: ellipsis
 
 
