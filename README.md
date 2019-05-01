@@ -1,9 +1,12 @@
+Stylus用UserCSS（森）
+====
+
 # 1. 概要
 
 Chrome/Firefox/Operaで使えるブラウザ拡張機能「[Stylus](https://add0n.com/stylus.html)」で、自分が使っている上書きCSS（の一部）。  
-よろしければご自由にお使いください。  
+良ければ持ってって。  
 
-各ブラウザ用Stylusはこちら。
+前提環境である各ブラウザ用Stylusの導入はこちらから。
 + Chrome: https://chrome.google.com/webstore/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne
 + Firefox: https://addons.mozilla.org/ja/firefox/addon/styl-us/
 + Opera: https://addons.opera.com/ja/extensions/details/stylus/
