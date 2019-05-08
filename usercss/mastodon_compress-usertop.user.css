@@ -2,7 +2,7 @@
 @name			Mastodonカラム内ユーザーTOPを圧縮
 @description	カラム表示時のユーザーページの上部を色々と圧縮表示
 @namespace		https://github.com/Phroneris
-@version		1.2.0
+@version		1.2.1
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/Stylus
 @supportURL		https://github.com/Phroneris/Stylus/issues
@@ -22,6 +22,12 @@
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2019/05/09 v1.2.1
+	* サイト選択をドメイン式ではなくURL式に変更
+	* Qiitadonなどで固定トゥートが畳めないのを修正
+	* ヘッダー画像が無い場合に「フォローされています」が表示されないのを修正
+
 	2019/05/02 v1.2.0
 	* マストドン v2.8.0からのプロフィールレイアウトに対応
 	* ドメイン削除：friends.nico
@@ -31,14 +37,10 @@
 	* このChangeLogを追加
 	* 対応インスタンスを追加（自分のために）
 	* リポジトリ整理に伴い@updateURLを修正
+
 */
 
-@-moz-document domain("gensokyo.town"), domain("otoya.space"), domain("mstdn.jp"), domain("pawoo.net"), domain("mastodon.social"), domain("qiitadon.com"), domain("best-friends.chat")
-	// ちなみにQiitadonでは固定トゥートを畳めない（2019/2/21時点）。
-	// 場当たり的に対応できなくはないが、より根っこの部分（※）を突き止めるのがめんどい。
-	// （※ QiitadonのMastodonバージョンが古いせいなのか、だとしたらいつ本家の仕様が変わったか、それをCSSだけでどうやって区別できるか、など）
-
-	// そんなこと言ってるうちに、本家Mastodonがv2.8.0でユーザーTOPのレイアウト変えてきた…。
+@-moz-document regexp("^https://.+/web/accounts/\d+(/.*)?$")
 	
 	div.account__header:not([style^="background-image"])	// v2.8.0以上
 		/*	プロフィールを圧縮表示
@@ -78,7 +80,6 @@
 					a										: 投稿TL
 					a										: 投稿と返信TL
 					a										: メディアTL
-					
 		*/
 		if smallenProfile
 			backCol = #313543
@@ -89,7 +90,8 @@
 					left: initial
 					right: 10px
 					z-index: 10
-				height: 145px + 44px
+				height: 145px + 44px	// この数値何だっけ？
+				width: 100%
 				position: absolute
 				&::after
 					content: ""
@@ -101,7 +103,7 @@
 					height: 100%
 					background: linear-gradient(to bottom, rgba(backCol, 0), rgba(backCol, 0) 50%, rgba(backCol, 1) 95%)
 				img
-					opacity: 0.3
+					opacity: 0.3	// 可変にしようかと思ったけどやめた
 			.account__header__bar
 				background: none
 			/* アイコン等 */
@@ -151,7 +153,7 @@
 				a
 					padding-top: 0	// paddingを上記marginに
 					padding-bottom: 0
-					
+
 	div.account__header[style^="background-image"]	// v2.8.0未満
 		& > div
 			/*	プロフィールを圧縮表示
@@ -245,11 +247,11 @@
 		・「クリックや選択」または「マウスオーバー」で再展開する。
 		（ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、CSS3では先読みを要する親要素や兄要素への作用はできない）
 		（クリックや選択の場合、トゥート内のリンクやCWや画像をクリックするとトゥート自体の選択が解かれてしまう不具合あり）
-		・カラム内ユーザーページでだけ有効、カラム内単トゥートページや個別ユーザーページなどには効かない（命名則が違うので）。
+		・カラム内ユーザーページでだけ有効、カラム内単トゥートページや個別ユーザーページなどには効かない。
 	*/
 	if smallenPinned
 		/* 固定トゥート全体 */
-		div[data-featured="true"]:not(:{openStylePinned})
+		article[data-id^="f-"] > div > div.status__wrapper:not(:{openStylePinned}) // div[data-featured="true"]式はQiitadonに使えないので、ちょっと怖いけど廃止。
 			border-bottom: 1px solid #393f4f	// 全体の下線をこちらに回す。
 			// height: 34px						// これがないとなんかラベルの高さが増える。	// と思っていたが、下記のafterによってそうならなくなった。
 			/* 「固定されたトゥート」ラベル全体 */
