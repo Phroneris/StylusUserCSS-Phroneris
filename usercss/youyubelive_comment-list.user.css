@@ -2,11 +2,11 @@
 @name			YouTubeLiveコメント一覧カスタム
 @description	YouTubeLiveコメント一覧のパーツ削除、高さ変更、ユーザー名省略（マウスオーバーで表示）など
 @namespace		https://github.com/Phroneris
-@version		1.0.3
+@version		1.0.4
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/Stylus
 @supportURL		https://github.com/Phroneris/Stylus/issues
-@updateURL		https://github.com/Phroneris/Stylus/raw/master/usercss/youyubelive_comment-list.user.css
+@updateURL		https://github.com/Phroneris/Stylus/raw/master/usercss/youyubelive_comment-list.user.styl
 @license		CC0-1.0
 @preprocessor	stylus
 
@@ -16,18 +16,25 @@
 @var			checkbox chatHider "「チャットを非表示」を隠す" 1
 @var			checkbox chatHeight "コメント一覧の高さを変更する" 1
 @var			number chatHeight-px "┗ 高さ (px)" 480
-@var	select chatName "ユーザー名" {
-	"長いものを略す": "cut",
-	"完全に非表示": "hide",
-	"何もしない": "noop"
-}
+@var			select chatName "ユーザー名" {
+					"長いものを略す": "cut",
+					"完全に非表示": "hide",
+					"何もしない": "noop"
+				}
 @var			checkbox chatNameShowOnHover "┣ マウスオーバーで解除する" 1
 @var			number chatNameHide-px "┗ 略す場合の上限幅 (px)" 100
 @var			checkbox chatWelcome "「チャットへようこそ！」を隠す" 1
+@var			checkbox revert "左右逆転（効果確認用）" 0
 @var			checkbox all "†卍★もう何もかも消す★卍†" 0
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2019/06/20 v1.0.4
+	* 効果確認がしやすいよう、"左右逆転" を追加
+	* モデレーターなどのバッジを省略しないよう修正
+	* @updateURLを`*.styl`に変更
+
 	2019/05/02 v1.0.3
 	* ユーザー名表示のマウスオーバーによる解除を切り替え可能に
 	* "「チャットへようこそ！」を隠す" を追加
@@ -40,15 +47,32 @@
 	* このChangeLogを追加
 	* インデントをタブ文字に徹底
 	* @var間にカンマが要らないことを思い出した
+	
 */
 
 @-moz-document domain("youtube.com")
 	// ちなみにURL指定をより厳密にしようとするとiframe内に作用できなくて色々効かなくなる（2019/2/19時点）。
-
+		
 	i = !important
 	n()
 		display: none i
 	
+	if revert
+		#columns
+			display: grid i
+			grid-template-columns: auto auto
+			grid-template-rows: auto
+		#primary
+			grid-column: 2 / 2
+			grid-row: 1 / 1
+			margin-left: 0 i
+		#secondary
+			grid-column: 1 / 2
+			grid-row: 1 / 1
+			margin-left: 24px i
+			// padding-right: 0 i
+			justify-content: right
+
 	if all
 		#chat
 			n()
@@ -86,14 +110,19 @@
 		if chatName != "noop"
 			hv = chatNameShowOnHover ? ":not(:hover)" : ""
 			{"yt-live-chat-text-message-renderer" + hv}
-				yt-live-chat-author-chip
-					if chatName == "hide"
+				if chatName == "hide"
+					yt-live-chat-author-chip
+						margin-right: 0
+					#chat-badges:not(:empty)
+						margin-right: 8px
+						margin-left: -@margin-right
+					#author-name
 						n()
-					else if chatName == "cut"
-						span
-							max-width: unit(chatNameHide-px, px)
-							overflow: hidden
-							white-space: nowrap
-							text-overflow: ellipsis
+				else if chatName == "cut"
+					#author-name
+						max-width: unit(chatNameHide-px, px)
+						overflow: hidden
+						white-space: nowrap
+						text-overflow: ellipsis
 
 

@@ -2,11 +2,11 @@
 @name			TogetterコメNG（アイコン、名前、IDを黒塗り）
 @description	Togetterコメント欄の特定ユーザーのアイコンと名前とIDを黒塗りする（コメントも消したいけど、CSS3では先読みを要する親要素や兄要素への作用はできない）
 @namespace		https://github.com/Phroneris
-@version		1.0.1
+@version		1.0.2
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/Stylus
 @supportURL		https://github.com/Phroneris/Stylus/issues
-@updateURL		https://github.com/Phroneris/Stylus/raw/master/usercss/togetter_comment-ng.user.css
+@updateURL		https://github.com/Phroneris/Stylus/raw/master/usercss/togetter_comment-ng.user.styl
 @license		CC0-1.0
 @preprocessor	stylus
 
@@ -18,9 +18,14 @@
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2019/06/20 v1.0.2
+	* @updateURLを`*.styl`に変更
+
 	2019/02/22 v1.0.1
 	* このChangeLogを追加
 	* リポジトリ整理に伴い@updateURLを修正
+	
 */
 
 @-moz-document domain("togetter.com")
@@ -56,3 +61,4 @@
 						f()
 				else
 						f()
+						

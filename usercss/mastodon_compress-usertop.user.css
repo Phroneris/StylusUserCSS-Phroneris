@@ -2,11 +2,11 @@
 @name			Mastodonカラム内ユーザーTOPを圧縮
 @description	カラム表示時のユーザーページの上部を色々と圧縮表示
 @namespace		https://github.com/Phroneris
-@version		1.2.1
+@version		1.2.2
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/Stylus
 @supportURL		https://github.com/Phroneris/Stylus/issues
-@updateURL		https://github.com/Phroneris/Stylus/raw/master/usercss/mastodon_compress-usertop.user.css
+@updateURL		https://github.com/Phroneris/Stylus/raw/master/usercss/mastodon_compress-usertop.user.styl
 @license		CC0-1.0
 @preprocessor	stylus
 
@@ -16,12 +16,19 @@
 @var			checkbox smallenTab "圧縮表示：TL切り替え部" 1
 @var			checkbox smallenPinned "固定トゥートを畳む" 1
 @var			select openStylePinned "┗ 再展開方法" {
-	"クリックや選択": "focus",
-	"マウスオーバー": "hover"
-}
+					"クリックや選択": "focus-within",
+					"マウスオーバー": "hover"
+				}
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2019/06/20 v1.2.2
+	* URL選択を少しだけ厳密に
+	* 「フォローされています」等のバッジ（？）の高さを微減
+	* 畳んだ固定トゥートが日時まで非表示になるのを修正
+	* 固定トゥート再展開方法が「クリックや選択」の場合に、トゥート内のリンクやCWや画像をクリックするとトゥート自体の選択が解かれてしまうのを修正
+	* @updateURLを`*.styl`に変更
 
 	2019/05/09 v1.2.1
 	* サイト選択をドメイン式ではなくURL式に変更
@@ -40,7 +47,7 @@
 
 */
 
-@-moz-document regexp("^https://.+/web/accounts/\d+(/.*)?$")
+@-moz-document regexp("^https://[^/]+?/web/accounts/\\d+(/.*)?$")
 	
 	div.account__header:not([style^="background-image"])	// v2.8.0以上
 		/*	プロフィールを圧縮表示
@@ -51,7 +58,7 @@
 			.account-timeline__header			: ヘッダー、アイコン等、名前とID、補足欄、文、FF、TL切り替え
 				 .account__header					: ヘッダー、アイコン等、名前とID、補足欄、文、FF
 					.account__header__image
-						.account__header__info				: 「フォローされています」
+						.account__header__info				: 「フォローされています」等
 						img									: ヘッダー画像
 					.account__header__bar				: アイコン等、名前とID、補足欄、文、FF
 						.account__header__tabs
@@ -90,6 +97,9 @@
 					left: initial
 					right: 10px
 					z-index: 10
+					.relationship-tag
+						padding-top: 3px
+						padding-bottom: @padding-top
 				height: 145px + 44px	// この数値何だっけ？
 				width: 100%
 				position: absolute
@@ -246,7 +256,7 @@
 		・日時だけ残すので頻繁に目にする場合は更新があれば気付ける。
 		・「クリックや選択」または「マウスオーバー」で再展開する。
 		（ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、CSS3では先読みを要する親要素や兄要素への作用はできない）
-		（クリックや選択の場合、トゥート内のリンクやCWや画像をクリックするとトゥート自体の選択が解かれてしまう不具合あり）
+		（クリックや選択の場合、トゥート内の画像の閲覧注意をクリックで解除するとトゥート自体の選択が解かれてしまう不具合あり。もう一度選択すれば普通に見れる）
 		・カラム内ユーザーページでだけ有効、カラム内単トゥートページや個別ユーザーページなどには効かない。
 	*/
 	if smallenPinned
@@ -270,10 +280,10 @@
 				padding-right: 0
 				border: 0						// 全体の下線をなくす。
 				min-height: 0px					// 表示に影響はないが、不要な広さが確保されて要素検証時に目障りなので削る。
-				/* 情報（時間、名前、アイコン）のうち時間以外 */
-				div.status__info a:nth-child(n+2)
+				/* 情報（日時、名前、アイコン）のうち日時以外 */
+				div.status__info a:not(.status__relative-time)
 					display: none
 				/* 情報以外（本文、メディア、アクション、リンク先のカード） */
-				div:nth-of-type(n+2), a.status-card
+				> *:not(.status__info)
 					display: none
 
