@@ -1,0 +1,289 @@
+/* ==UserStyle==
+@name			Mastodonカラム内ユーザーTOPを圧縮
+@description	カラム表示時のユーザーページの上部を色々と圧縮表示
+@namespace		https://github.com/Phroneris
+@version		1.2.2
+@author			森の子リスのミーコの大冒険（Phroneris）
+@homepageURL	https://github.com/Phroneris/Stylus
+@supportURL		https://github.com/Phroneris/Stylus/issues
+@updateURL		https://github.com/Phroneris/Stylus/raw/master/usercss/mastodon_compress-usertop.user.styl
+@license		CC0-1.0
+@preprocessor	stylus
+
+@var			checkbox smallenProfile "圧縮表示：プロフィール" 1
+@var			checkbox smallenHosoku "圧縮表示：補足欄" 1
+@var			checkbox smallenFF "圧縮表示：投稿数・FF数の欄" 1
+@var			checkbox smallenTab "圧縮表示：TL切り替え部" 1
+@var			checkbox smallenPinned "固定トゥートを畳む" 1
+@var			select openStylePinned "┗ 再展開方法" {
+					"クリックや選択": "focus-within",
+					"マウスオーバー": "hover"
+				}
+==/UserStyle== */
+
+/* ==ChangeLog==
+
+	2019/06/20 v1.2.2
+	* URL選択を少しだけ厳密に
+	* 「フォローされています」等のバッジ（？）の高さを微減
+	* 畳んだ固定トゥートが日時まで非表示になるのを修正
+	* 固定トゥート再展開方法が「クリックや選択」の場合に、トゥート内のリンクやCWや画像をクリックするとトゥート自体の選択が解かれてしまうのを修正
+	* @updateURLを`*.styl`に変更
+
+	2019/05/09 v1.2.1
+	* サイト選択をドメイン式ではなくURL式に変更
+	* Qiitadonなどで固定トゥートが畳めないのを修正
+	* ヘッダー画像が無い場合に「フォローされています」が表示されないのを修正
+
+	2019/05/02 v1.2.0
+	* マストドン v2.8.0からのプロフィールレイアウトに対応
+	* ドメイン削除：friends.nico
+	* ドメイン追加：best-friends.chat
+
+	2019/02/22 v1.1.3
+	* このChangeLogを追加
+	* 対応インスタンスを追加（自分のために）
+	* リポジトリ整理に伴い@updateURLを修正
+
+*/
+
+@-moz-document regexp("^https://[^/]+?/web/accounts/\\d+(/.*)?$")
+	
+	div.account__header:not([style^="background-image"])	// v2.8.0以上
+		/*	プロフィールを圧縮表示
+			・ヘッダー‐アイコン‐名前‐ID（‐補足欄）‐文の間隔や各行間を詰める。
+			・文の空行を詰める。
+		*/
+		/* 構造（divは省略）
+			.account-timeline__header			: ヘッダー、アイコン等、名前とID、補足欄、文、FF、TL切り替え
+				 .account__header					: ヘッダー、アイコン等、名前とID、補足欄、文、FF
+					.account__header__image
+						.account__header__info				: 「フォローされています」等
+						img									: ヘッダー画像
+					.account__header__bar				: アイコン等、名前とID、補足欄、文、FF
+						.account__header__tabs
+							a.avatar						: アイコン
+							.spacer
+							.account__header__tabs__buttons	: ボタン類
+						.account__header__tabs__name
+							h1
+								span						: 名前
+								.account-role bot			: Botバッジ（なおAdminバッジは出ない）
+								small						: ID
+						.account__header__extra
+							.account__header__bio
+								account__header__fields		: 捕捉欄
+									dl
+										dt					: 見出し
+										dd					: 中身
+									...
+								.account__header__content	: 文
+									p
+							.account__header__extra__links	: FF
+								a							: 投稿数
+								a							: フォロー数
+								a							: フォロワー数
+				.account__section-headline			: TL切り替え
+					a										: 投稿TL
+					a										: 投稿と返信TL
+					a										: メディアTL
+		*/
+		if smallenProfile
+			backCol = #313543
+			background: backCol
+			/* ヘッダー */
+			.account__header__image
+				.account__header__info
+					left: initial
+					right: 10px
+					z-index: 10
+					.relationship-tag
+						padding-top: 3px
+						padding-bottom: @padding-top
+				height: 145px + 44px	// この数値何だっけ？
+				width: 100%
+				position: absolute
+				&::after
+					content: ""
+					display: block
+					position: absolute
+					top: 0
+					left: 0
+					width: 100%
+					height: 100%
+					background: linear-gradient(to bottom, rgba(backCol, 0), rgba(backCol, 0) 50%, rgba(backCol, 1) 95%)
+				img
+					opacity: 0.3	// 可変にしようかと思ったけどやめた
+			.account__header__bar
+				background: none
+			/* アイコン等 */
+			.account__header__tabs
+				padding-top: 0
+				padding-bottom: @padding-top
+				margin-top: 8px
+				margin-bottom: 7px
+				/* メニューボタン */
+				.account__header__tabs__buttons button[aria-label]
+					background-color: backCol
+			/* 名前とID */
+			div.account__header__tabs__name
+				padding-top: 0	// paddingをmarginに
+				padding-bottom: @padding-top
+				margin-top: 5px
+				margin-bottom: 5px + 3px
+				h1
+					line-height: 24px - 5px
+			/* 補足欄 */
+			.account__header__fields
+				margin-bottom: 20px - 8px
+			/* 文 */
+			div.account__header__content
+				padding-top: 0
+				padding-bottom: 0
+				p
+					line-height: 18px - 2px
+					forceWrap = 1	// 「見境なく改行」オプションを設けようかと思ったけどいいや、勝手にやる。
+					if forceWrap
+						word-break: break-all
+				/* 文の空行 */
+				> p:nth-last-child(n+2)
+					margin-bottom: 20px - 15px
+		if smallenHosoku
+			/* 補足欄を圧縮表示（ほんとは固定トゥートみたいにクリックで畳みたいが、CSS3だけではできなさそう） */
+			div.account__header__fields dl
+				dt, dd
+					hosokuVPad = 14px - 8px
+					padding: hosokuVPad 20px - 10px hosokuVPad - 3px
+		/* 投稿数・FF数の欄を圧縮表示 */
+		if smallenFF
+			div.account__header__extra__links
+				// line-height: 0
+				margin-top: 20px - 10px
+				margin-bottom: 10px - 7px
+				a
+					padding-top: 0	// paddingを上記marginに
+					padding-bottom: 0
+
+	div.account__header[style^="background-image"]	// v2.8.0未満
+		& > div
+			/*	プロフィールを圧縮表示
+				・アイコン‐名前‐ID（‐Botバッジ）‐文（‐補足欄）の間隔や各行間を詰める。
+				・文の空行を詰める。
+			*/
+			if smallenProfile
+				/* プロフィール全体 */
+				userTPad = 20px - 5px
+				userBPad = userTPad - 3px
+				padding-top: userTPad
+				padding-bottom: userBPad
+				/* 補足欄（調整） */
+				.account__header__fields
+					margin-top: userBPad
+					margin-bottom: - userBPad
+				/* アイコン */
+				a.account__header__avatar
+					margin-bottom: 10px - 4px
+				/* 名前 */
+				span.account__header__display-name
+					line-height: 27px - 7px
+					margin-top: 2px
+					margin-bottom - 2px
+				/* ID */
+				span.account__header__username
+					line-height: 18px - 4px
+					margin-bottom: 0	// デフォルト10px。下の変数で代用
+				existingBioTop = 10px - 5px
+				/* Botバッジ */
+				div.roles
+					margin-top: existingBioTop
+					margin-bottom: 0
+				/* 文 */
+				div.account__header__content
+					p
+						line-height: 18px - 2px
+						forceWrap = 1	// 「見境なく改行」オプションを設けようかと思ったけどいいや、勝手にやる。
+						if forceWrap
+							word-break: break-all
+					> p:first-child:not(:empty)
+						margin-top: existingBioTop
+					/* 文の空行 */
+					> p:nth-last-child(n+2)
+						margin-bottom: 20px - 15px
+			if smallenHosoku
+				/* 補足欄を圧縮表示（ほんとは固定トゥートみたいにクリックで畳みたいが、CSS3だけではできなさそう） */
+				div.account__header__fields
+					border-top: 0px
+					dl
+						border-bottom: 0
+						dt, dd
+							hosokuVPad = 14px - 8px
+							padding: hosokuVPad 20px - 10px hosokuVPad - 3px
+							// &:focus
+							// 	background-color: red
+		/* 投稿数・FF数の欄を圧縮表示 */
+		if smallenFF
+			& + div > div.account__action-bar
+				line-height: 0
+				a.account__action-bar__tab, div.account__action-bar-dropdown
+					ffPad = 10px - 3px
+					padding-top: ffPad + 0px
+					padding-bottom: ffPad - 5px
+					> span
+						line-height: 18px - 5px
+					> strong
+						line-height: 18px - 4px
+				a.account__action-bar__tab.active
+					border-bottom-width: 1px
+				button	// こいつ正直よくわからない…。
+					// line-height: 0px !important
+					height: 0px !important
+					// position: relative
+					// top: 0px
+
+	/* TL切り替え部を圧縮表示 */
+	if smallenTab
+		div.account__section-headline > a
+			tabVPad = 15px - 7px
+			padding-top: tabVPad + 1px
+			padding-bottom: tabVPad
+			&.active
+				triWidth = 10px - 3px
+				&::before, &::after
+					border-width: triWidth triWidth + 2px
+
+	/*	固定トゥートを畳む
+		・消しはしないので「固定トゥートがある」ということはわかる。
+		・日時だけ残すので頻繁に目にする場合は更新があれば気付ける。
+		・「クリックや選択」または「マウスオーバー」で再展開する。
+		（ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、CSS3では先読みを要する親要素や兄要素への作用はできない）
+		（クリックや選択の場合、トゥート内の画像の閲覧注意をクリックで解除するとトゥート自体の選択が解かれてしまう不具合あり。もう一度選択すれば普通に見れる）
+		・カラム内ユーザーページでだけ有効、カラム内単トゥートページや個別ユーザーページなどには効かない。
+	*/
+	if smallenPinned
+		/* 固定トゥート全体 */
+		article[data-id^="f-"] > div > div.status__wrapper:not(:{openStylePinned}) // div[data-featured="true"]式はQiitadonに使えないので、ちょっと怖いけど廃止。
+			border-bottom: 1px solid #393f4f	// 全体の下線をこちらに回す。
+			// height: 34px						// これがないとなんかラベルの高さが増える。	// と思っていたが、下記のafterによってそうならなくなった。
+			/* 「固定されたトゥート」ラベル全体 */
+			div.status__prepend
+				display: inline-block
+				padding-bottom: 8px
+				span
+					display: none				// 「固定されたトゥート」というラベル文。消さないとカラム幅次第では日付が長い場合にかぶる。
+				&::after
+					content: "固定トゥート"		// かぶらない短さ。ほんとはユーザー変数で指定したいけど、日本語文字列を受け付けてくれない…。
+			/* ラベル以外のトゥート全体（情報、本文、メディア、アクション） */
+			div.status
+				display: inline-block
+				position: absolute
+				right: 10px
+				padding-right: 0
+				border: 0						// 全体の下線をなくす。
+				min-height: 0px					// 表示に影響はないが、不要な広さが確保されて要素検証時に目障りなので削る。
+				/* 情報（日時、名前、アイコン）のうち日時以外 */
+				div.status__info a:not(.status__relative-time)
+					display: none
+				/* 情報以外（本文、メディア、アクション、リンク先のカード） */
+				> *:not(.status__info)
+					display: none
+
