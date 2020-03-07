@@ -16,20 +16,20 @@ Chrome/Firefox/Operaで使えるブラウザ拡張機能「[Stylus](https://add0
 
 ## 2-1. Stylusへの追加
 
-私がここで公開している各スタイル（`/usercss/*.user.styl`）は、色々な方法でお手元のブラウザ内のStylusに追加できる。  
+私がここで公開している各スタイル（`/usercss/*.user.css`）は、色々な方法でお手元のブラウザ内のStylusに追加できる。  
 以下、既に上記リンク先などからStylus自体の導入が済んでいるものとして、各スタイルの追加方法を示す。
 
 ### 2-1A.【推奨】Web上からの最速追加方法
 
 以下の各リンクを開くと突然インストール画面に飛び、そこで「インストール」を押せばただちに追加が完了する。はず。
 
-+ [Mastodonカラム内ユーザーTOPを圧縮](usercss/mastodon_compress-usertop.user.styl?raw=true)
-+ [Mastodon未収載アイコン変更](usercss/mastodon_unlisted-icon.user.styl?raw=true)
-+ [TogetterコメNG（アイコン、名前、IDを黒塗り）](usercss/togetter_comment-ng.user.styl?raw=true)
-+ [Togetter「興味ありそう」内の広告削除](usercss/togetter_no-recommend-ads.user.styl?raw=true)
-+ [YouTubeLiveコメント一覧カスタム](usercss/youyubelive_comment-list.user.styl?raw=true)
++ [Mastodonカラム内ユーザーTOPを圧縮](usercss/mastodon_compress-usertop.user.css?raw=true)
++ [Mastodon未収載アイコン変更](usercss/mastodon_unlisted-icon.user.css?raw=true)
++ [TogetterコメNG（アイコン、名前、IDを黒塗り）](usercss/togetter_comment-ng.user.css?raw=true)
++ [Togetter「興味ありそう」内の広告削除](usercss/togetter_no-recommend-ads.user.css?raw=true)
++ [YouTubeLiveコメント一覧カスタム](usercss/youyubelive_comment-list.user.css?raw=true)
 
-もしStylus導入済みの環境で上記の直リンクが上手くはたらかなかったら、GitHub上の各ファイルの「Raw」などから`/usercss/*.user.styl`の生ファイルを直接開くことで同じ効果が発動する。はず。
+もしStylus導入済みの環境で上記の直リンクが上手くはたらかなかったら、GitHub上の各ファイルの「Raw」などから`/user/*.user.css`の生ファイルを直接開くことで同じ効果が発動する。はず。
 
 ### 2-1B. Web上からコピペで手動追加する方法
 
