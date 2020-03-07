@@ -48,7 +48,7 @@
 */
 
 @-moz-document regexp("^https://[^/]+?/web/accounts/\\d+(/.*)?$")
-	
+
 	div.account__header:not([style^="background-image"])	// v2.8.0以上
 		/*	プロフィールを圧縮表示
 			・ヘッダー‐アイコン‐名前‐ID（‐補足欄）‐文の間隔や各行間を詰める。
@@ -286,4 +286,5 @@
 				/* 情報以外（本文、メディア、アクション、リンク先のカード） */
 				> *:not(.status__info)
 					display: none
+
 
