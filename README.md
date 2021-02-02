@@ -43,7 +43,7 @@ Chrome/Firefox/Opera向けブラウザ拡張機能 [Stylus](https://add0n.com/st
 [Mstdn-CmprsUsTp]: usercss/mastodon_compress-usertop.user.styl?raw=true
 [Mstdn-UnlstdIcn]: usercss/mastodon_unlisted-icon.user.styl?raw=true
 [Tgttr-CmntNG]: usercss/togetter_comment-ng.user.styl?raw=true
-[YTbLv-CmntLst]: usercss/youyubelive_comment-list.user.styl?raw=true
+[YTbLv-CmntLst]: usercss/youtubelive_comment-list.user.styl?raw=true
 
 もしStylus導入済みの環境で上記の直リンクが上手くはたらかない場合、各スタイル（`/usercss`フォルダ下の`*.user.styl`ファイル）をGitHub上で開き、そのページの「Raw」ボタンから生ファイルを直接開けば、同じようにインストール画面が現れる。はず。
 
