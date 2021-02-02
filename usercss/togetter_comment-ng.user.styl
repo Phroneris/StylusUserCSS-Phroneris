@@ -1,12 +1,12 @@
 /* ==UserStyle==
 @name			TogetterコメNG（アイコン、名前、IDを黒塗り）
-@description	Togetterコメント欄の特定ユーザーのアイコンと名前とIDを黒塗りする（コメントも消したいけど、CSS3では先読みを要する親要素や兄要素への作用はできない）
+@description	Togetterコメント欄の特定ユーザーのアイコンと名前とIDを黒塗りする
 @namespace		https://github.com/Phroneris
-@version		1.0.2
+@version		1.0.3
 @author			森の子リスのミーコの大冒険（Phroneris）
-@homepageURL	https://github.com/Phroneris/Stylus
-@supportURL		https://github.com/Phroneris/Stylus/issues
-@updateURL		https://github.com/Phroneris/Stylus/raw/master/usercss/togetter_comment-ng.user.styl
+@homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
+@supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
+@updateURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/raw/master/usercss/togetter_comment-ng.user.styl
 @license		CC0-1.0
 @preprocessor	stylus
 
@@ -19,6 +19,12 @@
 
 /* ==ChangeLog==
 
+	2021/02/02 v1.0.3
+	* 各種URLのリポジトリ名を修正
+	* @descriptionから仕様へのぼやきを分離
+	* 親セレクタを簡潔なものに変更
+	* Togetter側の仕様変更（もういつのだよ…）に対応すべく修正
+
 	2019/06/20 v1.0.2
 	* @updateURLを`*.styl`に変更
 
@@ -29,37 +35,46 @@
 */
 
 @-moz-document domain("togetter.com")
-	// ふと思ったけどこれ更新したら今までのID全部消えたりしない？ 大丈夫？
+	/*
+		本当はその人のコメント全体やその人への「>>ID」も消したいけど、
+		・CSS3では先読みを要する親要素や兄要素への作用はできないので無理
+		・コメリプに至ってはCSSで掴める範囲にIDが無いので無理
+		つまり無理。JSでやれ。
+	*/
 
+	i = !important
 	f()
 		for userid in users
 			// ^(\d+[A-Za-z]*)(_\w*)$ みたいなIDが\1と\2に分割された配列になってしまうのを防ぐ。
 			// これのためにusersは半角スペース区切りではなくカンマ区切りにしないといけない。
 			userid = join('', userid)
 			// あとは普通に処理。このuseridの展開にUnknown wordのエラーが出るのが気になるけど…。
-			> a[href$=\'\/{userid}\']
+			&[href$=\'\/{userid}\']
 				if iconNG == 1
 					img
-						filter brightness(0)
-						border-radius 0
+						filter brightness(0) i
+						border-radius 0 i
 				if nameNG == 1
 					strong
-						background-color black
-						color black
+						background-color black i
+						color black i
 				if idNG == 1
-					+ a
-						background-color black
-						color black
-						display inline-block
-						margin-left 3px
-	div.list_box
-		> .list_tweet_box
-			> span.user_link
-				p(users)
-				if disableOnHover == 1
-					&:not(:hover)
-						f()
-				else
-						f()
+					.status_name
+						background-color black i
+						color black i
+						display inline-block i
+						margin-left 3px i
+	#comment_box
+		.user_link
+			if disableOnHover == 1
+				&:not(:hover)
+					f()
+			else
+					f()
+
+	// table
+	// 	for row in 1 2 3 4 5
+	// 		tr:nth-child({row}) // これはエラー出ないのに…。
+	// 			height: 10px * row
 
 
