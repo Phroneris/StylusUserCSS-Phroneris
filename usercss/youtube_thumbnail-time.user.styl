@@ -1,0 +1,38 @@
+/* ==UserStyle==
+@name			YouTubeサムネ時間どかし
+@description	動画視聴画面の右側の別動画一覧で、時間バッジをどかしてサムネイル全体を見やすくする
+@namespace		https://github.com/Phroneris
+@version		1.0.0
+@author			森の子リスのミーコの大冒険（Phroneris）
+@homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
+@supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
+@updateURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/raw/master/usercss/youtube_thumbnail-time.user.styl
+@license		CC0-1.0
+@preprocessor	stylus
+==/UserStyle== */
+
+/* ==ChangeLog==
+
+	2021/02/03 v1.0.0
+	* 作成
+
+*/
+
+@-moz-document url-prefix("https://www.youtube.com/watch")
+
+	ytd-watch-next-secondary-results-renderer  // 動画右の別動画一覧
+		ytd-thumbnail #thumbnail.ytd-thumbnail  // サムネ部分
+			overflow: unset
+		ytd-thumbnail-overlay-time-status-renderer  // 時間部分（4:33とか）
+			left: 168px + 4px
+			right: unset
+		ytd-badge-supported-renderer  // 「新着」「ライブ配信中」等のバッジ
+			justify-content: flex-end
+		#metadata-line.ytd-video-meta-block  // 「～前に配信済み」の親
+			flex-wrap: nowrap
+			white-space: nowrap
+			span.ytd-video-meta-block:nth-of-type(2)  // 「～前に配信済み」
+				overflow: hidden
+				text-overflow: ellipsis
+
+
