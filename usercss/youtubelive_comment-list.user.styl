@@ -1,0 +1,151 @@
+/* ==UserStyle==
+@name			YouTubeLiveコメント一覧カスタム
+@description	YouTubeLiveコメント一覧のパーツ削除、高さ変更、アイコンやユーザー名の省略（マウスオーバーで解除）など
+@namespace		https://github.com/Phroneris
+@version		1.1.0
+@author			森の子リスのミーコの大冒険（Phroneris）
+@homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
+@supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
+@updateURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/raw/master/usercss/youtubelive_comment-list.user.styl
+@license		CC0-1.0
+@preprocessor	stylus
+
+@var			checkbox chatHeader "上のを隠す" 1
+@var			checkbox chatSuper "スパチャ時の上のを隠す" 1
+@var			checkbox chatInput "入力欄を隠す" 0
+@var			checkbox chatHider "「チャットを非表示」を隠す" 1
+@var			number chatHeight "コメント一覧の高さを変更する (px、0未満は無効)" -480
+@var			checkbox chatIcon "アイコンを隠す" 0
+@var			select chatName "ユーザー名" {
+					"長いものを略す": "cut",
+					"完全に非表示": "hide",
+					"何もしない": "noop"
+				}
+@var			number chatNameHide-px "┗ 略す場合の上限幅 (px)" 100
+@var			checkbox chatShowOnHover "アイコンやユーザー名の省略をマウスオーバーで解除する" 1
+@var			checkbox chatWelcome "「チャットへようこそ！」を隠す" 1
+@var			checkbox revert "左右逆転（効果確認用）" 0
+@var			checkbox all "†卍★もう何もかも消す★卍†" 0
+==/UserStyle== */
+
+/* ==ChangeLog==
+
+	2021/02/03 v1.1.0
+	* 各種URLのリポジトリ名を修正
+	* @updateURLのファイル名の誤字を修正
+	* "アイコンを隠す" を追加
+	* マウスオーバー解除の影響範囲をアイコンにも拡張
+	* マウスオーバー解除のセレクタ記述を変更（Stylelintの勘違いエラーを避けるため）
+	* 高さ変更オプションを1つにまとめてオプション数を削減
+	* 左右逆転時の動画画面から動画が見切れるのを修正
+	* 詳細度の工夫により `!important` を削減
+
+	2019/06/20 v1.0.4
+	* 効果確認がしやすいよう、"左右逆転" を追加
+	* モデレーターなどのバッジを省略しないよう修正
+	* @updateURLを`*.styl`に変更
+
+	2019/05/02 v1.0.3
+	* ユーザー名表示のマウスオーバーによる解除を切り替え可能に
+	* "「チャットへようこそ！」を隠す" を追加
+	* 上のを隠してスパチャ時の上のを表示してる場合のスペースを調整
+
+	2019/02/22 v1.0.2
+	* リポジトリ整理に伴い@updateURLを修正
+
+	2019/02/21 v1.0.1
+	* このChangeLogを追加
+	* インデントをタブ文字に徹底
+	* @var間にカンマが要らないことを思い出した
+
+*/
+
+@-moz-document domain("youtube.com")
+	// ちなみに、URL指定をより厳密にしようとするとiframe内に作用できなくて色々効かなくなる。
+	// url-prefix("https://www.youtube.com/live_chat") とすればできるが、今度はiframe外部に効かなくなる。
+
+	i = !important
+	n()
+		display: none i
+
+	if revert
+		#columns[class]
+			display: grid
+			grid-template-columns: auto auto
+			grid-template-rows: auto
+			#primary
+				grid-column: 2 / 2
+				grid-row: 1 / 1
+				margin-left: 0
+		.html5-video-player .video-stream
+			width: 100% i
+			height: auto i
+		#secondary
+			grid-column: 1 / 2
+			grid-row: 1 / 1
+			margin-left: 24px
+			// padding-right: 0 i
+			justify-content: right
+
+	if all
+		#chat
+			n()
+	else
+		if chatHeader
+			yt-live-chat-header-renderer
+				n()
+		#ticker
+			if chatSuper
+				n()
+			else if chatHeader
+				#items
+					padding-top: 8px
+		if chatInput
+			#panel-pages.yt-live-chat-renderer
+				n()
+		if chatHider
+			#show-hide-button.ytd-live-chat-frame
+				n()
+		if chatWelcome
+			yt-live-chat-viewer-engagement-message-renderer:not(:hover)
+				#card
+					display: block
+					overflow: hidden
+					height: 3px
+					padding: 0
+					#icon, #content
+						n()
+		if chatHeight >= 0
+			#columns #chat.ytd-watch-flexy:not([collapsed])
+				height: unit(chatHeight, px)
+				max-height: @height
+				min-height: @height
+				overflow-y: hidden
+		if chatName != "noop"
+			hideChatAuthor()
+				if chatIcon
+					min-height: 24px
+					#author-photo
+						n()
+				if chatName == "hide"
+					yt-live-chat-author-chip
+						margin-right: 0
+					#chat-badges:not(:empty)
+						margin-right: 8px
+						margin-left: -@margin-right
+					#author-name
+						n()
+				else if chatName == "cut"
+					#author-name
+						max-width: unit(chatNameHide-px, px)
+						overflow: hidden
+						white-space: nowrap
+						text-overflow: ellipsis
+			#chat yt-live-chat-text-message-renderer
+				if chatShowOnHover
+					&:not(:hover)
+						hideChatAuthor()
+				else
+					hideChatAuthor()
+
+

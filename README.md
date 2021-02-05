@@ -3,11 +3,13 @@ Stylus用UserCSS（森）
 
 | Mastodonカラム内ユーザーTOPを圧縮 | Mastodon未収載アイコン変更 |
 |:---------------------------------:|:--------------------------:|
-| <img alt="「Mastodonカラム内ユーザーTOPを圧縮」のスクリーンショット" src="readme-image/sample_Mstdn-CmprsUsTp.png" height="400px"> | <img alt="「Mastodon未収載アイコン変更」のGIFアニメ" src="readme-image/sample_Mstdn-UnlstdIcn.gif" height="370px"><br>（GIFアニメ） |
+| <img alt="「Mastodonカラム内ユーザーTOPを圧縮」のGIFアニメ" src="readme-image/sample_Mstdn-CmprsUsTp.gif" height="450px"><br>（GIFアニメ） | <img alt="「Mastodon未収載アイコン変更」のGIFアニメ" src="readme-image/sample_Mstdn-UnlstdIcn.gif" height="400px"><br>（GIFアニメ） |
 
-| YouTubeLiveコメント一覧カスタム |
-|:-------------------------------:|
-| <img alt="「YouTubeLiveコメント一覧カスタム」のスクリーンショット" src="readme-image/sample_YTbLv-CmntLst.png" height="400px"> |
+| YouTubeLiveコメント一覧カスタム | YouTubeサムネ時間どかし |
+|:-------------------------------:|:-----------------------:|
+| <img alt="「YouTubeLiveコメント一覧カスタム」のスクリーンショット" src="readme-image/sample_YTbLv-CmntLst.png" height="370px"> | <img alt="「YouTubeサムネ時間どかし」のスクリーンショット" src="readme-image/sample_YTb-ThmbTm.png" height="370px"> |
+
+𝓐𝓷𝓭 𝓜𝓸𝓻𝓮...
 
 ----
 
@@ -33,19 +35,21 @@ Chrome/Firefox/Opera向けブラウザ拡張機能 [Stylus](https://add0n.com/st
 
 以下の各リンクから使いたいものを開くと突然インストール画面に飛ぶので、そこで「インストール」を押せばただちに追加が完了する。はず。
 
-| 名前、リンク                                           | 対象サイト | 概要、効果 |
-|--------------------------------------------------------|------------|------------|
-| [Mastodonカラム内ユーザーTOPを圧縮][Mstdn-CmprsUsTp]   | Mastodon   | カラム表示時のユーザーページの上部を色々と圧縮表示
-| [Mastodon未収載アイコン変更][Mstdn-UnlstdIcn]          | Mastodon   | 未収載トゥートのブーストアイコンを、公開トゥートとは別のものに変更してわかりやすくする
-| [TogetterコメNG][Tgttr-CmntNG]                         | Togetter   | コメント欄の特定ユーザーのアイコンと名前とIDを黒塗り
-| [Togetter「興味ありそう」内の広告削除][Tgttr-NRcmndAd] | Togetter   | 記事下部の「＝あなたが興味ありそうなまとめ＝」欄でまとめに交じってくる広告を非表示
-| [YouTubeLiveコメント一覧カスタム][YTbLv-CmntLst]       | YouTube&nbsp;Live | コメント一覧のパーツ削除、高さ変更、ユーザー名省略（マウスオーバーで表示）など
+| 名前、リンク                                         | 対象サイト | 概要、効果 |
+|------------------------------------------------------|------------|------------|
+| [Mastodonカラム内ユーザーTOPを圧縮][Mstdn-CmprsUsTp] | Mastodon   | カラム表示時のユーザーページの上部を色々と圧縮表示
+| [Mastodon未収載アイコン変更][Mstdn-UnlstdIcn]        | Mastodon   | 未収載トゥートのブーストアイコンを、公開トゥートとは別のものに変更してわかりやすくする
+| [TogetterコメNG][Tgttr-CmntNG]                       | Togetter   | コメント欄の特定ユーザーのアイコンと名前とIDを黒塗り
+| [YouTube長文コメント自動展開][YTb-ExpdLngTxt]        | YouTube    | 「続きを読む」のクリック無しで長文コメントを自動展開
+| [YouTubeサムネ時間どかし][YTb-ThmbTm]                | YouTube    | 動画視聴画面の右側の別動画一覧で、時間バッジをどかしてサムネイル全体を見やすくする
+| [YouTubeLiveコメント一覧カスタム][YTbLv-CmntLst]     | YouTube&nbsp;Live | コメント一覧のパーツ削除、高さ変更、ユーザー名省略（マウスオーバーで表示）など
 
 [Mstdn-CmprsUsTp]: usercss/mastodon_compress-usertop.user.styl?raw=true
 [Mstdn-UnlstdIcn]: usercss/mastodon_unlisted-icon.user.styl?raw=true
 [Tgttr-CmntNG]: usercss/togetter_comment-ng.user.styl?raw=true
-[Tgttr-NRcmndAd]: usercss/togetter_no-recommend-ads.user.styl?raw=true
-[YTbLv-CmntLst]: usercss/youyubelive_comment-list.user.styl?raw=true
+[YTb-ExpdLngTxt]: usercss/youtube_expand-long-text.user.styl?raw=true
+[YTb-ThmbTm]: usercss/youtube_thumbnail-time.user.styl?raw=true
+[YTbLv-CmntLst]: usercss/youtubelive_comment-list.user.styl?raw=true
 
 もしStylus導入済みの環境で上記の直リンクが上手くはたらかない場合、各スタイル（`/usercss`フォルダ下の`*.user.styl`ファイル）をGitHub上で開き、そのページの「Raw」ボタンから生ファイルを直接開けば、同じようにインストール画面が現れる。はず。
 
@@ -82,10 +86,6 @@ Web上からの方法すら上手くいかない場合、以下の手順でど�
 これが超便利なので、導入後は是非ご確認を。
 
 ![オプション指定の様子](readme-image/option_Mstdn-UnlstdIcn.png)
-
-## 2-3. 諸注意
-
-- Mastodon用のUserCSSの場合、効果対象のサイトをStylus内のコードエディタ上で手動指定する必要がある…かも。
 
 
 # 3. 更なるカスタム

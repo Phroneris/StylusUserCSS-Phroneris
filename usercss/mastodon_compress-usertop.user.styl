@@ -2,16 +2,17 @@
 @name			Mastodonカラム内ユーザーTOPを圧縮
 @description	カラム表示時のユーザーページの上部を色々と圧縮表示
 @namespace		https://github.com/Phroneris
-@version		1.2.2
+@version		1.3.0
 @author			森の子リスのミーコの大冒険（Phroneris）
-@homepageURL	https://github.com/Phroneris/Stylus
-@supportURL		https://github.com/Phroneris/Stylus/issues
-@updateURL		https://github.com/Phroneris/Stylus/raw/master/usercss/mastodon_compress-usertop.user.styl
+@homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
+@supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
+@updateURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/raw/master/usercss/mastodon_compress-usertop.user.styl
 @license		CC0-1.0
 @preprocessor	stylus
 
 @var			checkbox smallenProfile "圧縮表示：プロフィール" 1
 @var			checkbox smallenHosoku "圧縮表示：補足欄" 1
+@var			checkbox smallenNote "圧縮表示：メモ欄" 1
 @var			checkbox smallenFF "圧縮表示：投稿数・FF数の欄" 1
 @var			checkbox smallenTab "圧縮表示：TL切り替え部" 1
 @var			checkbox smallenPinned "固定トゥートを畳む" 1
@@ -19,9 +20,17 @@
 					"クリックや選択": "focus-within",
 					"マウスオーバー": "hover"
 				}
+@var			checkbox isLightTheme "ライトテーマ" 0
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2021/02/03 v1.3.0
+	* 各種URLのリポジトリ名を修正
+	* メモ欄に対応
+	* カラーテーマに対応（手動）
+	* セレクタ記述を少しスマートに
+	* マストドン v3.1.0からのFF欄のpadding変更に対応
 
 	2019/06/20 v1.2.2
 	* URL選択を少しだけ厳密に
@@ -49,18 +58,23 @@
 
 @-moz-document regexp("^https://[^/]+?/web/accounts/\\d+(/.*)?$")
 
+	UBC             = isLightTheme ? #d9e1e8 : #282c37  // SCSS $ui-base-color
+	UBC_l4-or-white = isLightTheme ? #ffffff : #313543  // SCSS lighten($ui-base-color, 4%)
+	UBC_l8          = isLightTheme ? #c0cdd9 : #393f4f  // SCSS lighten($ui-base-color, 8%)
+	SG              = #79bd9a // isLightTheme ? #4a905f : #79bd9a  // SCSS $success-green
+
 	div.account__header:not([style^="background-image"])	// v2.8.0以上
 		/*	プロフィールを圧縮表示
-			・ヘッダー‐アイコン‐名前‐ID（‐補足欄）‐文の間隔や各行間を詰める。
+			・各要素間や各行間を詰める。
 			・文の空行を詰める。
 		*/
 		/* 構造（divは省略）
-			.account-timeline__header			: ヘッダー、アイコン等、名前とID、補足欄、文、FF、TL切り替え
+			.account-timeline__header			: ヘッダー、アイコン等、名前とID、補足欄、メモ欄、文、FF、TL切り替え
 				 .account__header					: ヘッダー、アイコン等、名前とID、補足欄、文、FF
 					.account__header__image
 						.account__header__info				: 「フォローされています」等
 						img									: ヘッダー画像
-					.account__header__bar				: アイコン等、名前とID、補足欄、文、FF
+					.account__header__bar				: アイコン等、名前とID、補足欄、メモ欄、文、FF（、メニューボタン背景色）
 						.account__header__tabs
 							a.avatar						: アイコン
 							.spacer
@@ -68,15 +82,20 @@
 						.account__header__tabs__name
 							h1
 								span						: 名前
-								.account-role bot			: Botバッジ（なおAdminバッジは出ない）
+								.account-role.bot			: Botバッジ（なおAdminやModのバッジは出ない）
 								small						: ID
 						.account__header__extra
 							.account__header__bio
-								account__header__fields		: 捕捉欄
+								.account__header__fields	: 補足欄
 									dl
 										dt					: 見出し
 										dd					: 中身
 									...
+								.account__header__account-note	: メモ欄
+									label
+										span					: 「メモ」
+										span.inline-alert		: 編集終了時の「保存しました」
+									textarea					: メモ編集欄
 								.account__header__content	: 文
 									p
 							.account__header__extra__links	: FF
@@ -89,33 +108,33 @@
 					a										: メディアTL
 		*/
 		if smallenProfile
-			backCol = #313543
-			background: backCol
+			background: UBC_l4-or-white
 			/* ヘッダー */
-			.account__header__image
-				.account__header__info
+			.account__header
+				&__image
+					height: 145px + 44px
+					width: 100%
+					position: absolute
+					img
+						opacity: 0.3	// 可変にしようかと思ったけどやめた
+					&::after
+						content: ""
+						display: block
+						position: absolute
+						top: 0
+						left: 0
+						width: 100%
+						height: 100%
+						background: linear-gradient(to bottom, rgba(UBC_l4-or-white, 0), rgba(UBC_l4-or-white, 0) 50%, rgba(UBC_l4-or-white, 1) 95%)
+				&__info
 					left: initial
 					right: 10px
 					z-index: 10
 					.relationship-tag
 						padding-top: 3px
 						padding-bottom: @padding-top
-				height: 145px + 44px	// この数値何だっけ？
-				width: 100%
-				position: absolute
-				&::after
-					content: ""
-					display: block
-					position: absolute
-					top: 0
-					left: 0
-					width: 100%
-					height: 100%
-					background: linear-gradient(to bottom, rgba(backCol, 0), rgba(backCol, 0) 50%, rgba(backCol, 1) 95%)
-				img
-					opacity: 0.3	// 可変にしようかと思ったけどやめた
-			.account__header__bar
-				background: none
+				&__bar
+					background: none
 			/* アイコン等 */
 			.account__header__tabs
 				padding-top: 0
@@ -123,10 +142,10 @@
 				margin-top: 8px
 				margin-bottom: 7px
 				/* メニューボタン */
-				.account__header__tabs__buttons button[aria-label]
-					background-color: backCol
+				&__buttons button[aria-label]
+					background-color: UBC_l4-or-white
 			/* 名前とID */
-			div.account__header__tabs__name
+			.account__header__tabs__name
 				padding-top: 0	// paddingをmarginに
 				padding-bottom: @padding-top
 				margin-top: 5px
@@ -136,8 +155,14 @@
 			/* 補足欄 */
 			.account__header__fields
 				margin-bottom: 20px - 8px
+			/* メモ欄 */
+			.account__header__account-note
+				padding-top: 0
+				margin-top: 15px - 5px
+				// padding-bottom: 0
+				margin-bottom: 10px
 			/* 文 */
-			div.account__header__content
+			.account__header__content
 				padding-top: 0
 				padding-bottom: 0
 				p
@@ -148,20 +173,62 @@
 				/* 文の空行 */
 				> p:nth-last-child(n+2)
 					margin-bottom: 20px - 15px
+			/* 補足・メモ・文のうち最後の要素 */
+			.account__header__bio > *:last-child
+				margin-bottom: 0
 		if smallenHosoku
 			/* 補足欄を圧縮表示（ほんとは固定トゥートみたいにクリックで畳みたいが、CSS3だけではできなさそう） */
-			div.account__header__fields dl
+			.account__header__fields dl
 				dt, dd
 					hosokuVPad = 14px - 8px
 					padding: hosokuVPad 20px - 10px hosokuVPad - 3px
+		if smallenNote
+			/* メモ欄を圧縮表示 */
+			.account__header__account-note
+				label
+					position: relative
+					> *:first-child  // 「メモ」
+						display: none
+					.inline-alert  // 「保存しました」
+						foreCol = darken(SG, 50%)
+						backCol = lighten(SG, 70%)
+						color: foreCol
+						display: block
+						position: absolute
+						left: 0
+						bottom: 5px
+						border-radius: 4px
+						padding: 3px 8px
+						background: backCol
+						box-shadow: 2px 4px 15px rgba(0, 0, 0, 40%)
+						z-index: 9999
+						&::before
+							content: ""
+							display: block
+							position: absolute
+							bottom: -7px
+							width: 0
+							height: 0
+							border: 0 solid transparent
+							border-width: -@bottom 10px 0 0
+							border-top-color: backCol
+							border-radius: 0
+				textarea
+					// &::placeholder  // 「クリックしてメモを追加」
+					// 	text-align: right
+					background: UBC
+					textareaExtend = 10px - 5px
+					width: "calc(100% + %s)" % (textareaExtend * 2)
+					margin: 0 (- textareaExtend)
 		/* 投稿数・FF数の欄を圧縮表示 */
 		if smallenFF
-			div.account__header__extra__links
+			.account__header__extra__links
 				// line-height: 0
 				margin-top: 20px - 10px
 				margin-bottom: 10px - 7px
+				padding: 0	// paddingを上記marginに
 				a
-					padding-top: 0	// paddingを上記marginに
+					padding-top: 0
 					padding-bottom: 0
 
 	div.account__header[style^="background-image"]	// v2.8.0未満
@@ -236,13 +303,13 @@
 					border-bottom-width: 1px
 				button	// こいつ正直よくわからない…。
 					// line-height: 0px !important
-					height: 0px !important
 					// position: relative
 					// top: 0px
+					height: 0px !important
 
 	/* TL切り替え部を圧縮表示 */
 	if smallenTab
-		div.account__section-headline > a
+		.account__section-headline > a
 			tabVPad = 15px - 7px
 			padding-top: tabVPad + 1px
 			padding-bottom: tabVPad
@@ -255,17 +322,19 @@
 		・消しはしないので「固定トゥートがある」ということはわかる。
 		・日時だけ残すので頻繁に目にする場合は更新があれば気付ける。
 		・「クリックや選択」または「マウスオーバー」で再展開する。
-		（ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、CSS3では先読みを要する親要素や兄要素への作用はできない）
-		（クリックや選択の場合、トゥート内の画像の閲覧注意をクリックで解除するとトゥート自体の選択が解かれてしまう不具合あり。もう一度選択すれば普通に見れる）
+		（ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、
+		  CSS3では先読みを要する親要素や兄要素への作用はできない）
+		（クリックや選択の場合、トゥート内の画像の閲覧注意をクリックで解除すると
+		  トゥート自体の選択が解かれてしまう不具合あり。もう一度選択すれば普通に見れる）
 		・カラム内ユーザーページでだけ有効、カラム内単トゥートページや個別ユーザーページなどには効かない。
 	*/
 	if smallenPinned
 		/* 固定トゥート全体 */
 		article[data-id^="f-"] > div > div.status__wrapper:not(:{openStylePinned}) // div[data-featured="true"]式はQiitadonに使えないので、ちょっと怖いけど廃止。
-			border-bottom: 1px solid #393f4f	// 全体の下線をこちらに回す。
+			border-bottom: 1px solid UBC_l8	// 全体の下線をこちらに回す。
 			// height: 34px						// これがないとなんかラベルの高さが増える。	// と思っていたが、下記のafterによってそうならなくなった。
 			/* 「固定されたトゥート」ラベル全体 */
-			div.status__prepend
+			.status__prepend
 				display: inline-block
 				padding-bottom: 8px
 				span
@@ -273,7 +342,7 @@
 				&::after
 					content: "固定トゥート"		// かぶらない短さ。ほんとはユーザー変数で指定したいけど、日本語文字列を受け付けてくれない…。
 			/* ラベル以外のトゥート全体（情報、本文、メディア、アクション） */
-			div.status
+			.status
 				display: inline-block
 				position: absolute
 				right: 10px
@@ -281,7 +350,7 @@
 				border: 0						// 全体の下線をなくす。
 				min-height: 0px					// 表示に影響はないが、不要な広さが確保されて要素検証時に目障りなので削る。
 				/* 情報（日時、名前、アイコン）のうち日時以外 */
-				div.status__info a:not(.status__relative-time)
+				.status__info a:not(.status__relative-time)
 					display: none
 				/* 情報以外（本文、メディア、アクション、リンク先のカード） */
 				> *:not(.status__info)
