@@ -1,0 +1,100 @@
+/* ==UserStyle==
+@name			myTypingキーボードカスタム
+@description	myTypingのゲーム内キーボードに対する、指毎の色分けや、FキーとJキーの強調表示など
+@namespace		https://github.com/Phroneris
+@version		1.0.0
+@author			森の子リスのミーコの大冒険（Phroneris）
+@homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
+@supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
+@updateURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/raw/master/usercss/mytyping_keyboard.user.styl
+@license		CC0-1.0
+@preprocessor	stylus
+
+@var			checkbox setsColor       "指毎に色分け" 1
+@var			color    colorIndexL     "┣ 人差し指（左）" #0DD
+@var			color    colorIndexR     "┣ 人差し指（右）" #37F
+@var			color    colorMiddle     "┣ 中指"           #F7F
+@var			color    colorRing       "┣ 薬指"           #0D3
+@var			color    colorLittle     "┣ 小指"           #F93
+@var			color    colorThumb      "┣ 親指"           #FF0
+@var			checkbox setsColorAlways "┗ 常にうっすら色分け" 1
+@var			number   lightenValue    "　┗ うっすら度（%）" [80, 0, 100, 1]
+@var			checkbox emphasizesFJ    "FとJを強調表示" 1
+@var			color    colorFJ         "┣ 強調色" #FF0
+@var			number   borderFJ        "┗ 強調太さ（px）" [2, 0, 100, 1]
+@var			checkbox rotates         "回す" 0
+==/UserStyle== */
+
+/* ==ChangeLog==
+
+	2021/09/04 v1.0.0
+	* 作成
+
+*/
+
+@-moz-document domain("typing.twi1.me")
+
+	i = !important
+	lightenValue = unit(lightenValue, "%")
+	borderFJ = unit(borderFJ, "px")
+
+	if setsColor
+		/*
+			デフォルトの配色は、myTyping内にある下記の講座のものに寄せています。
+			https://typing.twi1.me/training#正しい指で打つ
+		*/
+
+		// 0番目は多次元配列時になぜか先頭しか認識されないので、1番目から始める
+		colors = (false colorIndexL colorIndexR colorMiddle colorRing colorLittle colorThumb)
+		keys = ()
+		keys[1] = (52 53 82 84 70 71 86 66)
+		keys[2] = (54 55 89 85 72 74 78 77)
+		keys[3] = (51 56 69 73 68 75 67 188)
+		keys[4] = (50 57 87 79 83 76 88 190)
+		keys[5] = (49 48 189 222 220 81 80 192 219 65 187 186 221 16 90 191 226)
+		keys[6] = (32)
+		fingers = ()
+		fingers[1] = (4)
+		fingers[2] = (7)
+		fingers[3] = (3 8)
+		fingers[4] = (2 9)
+		fingers[5] = (1 10)
+		fingers[6] = (5 6)
+
+		makeSelector(selBase, values)
+			selBase = ".%s.mtjHit.%s-" % (selBase selBase)
+			return selBase + join(", " + selBase, values)
+
+		for n in (1 .. length(colors) - 1)
+			selectorKeys    = makeSelector(mtjKey   , keys[n])
+			selectorFingers = makeSelector(mtjFinger, fingers[n])
+			selectors = join(", ", selectorKeys, selectorFingers)
+			{selectors}  // どうしてもエディタのエラーを回避したければ :is() で囲む
+				background-color: colors[n]
+			if setsColorAlways
+				{replace(".mtjHit", "", selectors)}
+					background-color: lighten(colors[n], lightenValue)
+
+	if emphasizesFJ
+		.mtjKey.mtjKey-
+			&70, &74
+				position: relative
+				&::before
+					origBorder = 2px
+					origBorderRadius = 8px
+					content: ""
+					position: absolute
+					inset: - (origBorder + borderFJ)
+					border: borderFJ solid colorFJ
+					border-radius: origBorderRadius + borderFJ
+
+	if rotates
+		.mtjKey
+			animation: spin 500ms linear infinite
+		@keyframes spin
+			0%
+				transform: rotate(0deg)
+			100%
+				transform: rotate(360deg)
+
+
