@@ -39,6 +39,7 @@ Chrome/Firefox/Opera向けブラウザ拡張機能 [Stylus](https://add0n.com/st
 |------------------------------------------------------|------------|------------|
 | [Mastodonカラム内ユーザーTOPを圧縮][Mstdn-CmprsUsTp] | Mastodon   | カラム表示時のユーザーページの上部を色々と圧縮表示
 | [Mastodon未収載アイコン変更][Mstdn-UnlstdIcn]        | Mastodon   | 未収載トゥートのブーストアイコンを、公開トゥートとは別のものに変更してわかりやすくする
+| [myTypingキーボードカスタム][MyTypg-Kbd]             | myTyping   | myTypingのゲーム内キーボードに対する、指毎の色分けや、FキーとJキーの強調表示など
 | [TogetterコメNG][Tgttr-CmntNG]                       | Togetter   | コメント欄の特定ユーザーのアイコンと名前とIDを黒塗り
 | [YouTube長文コメント自動展開][YTb-ExpdLngTxt]        | YouTube    | 「続きを読む」のクリック無しで長文コメントを自動展開
 | [YouTubeサムネ時間どかし][YTb-ThmbTm]                | YouTube    | 動画視聴画面の右側の別動画一覧で、時間バッジをどかしてサムネイル全体を見やすくする
@@ -46,6 +47,7 @@ Chrome/Firefox/Opera向けブラウザ拡張機能 [Stylus](https://add0n.com/st
 
 [Mstdn-CmprsUsTp]: usercss/mastodon_compress-usertop.user.styl?raw=true
 [Mstdn-UnlstdIcn]: usercss/mastodon_unlisted-icon.user.styl?raw=true
+[MyTypg-Kbd]: usercss/mytyping_keyboard.user.styl?raw=true
 [Tgttr-CmntNG]: usercss/togetter_comment-ng.user.styl?raw=true
 [YTb-ExpdLngTxt]: usercss/youtube_expand-long-text.user.styl?raw=true
 [YTb-ThmbTm]: usercss/youtube_thumbnail-time.user.styl?raw=true
