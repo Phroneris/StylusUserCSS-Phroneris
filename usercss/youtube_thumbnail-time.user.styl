@@ -2,7 +2,7 @@
 @name			YouTubeサムネ時間どかし
 @description	動画視聴画面の右側の別動画一覧で、時間バッジをどかしてサムネイル全体を見やすくする
 @namespace		https://github.com/Phroneris
-@version		1.0.0
+@version		1.1.0
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
 @supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
@@ -13,26 +13,195 @@
 
 /* ==ChangeLog==
 
+	2022/04/13 v1.1.0
+	* シリーズ表示に対応
+		* 1行で済む動画タイトルでも強制的に2行分のスペースが確保されるけど、ご容赦ください。
+	* タイトル等の既存部分も、今のYouTube用に調整
+	* URL条件を前方一致からドメイン一致に変更
+
 	2021/02/03 v1.0.0
 	* 作成
 
 */
+@-moz-document domain("youtube.com")
 
-@-moz-document url-prefix("https://www.youtube.com/watch")
+	////////////////////////////////////////// TODO:「リマインダーを設定」のある生放送
+	isDebug = 0
 
-	ytd-watch-next-secondary-results-renderer  // 動画右の別動画一覧
-		ytd-thumbnail #thumbnail.ytd-thumbnail  // サムネ部分
-			overflow: unset
-		ytd-thumbnail-overlay-time-status-renderer  // 時間部分（4:33とか）
-			left: 168px + 4px
-			right: unset
-		ytd-badge-supported-renderer  // 「新着」「ライブ配信中」等のバッジ
-			justify-content: flex-end
-		#metadata-line.ytd-video-meta-block  // 「～前に配信済み」の親
-			flex-wrap: nowrap
-			white-space: nowrap
-			span.ytd-video-meta-block:nth-of-type(2)  // 「～前に配信済み」
-				overflow: hidden
-				text-overflow: ellipsis
+	i = !important
+	n()
+		display: none i
+	debugBC(myColor, myOpacity = .2)
+		if isDebug
+			background-color: rgba(myColor, myOpacity)
+
+	thumbnailH = 94px
+	thumbnailW = 168px
+	thumbnailRightSp = 8px
+	leftW = thumbnailW + thumbnailRightSp
+	// titleH = unquote("var(--yt-link-line-height, 1.6rem) * 2")
+	titleLineH = 1.6rem
+	titleH = "%s * 2" % titleLineH  // タイトル領域を強制的に2行分確保
+
+	ytd-watch-next-secondary-results-renderer  // 動画右の別動画一覧  // flex
+
+		div#dismissible  // 別動画単品  // flex
+			align-items: flex-end  // 左のサムネと右の情報を下揃えにする
+
+			> ytd-thumbnail  // サムネ部分
+				a#thumbnail
+					overflow: unset
+				ytd-thumbnail-overlay-time-status-renderer  // 時間部分直上  // flex
+					margin: 0 0 2px
+					left: "calc(100% + %s)" % thumbnailRightSp  // 別に `leftW` で済むけど…
+					right: unset
+
+			> div.ytd-compact-video-renderer  // 情報部分
+				h3  // シリーズ・タイトル
+					debugBC(yellow)
+					> ytd-badge-supported-renderer  // シリーズ  // flex
+						debugBC(green)
+						justify-content: flex-end
+						> div
+							debugBC(red)
+							padding-top: 0px
+							padding-bottom: 5px
+							width: "calc(100% + %s)" % leftW
+							flex-shrink: 0  // 幅100%超のflexアイテムになるために必要
+							> span  // シリーズ文字
+								display: block
+								width: 100%  // 処理的には要らんけど、あった方がコードの意味がわかりやすい
+								// white-space: nowrap  // 単行強制なら上記shrinkの代わりにこれら
+								// overflow: hidden
+								// text-overflow: ellipsis
+								text-align: right
+								padding-top: 1px  // 0だと「ズ」の濁点上部が切れた
+								margin-top: -@padding-top
+								// &::before
+								// 	content: "↴"
+								// 	display: inline-block
+								// 	transform: scale(-1, 1)  // 左右反転
+								// 	margin-right: .3em
+					> span#video-title  // タイトル文字
+						line-height: titleLineH
+						height: "calc(%s)" % titleH
+
+				div.secondary-metadata  // シリーズ・タイトル以外
+					#metadata-line  // flex
+						flex-wrap: nowrap
+						white-space: nowrap
+						> span.ytd-video-meta-block:nth-of-type(2)  // 「～前に配信済み」
+							overflow: hidden
+							text-overflow: ellipsis
+					> ytd-badge-supported-renderer  // 「新着」「ライブ配信中」「360°」等のバッジ  // flex
+						debugBC(#00ff00)
+						display: flex i  // `display: none` を解除して強制的にスペース確保
+						justify-content: flex-end
+						titleBottomSp = 4px
+						chNameH = var(--ytd-channel-name-text_-_line-height, var(--ytd-thumbnail-attribution_-_line-height, 1.8rem))
+						viewCountH = var(--ytd-thumbnail-attribution_-_line-height)
+						height: s("calc(%s - (%s + %s + %s + %s))", thumbnailH, titleH, titleBottomSp, chNameH, viewCountH)
+						// ↓こっちでも良い
+						// badgeTextH = var(--yt-badge-line-height-size, 1.2rem)
+						// badgePad = 3px
+						// badgeBorder = 1px
+						// dataBottomSp = 2px
+						// height: s("calc(%s + (%s + %s) * 2 + %s)", badgeTextH, badgePad, badgeBorder, dataBottomSp)
+						if isDebug
+							> div  // バッジ文字直上
+								&:not(.badge-style-type-live-now)  // 「ライブ配信中」以外
+									background-color: #ececec  // debugBCが見づらいので完全不透明色に
+
+			> div.ytd-compact-radio-renderer  // 情報部分（ミックスリスト）
+				height: 100%
+
+		ytd-menu-renderer.style-scope  // オンマウス時のケバブメニューボタン
+			buttonSize = 24px
+			top: unset
+			bottom: thumbnailH - buttonSize
+
+
+/* HTML構造:
+（classの ".style-scope" は恐らく詳細度勝ち用の飾りなのでここでは全て省略）
+
+ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
+	div#offer-module : ？
+	div#items : ラッパー
+
+		ytd-compact-video-renderer (flex) : 別動画単品
+
+			div#dismissible (flex) : ラッパー
+
+				ytd-thumbnail : 左半分
+					a#thumbnail
+						yt-img-shadow : サムネ
+							img#img
+						div#overlays : 各種オーバーレイ
+							ytd-thumbnail-overlay-resume-playback-renderer : 視聴済み動画のプログレスバー
+								div#progress
+							ytd-thumbnail-overlay-time-status-renderer (flex) : 時間
+								yt-icon : ？
+								span#text : 時間文字
+							ytd-thumbnail-overlay-now-playing-renderer (flex) : 「再生中」
+								span : 文字
+								ytd-thumbnail-overlay-equalizer (flex) : 音声再生を表す縦揺れバーども
+									svg#equalizer
+						div#mouseover-overlay : オンマウスで映像だけプレビュー再生
+						div#hover-overlays : オンマウスで「後で見る」等のボタンを表示
+
+				div.details.ytd-compact-video-renderer : 右半分
+					div.metadata.ytd-compact-video-renderer (flex)
+						a
+							h3.ytd-compact-video-renderer : シリーズとタイトル
+								ytd-badge-supported-renderer.ytd-compact-video-renderer (flex) : シリーズ名
+									div.badge.badge-style-type-collection.ytd-badge-supported-renderer
+										yt-icon : ？
+										span : シリーズ名文字
+									dom-repeat
+								span#video-title : タイトル文字
+							div.secondary-metadata.ytd-compact-video-renderer : シリーズとタイトル以外
+								ytd-video-meta-block (flex) : 投稿チャンネル、再生回数、投稿時期
+									div#metadata (flex)
+										div#byline-container (flex) : 投稿チャンネル
+											ytd-channel-name#channel-name (flex)
+												div#container : チャンネル名
+													div#text-container
+														yt-formatted-string#text : チャンネル名文字
+													tp-yt-paper-tooltip : オンマウスのツールチップ
+														div#tooltip
+												ytd-badge-supported-renderer (flex) : 公認マーク
+													div.badge.badge-style-type-verified.ytd-badge-supported-renderer
+														yt-icon (flex)
+														span
+														tp-yt-paper-tooltip : オンマウスのツールチップ
+															div#tooltip
+													dom-repeat
+											div#separator : 中黒
+										div#metadata-line (flex) : 再生回数、投稿時期
+											span.ytd-video-meta-block : 再生回数文字
+												::after : 中黒
+											span.ytd-video-meta-block : 投稿時期文字
+											dom-repeat
+									div#additional-metadata-line : ？
+										dom-repeat
+								ytd-badge-supported-renderer.badges.ytd-compact-video-renderer (flex) : 「新着」「ライブ配信中」「360°」等のバッジ
+									div.badge.badge-style-type-simple.ytd-badge-supported-renderer
+										yt-icon
+										span : バッジ文字
+									dom-repeat
+						div#buttons : ？
+					div#menu : オンマウス時のケバブメニューボタン
+						ytd-menu-renderer
+							略
+					div#queue-button
+						略
+
+			div#dismissed : 恐らく非表示操作をした動画用
+			yt-interaction : ？
+				略
+
+	div#continuations : 恐らく無限スクロール用
+
+*/
 
 
