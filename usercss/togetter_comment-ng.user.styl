@@ -2,7 +2,7 @@
 @name			TogetterコメNG（アイコン、名前、IDを黒塗り）
 @description	Togetterコメント欄の特定ユーザーのアイコンと名前とIDを黒塗りする
 @namespace		https://github.com/Phroneris
-@version		1.0.3
+@version		1.1.0
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
 @supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
@@ -18,6 +18,14 @@
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2022/04/13 v1.1.0
+	* 名前とIDの間に追加していた空白を削除
+		* recyclebin5385氏の『togecutter-alt』でのNG登録時に邪魔なため
+	* 無意味な `!important` 祭りを廃止
+		* ただし変数 `i` は残しておく
+	* デバッグしやすくするため、NG色を変数化
+	* 他の配布UserCSSとの統一のため、CSSプロパティ直後に `:` を付与
 
 	2021/02/02 v1.0.3
 	* 各種URLのリポジトリ名を修正
@@ -43,6 +51,7 @@
 	*/
 
 	i = !important
+	ngColor = rgba(black, 1)
 	f()
 		for userid in users
 			// ^(\d+[A-Za-z]*)(_\w*)$ みたいなIDが\1と\2に分割された配列になってしまうのを防ぐ。
@@ -52,18 +61,17 @@
 			&[href$=\'\/{userid}\']
 				if iconNG == 1
 					img
-						filter brightness(0) i
-						border-radius 0 i
+						filter: brightness(0)
+						border-radius: 0
 				if nameNG == 1
 					strong
-						background-color black i
-						color black i
+						background-color: ngColor
+						color: ngColor
 				if idNG == 1
 					.status_name
-						background-color black i
-						color black i
-						display inline-block i
-						margin-left 3px i
+						background-color: ngColor
+						color: ngColor
+						display: inline-block
 	#comment_box
 		.user_link
 			if disableOnHover == 1
