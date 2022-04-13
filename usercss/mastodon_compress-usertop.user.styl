@@ -2,7 +2,7 @@
 @name			Mastodonカラム内ユーザーTOPを圧縮
 @description	カラム表示時のユーザーページの上部を色々と圧縮表示
 @namespace		https://github.com/Phroneris
-@version		1.3.0
+@version		1.4.0
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
 @supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
@@ -15,7 +15,7 @@
 @var			checkbox smallenNote "圧縮表示：メモ欄" 1
 @var			checkbox smallenFF "圧縮表示：投稿数・FF数の欄" 1
 @var			checkbox smallenTab "圧縮表示：TL切り替え部" 1
-@var			checkbox smallenPinned "固定トゥートを畳む" 1
+@var			checkbox smallenPinned "固定された投稿を畳む" 1
 @var			select openStylePinned "┗ 再展開方法" {
 					"クリックや選択": "focus-within",
 					"マウスオーバー": "hover"
@@ -24,6 +24,16 @@
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2022/04/13 v1.4.0
+	* 「トゥート」→「投稿」
+	* マストドンv3.4.0からの登録年月日表示に対応
+	* マストドンv3.5.0からの新形式ユーザーURLに対応
+		* これ→ https://github.com/mastodon/mastodon/pull/16171
+	* プロフィールにおいて、補足・メモ・文を欠く場合の縦余白を修正
+	* 固定投稿の検出方法を新旧併用式に変更
+	* 主に数値計算におけるコード規約として、「元のデザインで用いられている値」を表す `((固定値))` を導入
+	* その他微調整
 
 	2021/02/03 v1.3.0
 	* 各種URLのリポジトリ名を修正
@@ -56,7 +66,7 @@
 
 */
 
-@-moz-document regexp("^https://[^/]+?/web/accounts/\\d+(/.*)?$")
+@-moz-document regexp("^https://[^/]+?/web/accounts/\\d+(/.*)?$"), regexp("^https://[^/]+?/web/@[a-zA-Z0-9_]{1,30}(@[^/]+)?(/|/\\D.*)?$")
 
 	UBC             = isLightTheme ? #d9e1e8 : #282c37  // SCSS $ui-base-color
 	UBC_l4-or-white = isLightTheme ? #ffffff : #313543  // SCSS lighten($ui-base-color, 4%)
@@ -85,7 +95,7 @@
 								.account-role.bot			: Botバッジ（なおAdminやModのバッジは出ない）
 								small						: ID
 						.account__header__extra
-							.account__header__bio
+							.account__header__bio		: プロフィール
 								.account__header__fields	: 補足欄
 									dl
 										dt					: 見出し
@@ -98,6 +108,8 @@
 									textarea					: メモ編集欄
 								.account__header__content	: 文
 									p
+								.account__header__joined	: 登録年月日
+									span
 							.account__header__extra__links	: FF
 								a							: 投稿数
 								a							: フォロー数
@@ -112,7 +124,7 @@
 			/* ヘッダー */
 			.account__header
 				&__image
-					height: 145px + 44px
+					height: ((145px)) + 44px  // ((固定値)) は「元のデザインで用いられている値」の意味
 					width: 100%
 					position: absolute
 					img
@@ -121,17 +133,14 @@
 						content: ""
 						display: block
 						position: absolute
-						top: 0
-						left: 0
-						width: 100%
-						height: 100%
+						inset: 0
 						background: linear-gradient(to bottom, rgba(UBC_l4-or-white, 0), rgba(UBC_l4-or-white, 0) 50%, rgba(UBC_l4-or-white, 1) 95%)
 				&__info
 					left: initial
-					right: 10px
+					right: ((10px))
 					z-index: 10
 					.relationship-tag
-						padding-top: 3px
+						padding-top: ((4px)) - 1px
 						padding-bottom: @padding-top
 				&__bar
 					background: none
@@ -139,8 +148,8 @@
 			.account__header__tabs
 				padding-top: 0
 				padding-bottom: @padding-top
-				margin-top: 8px
-				margin-bottom: 7px
+				margin-bottom: ((7px))
+				margin-top: @margin-bottom + 1px
 				/* メニューボタン */
 				&__buttons button[aria-label]
 					background-color: UBC_l4-or-white
@@ -148,40 +157,51 @@
 			.account__header__tabs__name
 				padding-top: 0	// paddingをmarginに
 				padding-bottom: @padding-top
-				margin-top: 5px
-				margin-bottom: 5px + 3px
+				margin-top: ((5px))
+				margin-bottom: @margin-top + 3px
 				h1
-					line-height: 24px - 5px
-			/* 補足欄 */
+					line-height: ((24px)) - 5px
+			/* プロフィール（補足、メモ、文） */
+			.account__header__bio
+				&:empty  // 少なくともKirakiratter（v3.1.3）でプロフィールが無い場合
+					margin-top: -9px
+			/* 補足欄（無い人もいる） */  // 元padding: 0;
 			.account__header__fields
-				margin-bottom: 20px - 8px
-			/* メモ欄 */
+				margin-bottom: 10px
+			/* メモ欄（自分には無い） */  // 元padding: 15px 15px 10px;
 			.account__header__account-note
 				padding-top: 0
-				margin-top: 15px - 5px
 				// padding-bottom: 0
-				margin-bottom: 10px
-			/* 文 */
+				margin: 10px 0 11px
+				&:first-child  // 補足が無い場合
+					margin-top: -((4px))
+			/* 文（無い人もいる） */  // 元padding: 20px 15px 5px;
 			.account__header__content
 				padding-top: 0
 				padding-bottom: 0
-				p
-					line-height: 18px - 2px
+				margin-top: 5px
+				&:first-child  // 補足が無い自分の場合
+					margin-top: 0px
+				> p
+					line-height: ((18px)) - 2px
 					forceWrap = 1	// 「見境なく改行」オプションを設けようかと思ったけどいいや、勝手にやる。
 					if forceWrap
 						word-break: break-all
-				/* 文の空行 */
-				> p:nth-last-child(n+2)
-					margin-bottom: 20px - 15px
-			/* 補足・メモ・文のうち最後の要素 */
-			.account__header__bio > *:last-child
-				margin-bottom: 0
+					&:not(:last-child)  // 空行
+						margin-bottom: ((20px)) - 16px
+			/* 登録年月日 */  // 元padding: 5px 15px;
+			.account__header__joined
+				padding-top: 0
+				padding-bottom: 0
+				margin-top: ((5px)) + 2px
+				&:first-child  // プロフィールが無い自分の場合
+					margin-top: 0
 		if smallenHosoku
-			/* 補足欄を圧縮表示（ほんとは固定トゥートみたいにクリックで畳みたいが、CSS3だけではできなさそう） */
+			/* 補足欄を圧縮表示（ほんとは固定投稿みたいにクリック等で開閉したいが、CSS3だけではできなさそう） */
 			.account__header__fields dl
 				dt, dd
-					hosokuVPad = 14px - 8px
-					padding: hosokuVPad 20px - 10px hosokuVPad - 3px
+					hosokuVPad = ((14px)) - 8px
+					padding: hosokuVPad 10px hosokuVPad - 3px
 		if smallenNote
 			/* メモ欄を圧縮表示 */
 			.account__header__account-note
@@ -217,21 +237,21 @@
 					// &::placeholder  // 「クリックしてメモを追加」
 					// 	text-align: right
 					background: UBC
-					textareaExtend = 10px - 5px
+					textareaExtend = ((10px)) - 5px
 					width: "calc(100% + %s)" % (textareaExtend * 2)
 					margin: 0 (- textareaExtend)
 		/* 投稿数・FF数の欄を圧縮表示 */
 		if smallenFF
 			.account__header__extra__links
 				// line-height: 0
-				margin-top: 20px - 10px
-				margin-bottom: 10px - 7px
-				padding: 0	// paddingを上記marginに
+				padding: 0	// paddingをmarginに
+				margin-top: ((10px)) - 2px
+				margin-bottom: ((10px)) - 7px
 				a
 					padding-top: 0
 					padding-bottom: 0
 
-	div.account__header[style^="background-image"]	// v2.8.0未満
+	div.account__header[style^="background-image"]	// v2.8.0未満。基本的にもうメンテしない
 		& > div
 			/*	プロフィールを圧縮表示
 				・アイコン‐名前‐ID（‐Botバッジ）‐文（‐補足欄）の間隔や各行間を詰める。
@@ -310,50 +330,49 @@
 	/* TL切り替え部を圧縮表示 */
 	if smallenTab
 		.account__section-headline > a
-			tabVPad = 15px - 7px
-			padding-top: tabVPad + 1px
-			padding-bottom: tabVPad
+			padding-bottom: ((15px)) - 7px
+			padding-top: @padding-bottom + 1px
 			&.active
-				triWidth = 10px - 3px
 				&::before, &::after
-					border-width: triWidth triWidth + 2px
+					border-width: 0 ((10px)) - 1px ((10px)) - 3px
 
-	/*	固定トゥートを畳む
-		・消しはしないので「固定トゥートがある」ということはわかる。
+	/*	固定投稿を畳む
+		・消しはしないので「固定投稿がある」ということはわかる。
 		・日時だけ残すので頻繁に目にする場合は更新があれば気付ける。
 		・「クリックや選択」または「マウスオーバー」で再展開する。
 		（ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、
 		  CSS3では先読みを要する親要素や兄要素への作用はできない）
-		（クリックや選択の場合、トゥート内の画像の閲覧注意をクリックで解除すると
-		  トゥート自体の選択が解かれてしまう不具合あり。もう一度選択すれば普通に見れる）
-		・カラム内ユーザーページでだけ有効、カラム内単トゥートページや個別ユーザーページなどには効かない。
+		（クリックや選択の場合、投稿内の画像の閲覧注意をクリックで解除すると
+		  投稿自体の選択が解かれてしまう不具合あり。もう一度選択すれば普通に見れる）
+		・カラム内ユーザーページでだけ有効、カラム内単投稿ページや個別ユーザーページなどには効かない。
 	*/
 	if smallenPinned
-		/* 固定トゥート全体 */
-		article[data-id^="f-"] > div > div.status__wrapper:not(:{openStylePinned}) // div[data-featured="true"]式はQiitadonに使えないので、ちょっと怖いけど廃止。
-			border-bottom: 1px solid UBC_l8	// 全体の下線をこちらに回す。
-			// height: 34px						// これがないとなんかラベルの高さが増える。	// と思っていたが、下記のafterによってそうならなくなった。
-			/* 「固定されたトゥート」ラベル全体 */
-			.status__prepend
-				display: inline-block
-				padding-bottom: 8px
-				span
-					display: none				// 「固定されたトゥート」というラベル文。消さないとカラム幅次第では日付が長い場合にかぶる。
-				&::after
-					content: "固定トゥート"		// かぶらない短さ。ほんとはユーザー変数で指定したいけど、日本語文字列を受け付けてくれない…。
-			/* ラベル以外のトゥート全体（情報、本文、メディア、アクション） */
-			.status
-				display: inline-block
-				position: absolute
-				right: 10px
-				padding-right: 0
-				border: 0						// 全体の下線をなくす。
-				min-height: 0px					// 表示に影響はないが、不要な広さが確保されて要素検証時に目障りなので削る。
-				/* 情報（日時、名前、アイコン）のうち日時以外 */
-				.status__info a:not(.status__relative-time)
-					display: none
-				/* 情報以外（本文、メディア、アクション、リンク先のカード） */
-				> *:not(.status__info)
-					display: none
+		/* 固定投稿全体 */
+		article[data-id^="f-"] > div > div  // 古いサーバー  // 最近のサーバーも普通ならこれでカバーできるが、Pawooは無理
+		div[data-featured="true"]           // 最近のサーバー
+			&.status__wrapper:not(:{openStylePinned})
+				border-bottom: 1px solid UBC_l8	// 全体の下線をこちらに回す。
+				/* 「固定された投稿」ラベル全体 */
+				.status__prepend
+					display: inline-block
+					padding-bottom: ((8px))
+					span
+						display: none				// 「固定された投稿」というラベル文。消さないとカラム幅次第では日付が長い場合にかぶる。
+					&::after
+						content: "固定投稿"		// かぶらない短さ。ほんとはユーザー変数で指定したいけど、日本語文字列を受け付けてくれない…。
+				/* ラベル以外の投稿全体（情報、本文、メディア、アクション） */
+				.status
+					display: inline-block
+					position: absolute
+					right: ((10px))
+					padding-right: 0
+					border: 0						// 全体の下線をなくす。
+					min-height: 0px					// 表示に影響はないが、不要な広さが確保されて要素検証時に目障りなので削る。
+					/* 情報（日時、名前、アイコン）のうち日時以外 */
+					.status__info a:not(.status__relative-time)
+						display: none
+					/* 情報以外（本文、メディア、アクション、リンク先のカード） */
+					> *:not(.status__info)
+						display: none
 
 
