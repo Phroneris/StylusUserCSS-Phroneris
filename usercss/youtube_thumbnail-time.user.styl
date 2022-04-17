@@ -2,7 +2,7 @@
 @name			YouTubeサムネ時間どかし
 @description	動画視聴画面の右側の別動画一覧で、時間バッジをどかしてサムネイル全体を見やすくする
 @namespace		https://github.com/Phroneris
-@version		1.1.0
+@version		1.2.0
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
 @supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
@@ -12,6 +12,10 @@
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2022/04/17 v1.2.0
+	* YouTubeムービー（というか映画やテレビ番組の購入およびレンタル？）に対応
+	* 「募金活動」バッジに対応
 
 	2022/04/13 v1.1.0
 	* シリーズ表示に対応
@@ -43,6 +47,19 @@
 	titleLineH = 1.6rem
 	titleH = "%s * 2" % titleLineH  // タイトル領域を強制的に2行分確保
 
+	setBadgeH()
+		titleBottomSp = 4px
+		chNameH = var(--ytd-channel-name-text_-_line-height, var(--ytd-thumbnail-attribution_-_line-height, 1.8rem))
+		viewCountH = var(--ytd-thumbnail-attribution_-_line-height)
+		height: s("calc(%s - (%s + %s + %s + %s))", thumbnailH, titleH, titleBottomSp, chNameH, viewCountH)
+		// ↓こっちでも良い
+		// badgeTextH = var(--yt-badge-line-height-size, 1.2rem)
+		// badgePad = 3px
+		// badgeBorder = 1px
+		// dataBottomSp = 2px
+		// height: s("calc(%s + (%s + %s) * 2 + %s)", badgeTextH, badgePad, badgeBorder, dataBottomSp)
+
+
 	ytd-watch-next-secondary-results-renderer  // 動画右の別動画一覧  // flex
 
 		div#dismissible  // 別動画単品  // flex
@@ -56,7 +73,8 @@
 					left: "calc(100% + %s)" % thumbnailRightSp  // 別に `leftW` で済むけど…
 					right: unset
 
-			> div.ytd-compact-video-renderer  // 情報部分
+			> div.ytd-compact-video-renderer  // 通常（動画やライブ配信等）の情報部分
+
 				h3  // シリーズ・タイトル
 					debugBC(yellow)
 					> ytd-badge-supported-renderer  // シリーズ  // flex
@@ -87,32 +105,45 @@
 						height: "calc(%s)" % titleH
 
 				div.secondary-metadata  // シリーズ・タイトル以外
-					#metadata-line  // flex
+					#byline-container  // 投稿チャンネル
+						debugBC(blue)
+					#metadata-line  // 再生回数、投稿時期  // flex
+						debugBC(orange)
 						flex-wrap: nowrap
 						white-space: nowrap
 						> span.ytd-video-meta-block:nth-of-type(2)  // 「～前に配信済み」
 							overflow: hidden
 							text-overflow: ellipsis
-					> ytd-badge-supported-renderer  // 「新着」「ライブ配信中」「360°」等のバッジ  // flex
+					> ytd-badge-supported-renderer  // 「新着」等のバッジ  // flex
 						debugBC(#00ff00)
 						display: flex i  // `display: none` を解除して強制的にスペース確保
 						justify-content: flex-end
-						titleBottomSp = 4px
-						chNameH = var(--ytd-channel-name-text_-_line-height, var(--ytd-thumbnail-attribution_-_line-height, 1.8rem))
-						viewCountH = var(--ytd-thumbnail-attribution_-_line-height)
-						height: s("calc(%s - (%s + %s + %s + %s))", thumbnailH, titleH, titleBottomSp, chNameH, viewCountH)
-						// ↓こっちでも良い
-						// badgeTextH = var(--yt-badge-line-height-size, 1.2rem)
-						// badgePad = 3px
-						// badgeBorder = 1px
-						// dataBottomSp = 2px
-						// height: s("calc(%s + (%s + %s) * 2 + %s)", badgeTextH, badgePad, badgeBorder, dataBottomSp)
-						if isDebug
-							> div  // バッジ文字直上
-								&:not(.badge-style-type-live-now)  // 「ライブ配信中」以外
-									background-color: #ececec  // debugBCが見づらいので完全不透明色に
+						setBadgeH()
+						> div  // バッジ文字直上
+							&:not(.badge-style-type-live-now)  // 「ライブ配信中」以外
+								debugBC(#ececec, 1)  // 元の半透明だとdebug時に背景色が貫通して見づらい
 
-			> div.ytd-compact-radio-renderer  // 情報部分（ミックスリスト）
+			> div.ytd-compact-movie-renderer  // YouTubeムービーの場合の情報部分
+				> a.ytd-compact-movie-renderer  // 直下
+					width: 100%
+				h3#movie-title  // タイトル
+					debugBC(yellow)
+					line-height: titleLineH
+					height: "calc(%s)" % titleH
+				div.secondary-metadata  // 投稿チャンネル、西暦、ジャンル名
+					#byline-container  // 投稿チャンネル（「YouTube ムービー」）
+						debugBC(blue)
+					span.movie-metadata  // 西暦、ジャンル名
+						debugBC(orange)
+						padding-bottom: 0
+					+ ytd-badge-supported-renderer  // 「レンタル」等のバッジ  // flex
+						debugBC(#00ff00)
+						justify-content: flex-end
+						setBadgeH()
+						> div  // バッジ文字直上
+							debugBC(#ececec, 1)
+
+			> div.ytd-compact-radio-renderer  // ミックスリストの場合の情報部分
 				height: 100%
 
 		ytd-menu-renderer.style-scope  // オンマウス時のケバブメニューボタン
@@ -130,10 +161,11 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 
 		ytd-compact-video-renderer (flex) : 別動画単品
 
-			div#dismissible (flex) : ラッパー
+			div#dismissible.ytd-compact-video-renderer (flex) : ラッパー
 
 				ytd-thumbnail : 左半分
 					a#thumbnail
+						yt-image : ？
 						yt-img-shadow : サムネ
 							img#img
 						div#overlays : 各種オーバーレイ
@@ -151,7 +183,7 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 
 				div.details.ytd-compact-video-renderer : 右半分
 					div.metadata.ytd-compact-video-renderer (flex)
-						a
+						a.yt-simple-endpoint.ytd-compact-video-renderer
 							h3.ytd-compact-video-renderer : シリーズとタイトル
 								ytd-badge-supported-renderer.ytd-compact-video-renderer (flex) : シリーズ名
 									div.badge.badge-style-type-collection.ytd-badge-supported-renderer
@@ -169,12 +201,15 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 														yt-formatted-string#text : チャンネル名文字
 													tp-yt-paper-tooltip : オンマウスのツールチップ
 														div#tooltip
-												ytd-badge-supported-renderer (flex) : 公認マーク
-													div.badge.badge-style-type-verified.ytd-badge-supported-renderer
-														yt-icon (flex)
-														span
-														tp-yt-paper-tooltip : オンマウスのツールチップ
-															div#tooltip
+												ytd-badge-supported-renderer.ytd-channel-name (flex) : 公認関連マーク
+													div.badge.ytd-badge-supported-renderer
+														&.badge-style-type-verified        : 確認済み
+														&.badge-style-type-verified-artist : ♪（公式アーティスト）
+															yt-icon (flex)
+																svg
+															span
+															tp-yt-paper-tooltip : オンマウスのツールチップ
+																div#tooltip
 													dom-repeat
 											div#separator : 中黒
 										div#metadata-line (flex) : 再生回数、投稿時期
@@ -184,10 +219,13 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 											dom-repeat
 									div#additional-metadata-line : ？
 										dom-repeat
-								ytd-badge-supported-renderer.badges.ytd-compact-video-renderer (flex) : 「新着」「ライブ配信中」「360°」等のバッジ
-									div.badge.badge-style-type-simple.ytd-badge-supported-renderer
-										yt-icon
-										span : バッジ文字
+								ytd-badge-supported-renderer.badges.ytd-compact-video-renderer (flex) : 「新着」等のバッジ
+									div.badge.ytd-badge-supported-renderer
+										&.badge-style-type-simple   : 「新着」「360°」
+										&.badge-style-type-live-now : 「ライブ配信中」
+										&.badge-style-type-ypc      : 「募金活動」
+											yt-icon
+											span : バッジ文字
 									dom-repeat
 						div#buttons : ？
 					div#menu : オンマウス時のケバブメニューボタン
@@ -196,11 +234,77 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 					div#queue-button
 						略
 
-			div#dismissed : 恐らく非表示操作をした動画用
-			yt-interaction : ？
+			div#dismissed.ytd-compact-video-renderer : 恐らく非表示操作をした動画用
+			yt-interaction.ytd-compact-video-renderer : ？
 				略
 
 	div#continuations : 恐らく無限スクロール用
+
+*/
+
+/* YouTubeムービーの場合:
+
+		ytd-compact-movie-renderer (flex) : タグがvideo→movieに改名！
+
+			div#dismissible.ytd-compact-movie-renderer : クラスが改名！
+
+				ytd-thumbnail
+					a#thumbnail
+						yt-image
+						yt-img-shadow
+							img#img
+						div#overlays : 視聴済み動画のプログレスバーが親ごと無い！
+							ytd-thumbnail-overlay-time-status-renderer
+								yt-icon
+								span#text
+							ytd-thumbnail-overlay-now-playing-renderer
+								span : 文字
+								ytd-thumbnail-overlay-equalizer
+									svg#equalizer
+						div#mouseover-overlay : オンマウスで反応しない！
+						div#hover-overlays
+
+				div.details.ytd-compact-movie-renderer : クラスが改名！ ここから下のHTML構造がなんか違う！！
+					a.yt-simple-endpoint.ytd-compact-movie-renderer : いきなりaが来る！
+						dom-if : ？
+						h3#movie-title : タイトルだけで、シリーズが親ごと無い！
+						div.secondary-metadata.ytd-compact-movie-renderer : レンタル関連バッジは子ではなく弟になってる！
+							ytd-video-meta-block (flex) : 投稿チャンネルだけで、再生回数と投稿時期が無い！
+								div#metadata (flex)
+									div#byline-container (flex)
+										ytd-channel-name#channel-name (flex)
+											div#container
+												div#text-container
+													yt-formatted-string#text : 「YouTube ムービー」
+												tp-yt-paper-tooltip
+													div#tooltip
+											ytd-badge-supported-renderer.ytd-channel-name (flex)
+												div.badge.badge-style-type-verified.ytd-badge-supported-renderer : 確認済み（当然）
+													yt-icon (flex)
+														svg
+													span
+													tp-yt-paper-tooltip
+														div#tooltip
+												dom-repeat
+										div#separator
+									div#metadata-line (flex)  : 再生回数と投稿時期が無い！
+										dom-repeat
+								div#additional-metadata-line
+									dom-repeat
+							span.movie-metadata.ytd-compact-movie-renderer : 西暦とジャンル名がこっちにある！（例：「1979・アニメ」）
+						ytd-badge-supported-renderer.ytd-compact-movie-renderer (flex) : レンタル関連バッジ
+							div.badge.badge-style-type-ypc.ytd-badge-supported-renderer
+								yt-icon
+								span : 「レンタル」「購入またはレンタル」…のどっちなのかはセレクタでは判別不能
+							dom-repeat
+						dom-if : ？
+					div#menu : この弟の div#queue-button が無い！
+						ytd-menu-renderer
+							略
+
+			div#dismissed.ytd-compact-movie-renderer
+			yt-interaction.ytd-compact-movie-renderer
+				略
 
 */
 
