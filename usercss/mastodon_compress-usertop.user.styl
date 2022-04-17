@@ -2,7 +2,7 @@
 @name			Mastodonカラム内ユーザーTOPを圧縮
 @description	カラム表示時のユーザーページの上部を色々と圧縮表示
 @namespace		https://github.com/Phroneris
-@version		1.4.0
+@version		1.4.1
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
 @supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
@@ -24,6 +24,10 @@
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2022/04/17 v1.4.1
+	* マストドンv2.8.0未満への対応部分は基本的にもうメンテしないものとし、ファイル末尾に移動
+	* インラインコメントの区切りをタブ文字ではなくスペース2個に統一
 
 	2022/04/13 v1.4.0
 	* 「トゥート」→「投稿」
@@ -73,7 +77,7 @@
 	UBC_l8          = isLightTheme ? #c0cdd9 : #393f4f  // SCSS lighten($ui-base-color, 8%)
 	SG              = #79bd9a // isLightTheme ? #4a905f : #79bd9a  // SCSS $success-green
 
-	div.account__header:not([style^="background-image"])	// v2.8.0以上
+	div.account__header:not([style^="background-image"])  // v2.8.0以上
 		/*	プロフィールを圧縮表示
 			・各要素間や各行間を詰める。
 			・文の空行を詰める。
@@ -128,7 +132,7 @@
 					width: 100%
 					position: absolute
 					img
-						opacity: 0.3	// 可変にしようかと思ったけどやめた
+						opacity: 0.3  // 可変にしようかと思ったけどやめた
 					&::after
 						content: ""
 						display: block
@@ -155,7 +159,7 @@
 					background-color: UBC_l4-or-white
 			/* 名前とID */
 			.account__header__tabs__name
-				padding-top: 0	// paddingをmarginに
+				padding-top: 0  // paddingをmarginに
 				padding-bottom: @padding-top
 				margin-top: ((5px))
 				margin-bottom: @margin-top + 3px
@@ -184,7 +188,7 @@
 					margin-top: 0px
 				> p
 					line-height: ((18px)) - 2px
-					forceWrap = 1	// 「見境なく改行」オプションを設けようかと思ったけどいいや、勝手にやる。
+					forceWrap = 1  // 「見境なく改行」オプションを設けようかと思ったけどいいや、勝手にやる
 					if forceWrap
 						word-break: break-all
 					&:not(:last-child)  // 空行
@@ -244,12 +248,62 @@
 		if smallenFF
 			.account__header__extra__links
 				// line-height: 0
-				padding: 0	// paddingをmarginに
+				padding: 0  // paddingをmarginに
 				margin-top: ((10px)) - 2px
 				margin-bottom: ((10px)) - 7px
 				a
 					padding-top: 0
 					padding-bottom: 0
+
+	/* TL切り替え部を圧縮表示 */
+	if smallenTab
+		.account__section-headline > a
+			padding-bottom: ((15px)) - 7px
+			padding-top: @padding-bottom + 1px
+			&.active
+				&::before, &::after
+					border-width: 0 ((10px)) - 1px ((10px)) - 3px
+
+	/*	固定投稿を畳む
+		・消しはしないので「固定投稿がある」ということはわかる。
+		・日時だけ残すので頻繁に目にする場合は更新があれば気付ける。
+		・「クリックや選択」または「マウスオーバー」で再展開する。
+		（ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、
+		  CSS3では先読みを要する親要素や兄要素への作用はできない）
+		（クリックや選択の場合、投稿内の画像の閲覧注意をクリックで解除すると
+		  投稿自体の選択が解かれてしまう不具合あり。もう一度選択すれば普通に見れる）
+		・カラム内ユーザーページでだけ有効、カラム内単投稿ページや個別ユーザーページなどには効かない。
+	*/
+	if smallenPinned
+		/* 固定投稿全体 */
+		article[data-id^="f-"] > div > div  // 古いサーバー  // 最近のサーバーも普通ならこれでカバーできるが、Pawooは無理
+		div[data-featured="true"]           // 最近のサーバー
+			&.status__wrapper:not(:{openStylePinned})
+				border-bottom: 1px solid UBC_l8  // 全体の下線をこちらに回す
+				/* 「固定された投稿」ラベル全体 */
+				.status__prepend
+					display: inline-block
+					padding-bottom: ((8px))
+					span                     // 「固定された投稿」
+						display: none        // 消さないとカラム幅次第では日付が長い場合にかぶる
+					&::after
+						content: "固定投稿"  // かぶらない短さ。ほんとはユーザー変数で指定したいけど、日本語文字列を受け付けてくれない…
+				/* ラベル以外の投稿全体（情報、本文、メディア、アクション） */
+				.status
+					display: inline-block
+					position: absolute
+					right: ((10px))
+					padding-right: 0
+					border: 0        // 全体の下線をなくす
+					min-height: 0px  // 表示に影響はないが、不要な広さが確保されて要素検証時に目障りなので削る
+					/* 情報（日時、名前、アイコン）のうち日時以外 */
+					.status__info a:not(.status__relative-time)
+						display: none
+					/* 情報以外（本文、メディア、アクション、リンク先のカード） */
+					> *:not(.status__info)
+						display: none
+
+
 
 	div.account__header[style^="background-image"]	// v2.8.0未満。基本的にもうメンテしない
 		& > div
@@ -326,53 +380,5 @@
 					// position: relative
 					// top: 0px
 					height: 0px !important
-
-	/* TL切り替え部を圧縮表示 */
-	if smallenTab
-		.account__section-headline > a
-			padding-bottom: ((15px)) - 7px
-			padding-top: @padding-bottom + 1px
-			&.active
-				&::before, &::after
-					border-width: 0 ((10px)) - 1px ((10px)) - 3px
-
-	/*	固定投稿を畳む
-		・消しはしないので「固定投稿がある」ということはわかる。
-		・日時だけ残すので頻繁に目にする場合は更新があれば気付ける。
-		・「クリックや選択」または「マウスオーバー」で再展開する。
-		（ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、
-		  CSS3では先読みを要する親要素や兄要素への作用はできない）
-		（クリックや選択の場合、投稿内の画像の閲覧注意をクリックで解除すると
-		  投稿自体の選択が解かれてしまう不具合あり。もう一度選択すれば普通に見れる）
-		・カラム内ユーザーページでだけ有効、カラム内単投稿ページや個別ユーザーページなどには効かない。
-	*/
-	if smallenPinned
-		/* 固定投稿全体 */
-		article[data-id^="f-"] > div > div  // 古いサーバー  // 最近のサーバーも普通ならこれでカバーできるが、Pawooは無理
-		div[data-featured="true"]           // 最近のサーバー
-			&.status__wrapper:not(:{openStylePinned})
-				border-bottom: 1px solid UBC_l8	// 全体の下線をこちらに回す。
-				/* 「固定された投稿」ラベル全体 */
-				.status__prepend
-					display: inline-block
-					padding-bottom: ((8px))
-					span
-						display: none				// 「固定された投稿」というラベル文。消さないとカラム幅次第では日付が長い場合にかぶる。
-					&::after
-						content: "固定投稿"		// かぶらない短さ。ほんとはユーザー変数で指定したいけど、日本語文字列を受け付けてくれない…。
-				/* ラベル以外の投稿全体（情報、本文、メディア、アクション） */
-				.status
-					display: inline-block
-					position: absolute
-					right: ((10px))
-					padding-right: 0
-					border: 0						// 全体の下線をなくす。
-					min-height: 0px					// 表示に影響はないが、不要な広さが確保されて要素検証時に目障りなので削る。
-					/* 情報（日時、名前、アイコン）のうち日時以外 */
-					.status__info a:not(.status__relative-time)
-						display: none
-					/* 情報以外（本文、メディア、アクション、リンク先のカード） */
-					> *:not(.status__info)
-						display: none
 
 
