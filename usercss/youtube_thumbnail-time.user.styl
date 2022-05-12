@@ -2,7 +2,7 @@
 @name			YouTubeサムネ時間どかし
 @description	動画視聴画面の右側の別動画一覧で、時間バッジをどかしてサムネイル全体を見やすくする
 @namespace		https://github.com/Phroneris
-@version		1.2.0
+@version		1.2.1
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
 @supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
@@ -12,6 +12,9 @@
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2022/05/12 v1.2.1
+	* 公式の変数定義の変更に対応
 
 	2022/04/17 v1.2.0
 	* YouTubeムービー（というか映画やテレビ番組の購入およびレンタル？）に対応
@@ -49,8 +52,8 @@
 
 	setBadgeH()
 		titleBottomSp = 4px
-		chNameH = var(--ytd-channel-name-text_-_line-height, var(--ytd-thumbnail-attribution_-_line-height, 1.8rem))
-		viewCountH = var(--ytd-thumbnail-attribution_-_line-height)
+		chNameH = var(--ytd-channel-name-text-line-height, var(--yt-thumbnail-attribution-line-height, 1.8rem))
+		viewCountH = var(--yt-thumbnail-attribution-line-height, 1.8rem)
 		height: s("calc(%s - (%s + %s + %s + %s))", thumbnailH, titleH, titleBottomSp, chNameH, viewCountH)
 		// ↓こっちでも良い
 		// badgeTextH = var(--yt-badge-line-height-size, 1.2rem)
@@ -158,6 +161,8 @@
 ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 	div#offer-module : ？
 	div#items : ラッパー
+
+	 （途中にも色々あるけど略）
 
 		ytd-compact-video-renderer (flex) : 別動画単品
 
