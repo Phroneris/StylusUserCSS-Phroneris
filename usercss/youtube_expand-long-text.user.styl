@@ -2,18 +2,20 @@
 @name			YouTube長文コメント自動展開
 @description	「続きを読む」のクリック無しで長文コメントを自動展開
 @namespace		https://github.com/Phroneris
-@version		1.0.0
+@version		1.1.0
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
 @supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
 @updateURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/raw/master/usercss/youtube_expand-long-text.user.styl
 @license		CC0-1.0
 @preprocessor	stylus
-@var			checkbox expandCaption "動画説明文も展開" 1
-@var			checkbox showLessMoreOfCaption "┗ 動画説明文の「もっと見る」ボタンを表示（説明文下部の「カテゴリ」等を閲覧したい場合に必要です）" 1
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2022/11/03 v1.1.0
+	* YouTubeのUIリニューアルに対応
+	* リニューアルの影響で動画説明文の展開が不可能に
 
 	2021/02/03 v1.0.0
 	* 作成
@@ -27,14 +29,14 @@
 		display: none i
 
 	adjustMainText()  // コメント本文を下処理
-		ytd-expander[class].style-scope > #content.ytd-expander  // コメントにも説明文にも両適用＆詳細度勝ちするために、こういうのが要る
+		ytd-expander[class].style-scope > #content.ytd-expander  // 詳細度勝ちするためにこういうのが要る
 			overflow: initial
 			max-height: initial
 			display: block  // これ以下が無いと返信付きの場合に壊れる
 			-webkit-box-orient: initial
 			-webkit-line-clamp: initial
 	hideButton()  // 「続きを読む」も「一部を表示」も消す
-		paper-button.ytd-expander
+		tp-yt-paper-button.ytd-expander
 			n()
 	expandReplies()  // 返信を自動展開  // どうも「返信を表示」をクリックしないと返信自体が読み込まれないようなので、仕様上無理
 		ytd-comment-replies-renderer
@@ -47,12 +49,5 @@
 		adjustMainText()
 		hideButton()
 		// expandReplies()
-	if expandCaption
-		ytd-video-secondary-info-renderer
-			adjustMainText()
-		if not showLessMoreOfCaption
-			hideButton()
-			#container.ytd-video-secondary-info-renderer
-				margin-bottom: 8px
 
 
