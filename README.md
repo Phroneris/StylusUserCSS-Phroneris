@@ -110,7 +110,7 @@ Web上からの方法すら上手くいかない場合、以下の手順でど�
 
 ## 4-2. 作者環境（READMEの内容もこれに準ずる）
 
-- Windows 7 64bit
+- Windows 10 64bit
 - Google Chrome 64bit
 - 日本語
 
