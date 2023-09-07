@@ -3,7 +3,7 @@ Stylus用UserCSS（森）
 
 | Mastodonカラム内ユーザーTOPを圧縮 | Mastodon未収載アイコン変更 |
 |:---------------------------------:|:--------------------------:|
-| <img src="readme-image/sample_Mstdn-CmprsUsTp.gif" alt="『Mastodonカラム内ユーザーTOPを圧縮』v1.3.0のGIFアニメ" title="Mastodonカラム内ユーザーTOPを圧縮（v1.3.0）"><br>（GIFアニメ） | <img src="readme-image/sample_Mstdn-UnlstdIcn.gif" alt="『Mastodon未収載アイコン変更』v1.0.5のGIFアニメ" title="Mastodon未収載アイコン変更（v1.0.5）"><br>（GIFアニメ） |
+| <img src="readme-image/sample_Mstdn4-CmprsUsTp.png" alt="『Mastodonカラム内ユーザーTOPを圧縮（v4）』v1.0.0のスクリーンショット" title="Mastodonカラム内ユーザーTOPを圧縮（v4）- v1.0.0"> | <img src="readme-image/sample_Mstdn-UnlstdIcn.gif" alt="『Mastodon未収載アイコン変更』v1.0.5のGIFアニメ" title="Mastodon未収載アイコン変更（v1.0.5）"><br>（GIFアニメ） |
 
 | YouTubeLiveコメント一覧カスタム | YouTubeサムネ時間どかし |
 |:-------------------------------:|:-----------------------:|
@@ -37,7 +37,7 @@ Chrome/Firefox/Opera向けブラウザ拡張機能 [Stylus](https://add0n.com/st
 
 | 名前、リンク                                         | 対象サイト | 概要、効果 |
 |------------------------------------------------------|------------|------------|
-| [Mastodonカラム内ユーザーTOPを圧縮][Mstdn-CmprsUsTp] | Mastodon   | カラム表示時のユーザーページの上部を色々と圧縮表示
+| Mastodonカラム内ユーザーTOPを圧縮<br>[[～v3][Mstdn-CmprsUsTp]] [[v4][Mstdn4-CmprsUsTp]] | Mastodon | カラム表示時のユーザーページの上部を色々と圧縮表示
 | [Mastodon未収載アイコン変更][Mstdn-UnlstdIcn]        | Mastodon   | 未収載トゥートのブーストアイコンを、公開トゥートとは別のものに変更してわかりやすくする
 | [myTypingキーボードカスタム][MyTypg-Kbd]             | myTyping   | myTypingのゲーム内キーボードに対する、指毎の色分けや、FキーとJキーの強調表示など
 | [TogetterコメNG][Tgttr-CmntNG]                       | Togetter   | コメント欄の特定ユーザーのアイコンと名前とIDを黒塗り
@@ -46,6 +46,7 @@ Chrome/Firefox/Opera向けブラウザ拡張機能 [Stylus](https://add0n.com/st
 | [YouTubeLiveコメント一覧カスタム][YTbLv-CmntLst]     | YouTube&nbsp;Live | コメント一覧のパーツ削除、高さ変更、ユーザー名省略（マウスオーバーで表示）など
 
 [Mstdn-CmprsUsTp]: usercss/mastodon_compress-usertop.user.styl?raw=true
+[Mstdn4-CmprsUsTp]: usercss/mastodon4_compress-usertop.user.styl?raw=true
 [Mstdn-UnlstdIcn]: usercss/mastodon_unlisted-icon.user.styl?raw=true
 [MyTypg-Kbd]: usercss/mytyping_keyboard.user.styl?raw=true
 [Tgttr-CmntNG]: usercss/togetter_comment-ng.user.styl?raw=true
