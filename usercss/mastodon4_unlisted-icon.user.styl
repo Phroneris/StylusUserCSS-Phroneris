@@ -1,0 +1,219 @@
+/* ==UserStyle==
+@name			Mastodon未収載アイコン変更（v4）
+@description	Mastodonの未収載投稿のブーストアイコンを、公開投稿とは別のものに変更してわかりやすくする
+@namespace		https://github.com/Phroneris
+@version		1.0.0
+@author			森の子リスのミーコの大冒険（Phroneris）
+@homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
+@supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
+@updateURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/raw/master/usercss/mastodon4_unlisted-icon.user.styl
+@license		CC0-1.0
+@preprocessor	stylus
+
+@var			select icon "ブーストアイコン形状" {
+	"変更しない"   : "noop",
+	"片矢印*"      : "halfArrow",
+	"開ききった鍵" : "openFull",
+	"開いた鍵"     : "open"
+}
+@var			select colorSet "配色セット" {
+	"使用しない"             : "noop",
+	"Mastodon"               : "default",
+	"Mastodon Light"         : "mastodon-light",
+	"Mastodon Contrast"      : "contrast",
+	"Mastodon v3"            : "mastodon-v3",
+	"Kirakiratter"           : "kkt",
+	"Kirakiratter angely"    : "kkt-angely",
+	"Kirakiratter dark"      : "kkt-dark",
+	"Kirakiratter checkmate" : "kkt-checkmate",
+	"Qiitadon"               : "qiitadon",
+	"Qiitadon-dark"          : "qiitadon-dark",
+	"通常は黒、ブーストで白" : "black-white",
+	"通常は白、ブーストで黒" : "white-black"
+}
+@var			checkbox overridesColorNormal  "通常色を上書き" 0
+@var			color    colorNormal           "┗ 通常色"      #606984
+@var			checkbox overridesColorBoosted "ブースト色を上書き" 0
+@var			color    colorBoosted          "┗ ブースト色"      #8c8dff
+==/UserStyle== */
+
+/* ==ChangeLog==
+
+	2023/09/08 v1.0.0
+	* Mastodon v4の大規模リニューアルに対応
+	* 過去版と分離
+	* 「ブーストアイコン形状」に「変更しない」を追加
+	* 配色セットと個別色上書きによる色変え機能を追加
+
+*/
+/*
+	* hover範囲を修正…しようと思ったがむしろ正しいっぽいのでやめた
+	* hoverだけでなくactiveとfocusも認識するよう修正…しようと思ったが同上
+	* 配色逆転機能を追加…してみたが微塵の有用性も無いのでやめた
+*/
+
+// @-moz-document regexp(".*")  // @-moz-document 自体を消すことで全てのURLに一致
+
+	// 開発時1に
+	dbg = 0
+	i = !important
+
+	/*	MastodonのDark（デフォルト）の色
+		mastodon/app/javascript/styles/mastodon/boost.scss より
+			button.icon-button i.fa-retweet
+				（SVG略）
+				fill='#{hex-color($action-button-color)}'  // 通常時 // :hover = lighten 7%, .disabled = darken 13%
+				fill='#{hex-color($highlight-text-color)}' // ブースト時
+		mastodon/app/javascript/styles/mastodon/variables.scss より
+			$action-button-color = $ui-base-lighter-color = lighten($ui-base-color = $classic-base-color = #282c37, 26%)
+			$highlight-text-color = lighten($ui-highlight-color = $classic-highlight-color = #6364ff, 8%)
+	*/
+	/* Stylusでは lighten() 等の関数の挙動が全然違うので、Sass仕様のそれらを自作
+		違いの記録：
+			lighten(red, 50%) はSassでは真っ白、Stylusでは薄赤 - Qiita
+			https://qiita.com/Phroneris/items/9f9bc130c41ee9c39913
+	*/
+	sass-color-control(color, rate, func)
+		return rgb(func(color, func(color) + rate))
+	sass-lighten(color, rate)
+		return sass-color-control(color, + rate, lightness)
+	sass-darken(color, rate)
+		return sass-color-control(color, - rate, lightness)
+	sass-saturate(color, rate)
+		return sass-color-control(color, + rate, saturation)
+	sass-desaturate(color, rate)
+		return sass-color-control(color, - rate, saturation)
+
+	colorUse = 0  // 0: ソースで算出済みの解、1: 計算の過程も再現してみた値
+	colorSet-noop           = (unquote("#------") unquote("#------"))
+	colorSet-default        = (#606984 sass-lighten(#282c37, 26%))[colorUse] (#8c8dff sass-lighten(#6364ff, 8%))[colorUse]
+	colorSet-mastodon-light = colorSet-default[0] (#3a3bff sass-darken(#858afa, 8%))[colorUse]
+	// $action-button-color
+	// $highlight-text-color = darken($ui-highlight-color = $classic-highlight-color = #858afa, 8%)
+	colorSet-contrast       = (#a2a9bc sass-lighten(#282c37, 50%))[colorUse] (#9697ff sass-lighten(#6364ff, 10%))[colorUse]
+	// $action-button-color = lighten($ui-base-color = $classic-base-color = #282c37, 50%)
+	// $highlight-text-color = lighten($ui-highlight-color = $classic-highlight-color = #6364ff, 10%)
+	colorSet-mastodon-v3    = colorSet-default[0] #2b90d9
+	colorSet-kkt            = (#8a6461 sass-lighten(sass-desaturate(#6a4643, 5%), 12%))[colorUse] #e46bac
+	// $action-button-color // 計算の方では #8a6460 になる
+	// $ui-highlight-color
+	colorSet-kkt-angely     = (#d37563 sass-lighten(#c24d37, 12%))[colorUse] #ffb389
+	colorSet-kkt-dark       = (#f7f7f7 sass-lighten(sass-desaturate(sass-darken(#FFF, 15%), 5%), 12%))[colorUse] #443ae4  // 通常色が計算の方では #f8f8f8 になる
+	colorSet-kkt-checkmate  = colorSet-kkt-dark[0] #65112b
+	colorSet-qiitadon       = #AAAAAA #009AF4  // custom/boost.scss ハードコード
+	colorSet-qiitadon-dark  = #555555 #00EFFF  // qiita-dark.scss ハードコード
+	colorSet-black-white    = black white  // 独自
+	colorSet-white-black    = white black  // 独自
+
+	quote(literal)
+		return "" + literal + ""
+	getColorSetVariable(suffix)
+		// `contrast` とかをそのままリテラルで扱うと `contrast(t,e)` とかに展開されちゃう
+		// 当然 `"colorSet-" + contrast` は "colorSet-contrast(t,e)" になるので死
+		// 一方、sprintf演算子 % を使えば `colorSet-contrast` を作れる
+		// ただし lookup() の引数は文字列でなければならないので quote() を要する
+		return lookup(quote("colorSet-%s" % suffix))
+
+	/*
+		◯◯色を上書き→上書きの色
+		配色セットを使う（そして上書きはしない）→セットの色
+		いずれも無し→推測
+		推測不能→色指定しない
+	*/
+
+	usesColorSet = colorSet != noop
+	if usesColorSet or (overridesColorNormal and overridesColorBoosted)
+
+		colorSetName = colorSet
+		colorSet = getColorSetVariable(colorSet)
+		trueColorNormal  = overridesColorNormal  ? colorNormal  : colorSet[0]
+		trueColorBoosted = overridesColorBoosted ? colorBoosted : colorSet[1]
+		:root
+			--boost-color-normal : trueColorNormal
+			--boost-color-boosted: trueColorBoosted
+
+		if dbg  // デバッグ用
+			.drawer__inner
+				marks = (!overridesColorNormal !overridesColorBoosted overridesColorNormal overridesColorBoosted)
+				for m, i in marks
+					marks[i] = unquote(m ? "!" : " ")
+				six-hex(col)
+					dec = red(col) * (16 ** 4) + green(col) * (16 ** 2) + blue(col)
+					hex = base-convert(dec, 16, 6)
+					return "#%s" % hex
+				// なぜか () 式のリストだと i==1 で残り全てが入っちゃう
+				colors = colorSet[0], colorSet[1], colorNormal, colorBoosted
+				for c, i in colors
+					colors[i] = six-hex(c)  // black が #000 になったりするので6桁を強制する
+				&::after
+					content: quote('%s%s %s%s : "%s"\a %s%s %s%s : (Override)' % (colors[0] marks[0] colors[1] marks[1] colorSetName colors[2] marks[2] colors[3] marks[3]))
+					white-space: pre
+					background-color: trueColorNormal
+					color: trueColorBoosted
+					border: 5px solid @color
+					font: bold 1em monospace
+
+	else
+
+		// :root
+		// 	--boost-color-normal : colorSet-default[0]
+		// 	--boost-color-boosted: colorSet-default[1]
+		for theme in "default" "mastodon-light" "contrast" "mastodon-v3" "kkt" "kkt-angely" "kkt-dark" "kkt-checkmate" "qiitadon" "qiitadon-dark" "black-white" "white-black"
+			colorSet = getColorSetVariable(unquote(theme))
+			body.app-body.theme-{theme}
+				--boost-color-normal : colorSet[0]
+				--boost-color-boosted: colorSet[1]
+		body > #mastodon
+			if overridesColorNormal
+				--boost-color-normal : colorNormal
+			if overridesColorBoosted
+				--boost-color-boosted: colorBoosted
+
+	body > #mastodon div.status__wrapper-unlisted .icon-button
+		&.active > i.fa-retweet:not(:hover)
+			color: var(--boost-color-boosted)
+		> i.fa-retweet:not(:hover)
+			color: var(--boost-color-normal)
+
+			if icon == "openFull"
+				/*	・普段         ：開ききった鍵
+					・hover        ：本来
+					・BT真っ最中   ：本来（アニメーション）
+					・hover（BT後）：本来（紫）
+					・普段（BT後） ：開ききった鍵（紫）
+				*/
+				background-image: none  // 本来の図形を非表示
+				&::after
+					content: "\F09C"  // なぜかbeforeではなくafterじゃないと効かない
+
+			else if icon == "open"
+				/*	・普段         ：やや開いた鍵
+					・hover        ：本来
+					・BT真っ最中   ：本来（アニメーション）
+					・hover（BT後）：本来（紫）
+					・普段（BT後） ：やや開いた鍵（紫）
+				*/
+				background-image: none
+				&::after
+					content: "\F13E"
+
+			else if icon == "halfArrow"
+				/*	・普段         ：片方だけの矢印
+					・hover        ：本来
+					・BT真っ最中   ：本来（アニメーション）
+					・hover（BT後）：本来（紫）
+					・普段（BT後） ：片方だけの矢印（紫）
+				*/
+				background-image: none  // 背景を望む色で塗り潰し、mask-imageを使って画像の形で切り抜き
+				background-color: currentColor
+				mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='19'><path d='m17.13 3.59c-0.55-0.02-1.32 0.02-2.4 0.02h-10.862l2.32 2.85 0.03 0.06h8.4819c0.42 0 0.72 0.28 0.72 0.72v2.7h-2.5c-0.36 0.02-0.56 0.54-0.3 0.8l3.92 4.9c0.18 0.25 0.6 0.25 0.78 0l3.94-4.9c0.26-0.28 0-0.83-0.37-0.8h-2.49v-2.7c0-3.15 0.4-3.62-1.25-3.66z' fill='%23606984' stroke-width='0'/></svg>")
+				-webkit-mask-image: @mask-image
+
+			else if icon == "noop" and (usesColorSet or overridesColorNormal or overridesColorBoosted)
+				/* 色変えのみ */
+				background-image: none
+				background-color: currentColor
+				mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='209'><path d='M4.97 3.16c-.1.03-.17.1-.22.18L.8 8.24c-.2.3.03.78.4.8H3.6v2.68c0 4.26-.55 3.62 3.66 3.62h7.66l-2.3-2.84c-.03-.02-.03-.04-.05-.06H7.27c-.44 0-.72-.3-.72-.72v-2.7h2.5c.37.03.63-.48.4-.77L5.5 3.35c-.12-.17-.34-.25-.53-.2zm12.16.43c-.55-.02-1.32.02-2.4.02H7.1l2.32 2.85.03.06h5.25c.42 0 .72.28.72.72v2.7h-2.5c-.36.02-.56.54-.3.8l3.92 4.9c.18.25.6.25.78 0l3.94-4.9c.26-.28 0-.83-.37-.8H18.4v-2.7c0-3.15.4-3.62-1.25-3.66z' fill='%23606984' stroke-width='0'/></svg>")
+				-webkit-mask-image: @mask-image
+
+
