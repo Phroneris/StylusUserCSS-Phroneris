@@ -3,11 +3,11 @@ Stylus用UserCSS（森）
 
 | Mastodonカラム内ユーザーTOPを圧縮 | Mastodon未収載アイコン変更 |
 |:---------------------------------:|:--------------------------:|
-| <img src="readme-image/sample_Mstdn-CmprsUsTp.gif" height="450px" alt="『Mastodonカラム内ユーザーTOPを圧縮』v1.3.0のGIFアニメ" title="Mastodonカラム内ユーザーTOPを圧縮（v1.3.0）"><br>（GIFアニメ） | <img src="readme-image/sample_Mstdn-UnlstdIcn.gif" height="400px" alt="『Mastodon未収載アイコン変更』v1.0.5のGIFアニメ" title="Mastodon未収載アイコン変更（v1.0.5）"><br>（GIFアニメ） |
+| <img src="readme-image/sample_Mstdn-CmprsUsTp.gif" alt="『Mastodonカラム内ユーザーTOPを圧縮』v1.3.0のGIFアニメ" title="Mastodonカラム内ユーザーTOPを圧縮（v1.3.0）"><br>（GIFアニメ） | <img src="readme-image/sample_Mstdn-UnlstdIcn.gif" alt="『Mastodon未収載アイコン変更』v1.0.5のGIFアニメ" title="Mastodon未収載アイコン変更（v1.0.5）"><br>（GIFアニメ） |
 
 | YouTubeLiveコメント一覧カスタム | YouTubeサムネ時間どかし |
 |:-------------------------------:|:-----------------------:|
-| <img src="readme-image/sample_YTbLv-CmntLst.png" height="370px" alt="『YouTubeLiveコメント一覧カスタム』v1.1.0のスクリーンショット" title="YouTubeLiveコメント一覧カスタム（v1.1.0）"> | <img src="readme-image/sample_YTb-ThmbTm.png" height="370px" alt="『YouTubeサムネ時間どかし』v1.0.0のスクリーンショット" title="YouTubeサムネ時間どかし（v1.0.0）"> |
+| <img src="readme-image/sample_YTbLv-CmntLst.png" alt="『YouTubeLiveコメント一覧カスタム』v1.1.0のスクリーンショット" title="YouTubeLiveコメント一覧カスタム（v1.1.0）"> | <img src="readme-image/sample_YTb-ThmbTm.png" alt="『YouTubeサムネ時間どかし』v1.0.0のスクリーンショット" title="YouTubeサムネ時間どかし（v1.0.0）"> |
 
 𝓐𝓷𝓭 𝓜𝓸𝓻𝓮...
 
