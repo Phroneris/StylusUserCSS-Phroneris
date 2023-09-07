@@ -7,7 +7,7 @@ Stylus用UserCSS（森）
 
 | YouTubeLiveコメント一覧カスタム | YouTubeサムネ時間どかし |
 |:-------------------------------:|:-----------------------:|
-| <img src="readme-image/sample_YTbLv-CmntLst.png" alt="『YouTubeLiveコメント一覧カスタム』v1.2.0のスクリーンショット" title="YouTubeLiveコメント一覧カスタム - v1.2.0"> | <img src="readme-image/sample_YTb-ThmbTm.png" alt="『YouTubeサムネ時間どかし』v1.0.0のスクリーンショット" title="YouTubeサムネ時間どかし（v1.0.0）"> |
+| <img src="readme-image/sample_YTbLv-CmntLst.png" alt="『YouTubeLiveコメント一覧カスタム』v1.2.0のスクリーンショット" title="YouTubeLiveコメント一覧カスタム - v1.2.0"> | <img src="readme-image/sample_YTb-ThmbTm.png" alt="『YouTubeサムネ時間どかし』v1.3.0のスクリーンショット" title="YouTubeサムネ時間どかし - v1.3.0"> |
 
 𝓐𝓷𝓭 𝓜𝓸𝓻𝓮...
 

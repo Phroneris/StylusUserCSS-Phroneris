@@ -2,7 +2,7 @@
 @name			YouTubeサムネ時間どかし
 @description	動画視聴画面の右側の別動画一覧で、時間バッジをどかしてサムネイル全体を見やすくする
 @namespace		https://github.com/Phroneris
-@version		1.2.1
+@version		1.3.0
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
 @supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
@@ -12,6 +12,12 @@
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2023/09/08 v1.3.0
+	* 「配信予定」状態のライブ配信に対応
+	* ライブ配信の視聴者が0人の場合に対応
+	* 公式のサムネイルの角丸化に対応
+	* シリーズ表示が崩れていたのを修正
 
 	2022/05/12 v1.2.1
 	* 公式の変数定義の変更に対応
@@ -32,7 +38,6 @@
 */
 @-moz-document domain("youtube.com")
 
-	////////////////////////////////////////// TODO:「リマインダーを設定」のある生放送
 	isDebug = 0
 
 	i = !important
@@ -50,10 +55,11 @@
 	titleLineH = 1.6rem
 	titleH = "%s * 2" % titleLineH  // タイトル領域を強制的に2行分確保
 
+	viewCountH = var(--yt-thumbnail-attribution-line-height, 1.8rem)
+	/*
 	setBadgeH()
 		titleBottomSp = 4px
 		chNameH = var(--ytd-channel-name-text-line-height, var(--yt-thumbnail-attribution-line-height, 1.8rem))
-		viewCountH = var(--yt-thumbnail-attribution-line-height, 1.8rem)
 		height: s("calc(%s - (%s + %s + %s + %s))", thumbnailH, titleH, titleBottomSp, chNameH, viewCountH)
 		// ↓こっちでも良い
 		// badgeTextH = var(--yt-badge-line-height-size, 1.2rem)
@@ -61,9 +67,13 @@
 		// badgeBorder = 1px
 		// dataBottomSp = 2px
 		// height: s("calc(%s + (%s + %s) * 2 + %s)", badgeTextH, badgePad, badgeBorder, dataBottomSp)
+	*/
+	titleBottomSp = 4px
+	chNameH = var(--ytd-channel-name-text-line-height, var(--yt-thumbnail-attribution-line-height, 1.8rem))
+	badgeHCalc = s("calc(%s - (%s + %s + %s + %s))", thumbnailH, titleH, titleBottomSp, chNameH, viewCountH)
 
 
-	ytd-watch-next-secondary-results-renderer  // 動画右の別動画一覧  // flex
+	ytd-compact-video-renderer  // 別動画単品  // flex
 
 		div#dismissible  // 別動画単品  // flex
 			align-items: flex-end  // 左のサムネと右の情報を下揃えにする
@@ -71,10 +81,29 @@
 			> ytd-thumbnail  // サムネ部分
 				a#thumbnail
 					overflow: unset
+					// こいつに追加された `border-radius: 8px` を効かす
+					yt-image, #mouseover-overlay
+						&, img, ytd-moving-thumbnail-renderer
+							border-radius: inherit
+					#overlays
+						border-radius: inherit
+						ytd-thumbnail-overlay-resume-playback-renderer  // 視聴済み動画のプログレスバー
+							border-radius: inherit
+							height: 100%
+							background: none
+							overflow: hidden
+						#progress
+							y = calc(100% - 4px)
+							clip-path: polygon(0 y, 100% y, 100% 100%, 0 100%)
 				ytd-thumbnail-overlay-time-status-renderer  // 時間部分直上  // flex
 					margin: 0 0 2px
 					left: "calc(100% + %s)" % thumbnailRightSp  // 別に `leftW` で済むけど…
 					right: unset
+					// leftが (100% - 時間幅) を超えているせいか「配信予定」が1文字ずつ改行されてしまうので、防ぐ
+					word-break: keep-all  // `white-space: nowrap` とか `width: max-content` とかでも可
+					pointer-events: none  // 「通知する」ボタンの行にはリンクが無いようにする
+					ytd-badge-supported-renderer
+						margin: 0  // 正体不明だがとりあえず邪魔なので対応
 
 			> div.ytd-compact-video-renderer  // 通常（動画やライブ配信等）の情報部分
 
@@ -105,26 +134,42 @@
 								// 	margin-right: .3em
 					> span#video-title  // タイトル文字
 						line-height: titleLineH
-						height: "calc(%s)" % titleH
+						margin-bottom: 4px  // シリーズでの `margin: 0` を解除
+						^[0][has-one-line-title] ^[1..-1]
+							height: titleLineH
+						^[0]:not([has-one-line-title]) ^[1..-1]
+							height: "calc(%s)" % titleH
 
 				div.secondary-metadata  // シリーズ・タイトル以外
 					#byline-container  // 投稿チャンネル
 						debugBC(blue)
 					#metadata-line  // 再生回数、投稿時期  // flex
 						debugBC(orange)
-						flex-wrap: nowrap
-						white-space: nowrap
+						height: viewCountH  // ライブ視聴者0人だと「●人が視聴中」自体が出ずに潰れるので高さ確保
 						> span.ytd-video-meta-block:nth-of-type(2)  // 「～前に配信済み」
 							overflow: hidden
 							text-overflow: ellipsis
 					> ytd-badge-supported-renderer  // 「新着」等のバッジ  // flex
 						debugBC(#00ff00)
-						display: flex i  // `display: none` を解除して強制的にスペース確保
+						display: flex i  // シリーズでの `display: none` を解除して強制的にスペース確保
 						justify-content: flex-end
-						setBadgeH()
+						// 「通知する」ボタンがある時はそちらにスペースを譲り、インタラクションの入れ子を回避
+						^[0]:not([has-one-line-title]) ^[1..-1]
+							height: badgeHCalc
 						> div  // バッジ文字直上
-							&:not(.badge-style-type-live-now)  // 「ライブ配信中」以外
+							&:not(.badge-style-type-live-now-alternate)  // 「ライブ」以外
 								debugBC(#ececec, 1)  // 元の半透明だとdebug時に背景色が貫通して見づらい
+
+				#buttons  // 「通知する」ボタンとツールチップ
+					display: flex
+					justify-content: flex-end  // 右寄せ
+					ytd-toggle-button-renderer
+						buttonH = 32px
+						titleH = titleLineH
+						margin-top: s("calc(%s - (%s + %s + %s + %s + %s))", thumbnailH, titleH, titleBottomSp, chNameH, viewCountH, buttonH)
+					tp-yt-paper-tooltip
+						left: auto i
+						right: 0 i
 
 			> div.ytd-compact-movie-renderer  // YouTubeムービーの場合の情報部分
 				> a.ytd-compact-movie-renderer  // 直下
@@ -142,7 +187,7 @@
 					+ ytd-badge-supported-renderer  // 「レンタル」等のバッジ  // flex
 						debugBC(#00ff00)
 						justify-content: flex-end
-						setBadgeH()
+						height: badgeHCalc
 						> div  // バッジ文字直上
 							debugBC(#ececec, 1)
 
@@ -164,27 +209,33 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 
 	 （途中にも色々あるけど略）
 
-		ytd-compact-video-renderer (flex) : 別動画単品
+		ytd-compact-video-renderer (flex) : 別動画単品（「通知する」ボタンがあると [has-one-line-title] 属性が付く？）
 
 			div#dismissible.ytd-compact-video-renderer (flex) : ラッパー
 
 				ytd-thumbnail : 左半分
 					a#thumbnail
-						yt-image : ？
-						yt-img-shadow : サムネ
-							img#img
+						yt-image : サムネ
+							img
 						div#overlays : 各種オーバーレイ
 							ytd-thumbnail-overlay-resume-playback-renderer : 視聴済み動画のプログレスバー
 								div#progress
-							ytd-thumbnail-overlay-time-status-renderer (flex) : 時間
-								yt-icon : ？
-								span#text : 時間文字
+							ytd-thumbnail-overlay-time-status-renderer (flex) : 時間またはショート動画アイコン
+								ytd-badge-supported-renderer (flex) : ？
+								div#time-status (flex)
+									yt-icon : ショート動画アイコン？ でも今はショート動画にも時間が表示される
+									span#text : 時間文字
 							ytd-thumbnail-overlay-now-playing-renderer (flex) : 「再生中」
 								span : 文字
 								ytd-thumbnail-overlay-equalizer (flex) : 音声再生を表す縦揺れバーども
 									svg#equalizer
 						div#mouseover-overlay : オンマウスで映像だけプレビュー再生
+							ytd-moving-thumbnail-renderer.ytc-thumbnail
+								img#thumbnail : 動画の場合のプレビュー再生
+								yt-icon#play (flex) : ライブの場合の再生アイコン（横三角）
 						div#hover-overlays : オンマウスで「後で見る」等のボタンを表示
+							ytd-thumbnail-overlay-toggle-button-renderer[aria-label="後で見る"] (flex)
+							ytd-thumbnail-overlay-toggle-button-renderer[aria-label="キューに追加"] (flex)
 
 				div.details.ytd-compact-video-renderer : 右半分
 					div.metadata.ytd-compact-video-renderer (flex)
@@ -210,31 +261,43 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 													div.badge.ytd-badge-supported-renderer
 														&.badge-style-type-verified        : 確認済み
 														&.badge-style-type-verified-artist : ♪（公式アーティスト）
-															yt-icon (flex)
-																svg
-															span
+															yt-icon (flex) : アイコン
+															span : ？
 															tp-yt-paper-tooltip : オンマウスのツールチップ
 																div#tooltip
 													dom-repeat
 											div#separator : 中黒
-										div#metadata-line (flex) : 再生回数、投稿時期
+											yt-formatted-string#video-info : ？
+												yt-attributed-string
+										div#metadata-line : 再生回数、投稿時期
+											ytd-badge-supported-renderer.inline-metadata-badge : ？
+											div#separator : 中黒
 											span.ytd-video-meta-block : 再生回数文字
-												::after : 中黒
 											span.ytd-video-meta-block : 投稿時期文字
+												::before : 中黒
 											dom-repeat
 									div#additional-metadata-line : ？
 										dom-repeat
 								ytd-badge-supported-renderer.badges.ytd-compact-video-renderer (flex) : 「新着」等のバッジ
 									div.badge.ytd-badge-supported-renderer
-										&.badge-style-type-simple   : 「新着」「360°」
-										&.badge-style-type-live-now : 「ライブ配信中」
-										&.badge-style-type-ypc      : 「募金活動」
-											yt-icon
+										&.badge-style-type-simple             : 「新着」「360°」
+										&.badge-style-type-live-now-alternate : 「ライブ」
+										&.badge-style-type-ypc                : 「募金活動」
+											yt-icon (flex) : ライブの場合のアイコン
 											span : バッジ文字
 									dom-repeat
-						div#buttons : ？
+						div#buttons : 未来のライブの「通知する」ボタン
+							ytd-toggle-button-renderer.ytd-compact-video-renderer
+								yt-button-shape (flex)
+									button.yt-spec-button-shape-next (flex)
+										div.cbox.yt-spec-button-shape-next--button-text-content
+											span : テキスト
+										yt-touch-feedback-shape : クリックやタッチ等に反応して描画する何か
+											略
+								tp-yt-paper-tooltip : オンマウス時の「予定開始時間に通知します。」というツールチップ
+									div#tooltip : テキスト
 					div#menu : オンマウス時のケバブメニューボタン
-						ytd-menu-renderer
+						ytd-menu-renderer (flex)
 							略
 					div#queue-button
 						略
