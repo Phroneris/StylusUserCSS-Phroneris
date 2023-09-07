@@ -3,7 +3,7 @@ Stylus用UserCSS（森）
 
 | Mastodonカラム内ユーザーTOPを圧縮 | Mastodon未収載アイコン変更 |
 |:---------------------------------:|:--------------------------:|
-| <img src="readme-image/sample_Mstdn4-CmprsUsTp.png" alt="『Mastodonカラム内ユーザーTOPを圧縮（v4）』v1.0.0のスクリーンショット" title="Mastodonカラム内ユーザーTOPを圧縮（v4）- v1.0.0"> | <img src="readme-image/sample_Mstdn-UnlstdIcn.gif" alt="『Mastodon未収載アイコン変更』v1.0.5のGIFアニメ" title="Mastodon未収載アイコン変更（v1.0.5）"><br>（GIFアニメ） |
+| <img src="readme-image/sample_Mstdn4-CmprsUsTp.png" alt="『Mastodonカラム内ユーザーTOPを圧縮（v4）』v1.0.0のスクリーンショット" title="Mastodonカラム内ユーザーTOPを圧縮（v4）- v1.0.0"> | <img src="readme-image/sample_Mstdn4-UnlstdIcn.gif" alt="『Mastodon未収載アイコン変更（v4）』v1.0.0のGIFアニメ" title="Mastodon未収載アイコン変更（v4）- v1.0.0"><br>（GIFアニメ） |
 
 | YouTubeLiveコメント一覧カスタム | YouTubeサムネ時間どかし |
 |:-------------------------------:|:-----------------------:|
@@ -38,7 +38,7 @@ Chrome/Firefox/Opera向けブラウザ拡張機能 [Stylus](https://add0n.com/st
 | 名前、リンク                                         | 対象サイト | 概要、効果 |
 |------------------------------------------------------|------------|------------|
 | Mastodonカラム内ユーザーTOPを圧縮<br>[[～v3][Mstdn-CmprsUsTp]] [[v4][Mstdn4-CmprsUsTp]] | Mastodon | カラム表示時のユーザーページの上部を色々と圧縮表示
-| [Mastodon未収載アイコン変更][Mstdn-UnlstdIcn]        | Mastodon   | 未収載トゥートのブーストアイコンを、公開トゥートとは別のものに変更してわかりやすくする
+| Mastodon未収載アイコン変更<br>[[～v3][Mstdn-UnlstdIcn]] [[v4][Mstdn4-UnlstdIcn]] | Mastodon | 未収載トゥートのブーストアイコンを、公開トゥートとは別のものに変更してわかりやすくする
 | [myTypingキーボードカスタム][MyTypg-Kbd]             | myTyping   | myTypingのゲーム内キーボードに対する、指毎の色分けや、FキーとJキーの強調表示など
 | [TogetterコメNG][Tgttr-CmntNG]                       | Togetter   | コメント欄の特定ユーザーのアイコンと名前とIDを黒塗り
 | [YouTube長文コメント自動展開][YTb-ExpdLngTxt]        | YouTube    | 「続きを読む」のクリック無しで長文コメントを自動展開
@@ -48,6 +48,7 @@ Chrome/Firefox/Opera向けブラウザ拡張機能 [Stylus](https://add0n.com/st
 [Mstdn-CmprsUsTp]: usercss/mastodon_compress-usertop.user.styl?raw=true
 [Mstdn4-CmprsUsTp]: usercss/mastodon4_compress-usertop.user.styl?raw=true
 [Mstdn-UnlstdIcn]: usercss/mastodon_unlisted-icon.user.styl?raw=true
+[Mstdn4-UnlstdIcn]: usercss/mastodon4_unlisted-icon.user.styl?raw=true
 [MyTypg-Kbd]: usercss/mytyping_keyboard.user.styl?raw=true
 [Tgttr-CmntNG]: usercss/togetter_comment-ng.user.styl?raw=true
 [YTb-ExpdLngTxt]: usercss/youtube_expand-long-text.user.styl?raw=true
