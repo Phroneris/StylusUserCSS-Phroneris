@@ -2,7 +2,7 @@
 @name			Mastodonカラム内ユーザーTOPを圧縮（v4）
 @description	カラム表示時のユーザーページの上部を色々と圧縮表示
 @namespace		https://github.com/Phroneris
-@version		1.0.0
+@version		1.1.0
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
 @supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
@@ -28,6 +28,9 @@
 
 /* ==ChangeLog==
 
+	2023/10/31 v1.1.0
+	* Mastodon v4.2の新URL構造（https://{example.com}/deck/@{user}）に対応
+
 	2023/09/08 v1.0.0
 	* Mastodon v4の大規模リニューアルに対応
 	* 過去版と分離
@@ -43,7 +46,7 @@
 	  * Kirakiratterとはゴリゴリカスタム同士で競合すると思うので、Kirakiratterの色テーマには対応しない
 */
 
-@-moz-document regexp("^https://[^/]+?/@[a-zA-Z0-9_]{1,30}(@[^/]+)?(/|/\\D.*)?$")
+@-moz-document regexp("^https://[^/]+?/(deck/)?@[a-zA-Z0-9_]{1,30}(@[^/]+)?(/|/\\D.*)?$")
 
 	prepareDark()
 		--DTC   : #9baec8  // SCSS $darker-text-color
