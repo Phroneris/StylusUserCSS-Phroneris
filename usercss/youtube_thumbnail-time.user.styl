@@ -2,7 +2,7 @@
 @name			YouTubeサムネ時間どかし
 @description	動画視聴画面の右側の別動画一覧で、時間バッジをどかしてサムネイル全体を見やすくする
 @namespace		https://github.com/Phroneris
-@version		1.3.0
+@version		1.3.1
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
 @supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
@@ -12,6 +12,10 @@
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2024/04/02 v1.3.1
+	* シリーズ名が左寄せでなくなっていたのを修正
+	* （シリーズかつ新着の場合に「新着」バッジが再生回数の行の頭にレンダリングされるためレイアウトの一貫性が崩れてしまうが、さすがに位置が悪すぎてこれをCSSでごまかすのは難しく、仮に修正できたとして今後メンテできるかという点でも難しいので、一旦放置）
 
 	2023/09/08 v1.3.0
 	* 「配信予定」状態のライブ配信に対応
@@ -118,7 +122,7 @@
 							padding-bottom: 5px
 							width: "calc(100% + %s)" % leftW
 							flex-shrink: 0  // 幅100%超のflexアイテムになるために必要
-							> span  // シリーズ文字
+							> p  // シリーズ文字
 								display: block
 								width: 100%  // 処理的には要らんけど、あった方がコードの意味がわかりやすい
 								// white-space: nowrap  // 単行強制なら上記shrinkの代わりにこれら
@@ -226,7 +230,7 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 									yt-icon : ショート動画アイコン？ でも今はショート動画にも時間が表示される
 									span#text : 時間文字
 							ytd-thumbnail-overlay-now-playing-renderer (flex) : 「再生中」
-								span : 文字
+								span#overlay-text : 文字
 								ytd-thumbnail-overlay-equalizer (flex) : 音声再生を表す縦揺れバーども
 									svg#equalizer
 						div#mouseover-overlay : オンマウスで映像だけプレビュー再生
@@ -244,7 +248,7 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 								ytd-badge-supported-renderer.ytd-compact-video-renderer (flex) : シリーズ名
 									div.badge.badge-style-type-collection.ytd-badge-supported-renderer
 										yt-icon : ？
-										span : シリーズ名文字
+										p.ytd-badge-supported-renderer : シリーズ名文字
 									dom-repeat
 								span#video-title : タイトル文字
 							div.secondary-metadata.ytd-compact-video-renderer : シリーズとタイトル以外
@@ -262,7 +266,7 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 														&.badge-style-type-verified        : 確認済み
 														&.badge-style-type-verified-artist : ♪（公式アーティスト）
 															yt-icon (flex) : アイコン
-															span : ？
+															p : ？
 															tp-yt-paper-tooltip : オンマウスのツールチップ
 																div#tooltip
 													dom-repeat
@@ -270,7 +274,8 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 											yt-formatted-string#video-info : ？
 												yt-attributed-string
 										div#metadata-line : 再生回数、投稿時期
-											ytd-badge-supported-renderer.inline-metadata-badge : ？
+											ytd-badge-supported-renderer.inline-metadata-badge : シリーズの場合の「新着」等のバッジ
+												（内部構造はシリーズでない方のバッジと完全に同じ）
 											div#separator : 中黒
 											span.ytd-video-meta-block : 再生回数文字
 											span.ytd-video-meta-block : 投稿時期文字
@@ -284,7 +289,7 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 										&.badge-style-type-live-now-alternate : 「ライブ」
 										&.badge-style-type-ypc                : 「募金活動」
 											yt-icon (flex) : ライブの場合のアイコン
-											span : バッジ文字
+											p : バッジ文字
 									dom-repeat
 						div#buttons : 未来のライブの「通知する」ボタン
 							ytd-toggle-button-renderer.ytd-compact-video-renderer
