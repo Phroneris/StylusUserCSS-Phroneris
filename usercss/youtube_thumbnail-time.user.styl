@@ -2,7 +2,7 @@
 @name			YouTubeサムネ時間どかし
 @description	動画視聴画面の右側の別動画一覧で、時間バッジをどかしてサムネイル全体を見やすくする
 @namespace		https://github.com/Phroneris
-@version		1.3.1
+@version		1.3.2
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
 @supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
@@ -12,6 +12,9 @@
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2024/05/02 v1.3.2
+	* 時間バッジの左マージンを除去
 
 	2024/04/02 v1.3.1
 	* シリーズ名が左寄せでなくなっていたのを修正
@@ -106,7 +109,7 @@
 					// leftが (100% - 時間幅) を超えているせいか「配信予定」が1文字ずつ改行されてしまうので、防ぐ
 					word-break: keep-all  // `white-space: nowrap` とか `width: max-content` とかでも可
 					pointer-events: none  // 「通知する」ボタンの行にはリンクが無いようにする
-					ytd-badge-supported-renderer
+					ytd-badge-supported-renderer, .ytd-thumbnail-overlay-time-status-renderer
 						margin: 0  // 正体不明だがとりあえず邪魔なので対応
 
 			> div.ytd-compact-video-renderer  // 通常（動画やライブ配信等）の情報部分
@@ -224,10 +227,14 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 						div#overlays : 各種オーバーレイ
 							ytd-thumbnail-overlay-resume-playback-renderer : 視聴済み動画のプログレスバー
 								div#progress
-							ytd-thumbnail-overlay-time-status-renderer (flex) : 時間またはショート動画アイコン
+							ytd-thumbnail-overlay-time-status-renderer (flex) : 時間の類
 								ytd-badge-supported-renderer (flex) : ？
-								div#time-status (flex)
-									yt-icon : ショート動画アイコン？ でも今はショート動画にも時間が表示される
+									dom-repeat
+								div.ytd-thumbnail-overlay-time-status-renderer : 時間
+									badge-shape.badge-shape-wiz (flex)
+										div.badge-shape-wiz__text : 時間文字
+								div#time-status : 基本的に非表示？
+									yt-icon : ショート動画アイコン？ でも実際にはショートにすら見当たらない
 									span#text : 時間文字
 							ytd-thumbnail-overlay-now-playing-renderer (flex) : 「再生中」
 								span#overlay-text : 文字
@@ -266,6 +273,7 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 														&.badge-style-type-verified        : 確認済み
 														&.badge-style-type-verified-artist : ♪（公式アーティスト）
 															yt-icon (flex) : アイコン
+																略
 															p : ？
 															tp-yt-paper-tooltip : オンマウスのツールチップ
 																div#tooltip
@@ -277,8 +285,8 @@ ytd-watch-next-secondary-results-renderer (flex) : 動画右の別動画一覧
 											ytd-badge-supported-renderer.inline-metadata-badge : シリーズの場合の「新着」等のバッジ
 												（内部構造はシリーズでない方のバッジと完全に同じ）
 											div#separator : 中黒
-											span.ytd-video-meta-block : 再生回数文字
-											span.ytd-video-meta-block : 投稿時期文字
+											span.inline-metadata-item.ytd-video-meta-block : 再生回数文字
+											span.inline-metadata-item.ytd-video-meta-block : 投稿時期文字
 												::before : 中黒
 											dom-repeat
 									div#additional-metadata-line : ？
