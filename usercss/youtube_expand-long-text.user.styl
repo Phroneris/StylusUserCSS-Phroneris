@@ -2,7 +2,7 @@
 @name			YouTube長文コメント自動展開
 @description	「続きを読む」のクリック無しで長文コメントを自動展開
 @namespace		https://github.com/Phroneris
-@version		1.1.0
+@version		1.2.0
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
 @supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
@@ -12,6 +12,9 @@
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2025/01/09 v1.2.0
+	* YouTubeのHTMLタグ名変更に対応
 
 	2022/11/03 v1.1.0
 	* YouTubeのUIリニューアルに対応
@@ -45,7 +48,8 @@
 			#expander-contents
 				display: block i
 
-	ytd-comments
+	ytd-comments,  // ～v1.1.0
+	ytd-comment-view-model  // v1.2.0～
 		adjustMainText()
 		hideButton()
 		// expandReplies()
