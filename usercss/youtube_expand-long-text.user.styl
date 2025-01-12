@@ -2,7 +2,7 @@
 @name			YouTube長文コメント自動展開
 @description	「続きを読む」のクリック無しで長文コメントを自動展開
 @namespace		https://github.com/Phroneris
-@version		1.2.0
+@version		1.2.1
 @author			森の子リスのミーコの大冒険（Phroneris）
 @homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
 @supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
@@ -12,6 +12,9 @@
 ==/UserStyle== */
 
 /* ==ChangeLog==
+
+	2025/01/12 v1.2.1
+	* URL前方一致ではCSS自体が読み込まれないことがあるので、ドメイン一致に変更
 
 	2025/01/09 v1.2.0
 	* YouTubeのHTMLタグ名変更に対応
@@ -25,7 +28,7 @@
 
 */
 
-@-moz-document url-prefix("https://www.youtube.com/watch")
+@-moz-document domain("youtube.com")
 
 	i = !important
 	n()
