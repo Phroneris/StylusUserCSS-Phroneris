@@ -1,378 +1,379 @@
 /* ==UserStyle==
-@name			Mastodonカラム内ユーザーTOPを圧縮（v4）
-@description	カラム表示時のユーザーページの上部を色々と圧縮表示
-@namespace		https://github.com/Phroneris
-@version		1.1.0
-@author			森の子リスのミーコの大冒険（Phroneris）
-@homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
-@supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
-@updateURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/raw/master/usercss/mastodon4_compress-usertop.user.styl
-@license		CC0-1.0
-@preprocessor	stylus
+@name         Mastodonカラム内ユーザーTOPを圧縮（v4）
+@description  カラム表示時のユーザーページの上部を色々と圧縮表示
+@namespace    https://github.com/Phroneris
+@version      1.1.1
+@author       森の子リスのミーコの大冒険（Phroneris）
+@homepageURL  https://github.com/Phroneris/StylusUserCSS-Phroneris
+@supportURL   https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
+@updateURL    https://github.com/Phroneris/StylusUserCSS-Phroneris/raw/master/usercss/mastodon4_compress-usertop.user.styl
+@license      CC0-1.0
+@preprocessor stylus
 
-@var			checkbox smallenProfile "圧縮表示：プロフィール" 1
-@var			checkbox showFullUrl "┗ 省略されている長いURLをフル表示" 0
-@var			checkbox smallenTab "圧縮表示：TL切り替え部" 1
-@var			checkbox smallenPinned "固定された投稿を畳む" 1
-@var			select openStylePinned "┗ 再展開方法" {
-					"クリックや選択": "focus-within",
-					"マウスオーバー": "hover"
-				}
-@var			select theme "色テーマ" {
-					"自動判別": "theme-auto",
-					"ダークテーマ": "theme-dark",
-					"ライトテーマ": "theme-light",
-					"ハイコントラスト": "theme-contrast"
-				}
+@var          checkbox smallenProfile "圧縮表示：プロフィール" 1
+@var          checkbox showFullUrl "┗ 省略されている長いURLをフル表示" 0
+@var          checkbox smallenTab "圧縮表示：TL切り替え部" 1
+@var          checkbox smallenPinned "固定された投稿を畳む" 1
+@var          select openStylePinned "┗ 再展開方法" {
+                "クリックや選択": "focus-within",
+                "マウスオーバー": "hover"
+              }
+@var          select theme "色テーマ" {
+                "自動判別": "theme-auto",
+                "ダークテーマ": "theme-dark",
+                "ライトテーマ": "theme-light",
+                "ハイコントラスト": "theme-contrast"
+              }
 ==/UserStyle== */
 
 /* ==ChangeLog==
 
-	2023/10/31 v1.1.0
-	* Mastodon v4.2の新URL構造（https://{example.com}/deck/@{user}）に対応
+  2025/07/17 v1.1.1
+  * タブをスペース2個に、末尾空行を1行に変更
 
-	2023/09/08 v1.0.0
-	* Mastodon v4の大規模リニューアルに対応
-	* 過去版と分離
-	* プロフィール関連のオプションを削除し「プロフィール」の圧縮に一元化
-	* テーマ選択オプションに「自動判別」「ハイコントラスト」を追加
-	* URLのフル表示オプションを追加
-	* ヘッダーのグラデーションを mask-image 方式に変更
+  2023/10/31 v1.1.0
+  * Mastodon v4.2の新URL構造（https://{example.com}/deck/@{user}）に対応
+
+  2023/09/08 v1.0.0
+  * Mastodon v4の大規模リニューアルに対応
+  * 過去版と分離
+  * プロフィール関連のオプションを削除し「プロフィール」の圧縮に一元化
+  * テーマ選択オプションに「自動判別」「ハイコントラスト」を追加
+  * URLのフル表示オプションを追加
+  * ヘッダーのグラデーションを mask-image 方式に変更
 
 */
 /*
-	* 未収載アイコン変更の方と違い、こちらは…
-	  * 独自の色指定を使わない方法が無いので、「色テーマを使わない」みたいなオプションは設けない
-	  * Kirakiratterとはゴリゴリカスタム同士で競合すると思うので、Kirakiratterの色テーマには対応しない
+  * 未収載アイコン変更の方と違い、こちらは…
+    * 独自の色指定を使わない方法が無いので、「色テーマを使わない」みたいなオプションは設けない
+    * Kirakiratterとはゴリゴリカスタム同士で競合すると思うので、Kirakiratterの色テーマには対応しない
 */
 
 @-moz-document regexp("^https://[^/]+?/(deck/)?@[a-zA-Z0-9_]{1,30}(@[^/]+)?(/|/\\D.*)?$")
 
-	prepareDark()
-		--DTC   : #9baec8  // SCSS $darker-text-color
-		--UBC   : #282c37  // SCSS $ui-base-color
-		--UBC-l4: #313543  // SCSS lighten($ui-base-color, 4%)
-		--UBC-l8: #393f4f  // SCSS lighten($ui-base-color, 8%)
-		// --UBC-d4: #1f232b  // SCSS darken($ui-base-color, 4%)
-	prepareLight()
-		--DTC   : #282c37
-		--UBC   : #d9e1e8
-		--UBC-l4: #ffffff
-		--UBC-l8: #c0cdd9
-		// --UBC-d4: #e6ebf0
-	prepareContrast()
-		prepareDark()
-		--DTC   : #dde3ec
-	SG = #79bd9a  // SCSS $success-green
-	globalVGap = 10px
+  prepareDark()
+    --DTC   : #9baec8  // SCSS $darker-text-color
+    --UBC   : #282c37  // SCSS $ui-base-color
+    --UBC-l4: #313543  // SCSS lighten($ui-base-color, 4%)
+    --UBC-l8: #393f4f  // SCSS lighten($ui-base-color, 8%)
+    // --UBC-d4: #1f232b  // SCSS darken($ui-base-color, 4%)
+  prepareLight()
+    --DTC   : #282c37
+    --UBC   : #d9e1e8
+    --UBC-l4: #ffffff
+    --UBC-l8: #c0cdd9
+    // --UBC-d4: #e6ebf0
+  prepareContrast()
+    prepareDark()
+    --DTC   : #dde3ec
+  SG = #79bd9a  // SCSS $success-green
+  globalVGap = 10px
 
-	if theme == "theme-auto"
-		body.theme-default
-			prepareDark()
-		body.theme-mastodon-light
-			prepareLight()
-		body.theme-contrast
-			prepareContrast()
-	else
-		:root
-			if theme == "theme-light"
-				prepareLight()
-			else if theme == "theme-contrast"
-				prepareContrast()
-			else
-				prepareDark()
+  if theme == "theme-auto"
+    body.theme-default
+      prepareDark()
+    body.theme-mastodon-light
+      prepareLight()
+    body.theme-contrast
+      prepareContrast()
+  else
+    :root
+      if theme == "theme-light"
+        prepareLight()
+      else if theme == "theme-contrast"
+        prepareContrast()
+      else
+        prepareDark()
 
-	body.layout-multiple-columns > #mastodon
+  body.layout-multiple-columns > #mastodon
 
-		.account__header
-			/*	プロフィールを圧縮表示
-				・各要素間や各行間を詰める。
-				・文の空行を詰める。
-			*/
-			/* 構造（divは省略）
-				.account-timeline__header			: ヘッダー、アイコン等、名前とID、補足欄、メモ欄、文、FF、TL切り替え
-					.account__header					: ヘッダー、アイコン等、名前とID、補足欄、文、FF
-						.account__header__image
-							.account__header__info				: 「フォローされています」等
-							img.parallax						: ヘッダー画像
-						.account__header__bar				: アイコン等、名前とID、補足欄、メモ欄、文、FF（、メニューボタン背景色）
-							.account__header__tabs
-								a.avatar						: アイコン
-								.account__header__tabs__buttons	: ボタン類
-							.account__header__tabs__name
-								h1
-									span						: 名前
-									.account-role.bot			: Botバッジ（なおAdminやModのバッジは出ない）
-									small						: ID
-							.account__header__extra
-								.account__header__bio		: プロフィール
-									.account__header__account-note	: メモ欄
-										label
-											span					: 「メモ」
-											span.inline-alert		: 編集終了時の「保存しました」
-										textarea					: メモ編集欄
-									.account__header__content	: プロフィール文（無い人は要素ごと無い）
-										p
-									.account__header__fields	: 登録日、補足欄
-										dl						: 登録日の親
-											dt					: 「登録日」
-											dd					: 登録年月日
-										dl						: 補足1
-											dt					: 見出し
-											dd					: 中身
-										...						: 補足2...
-								.account__header__extra__links	: FF
-									a							: 投稿数
-									a							: フォロー数
-									a							: フォロワー数
-					.account__section-headline			: TL切り替え
-						a										: 投稿TL
-						a										: 投稿と返信TL
-						a										: メディアTL
-			*/
-			if smallenProfile
-				// background: var(--UBC-l4)
-				/* ヘッダー */
-				&__image
-					height: ((145px)) + 44px  // ((固定値)) は「元のデザインで用いられている値」の意味
-					width: 100%
-					position: absolute
-					mask-image: linear-gradient(to bottom, #000, #000 50%, transparent 95%)
-					-webkit-mask-image: @mask-image
-					img
-						opacity: 0.3  // 可変にしようかと思ったけどやめた
-				&__info
-					left: initial
-					right: ((10px))
-					z-index: 10
-					width: 190px
-					text-align: right
-					.relationship-tag
-						display: inline-block
-						padding-top: ((4px)) - 2px
-						padding-bottom: @padding-top
-						&:not(:first-child)
-							margin-left: .4em
-				// &__bar
-				// 	background: none
-				/* アイコン等 */
-				&__tabs
-					padding-top: 0
-					margin-top: globalVGap + 0px  // 全体の上端の空白
-					/* メニューボタン */
-					&__buttons button[aria-label]
-						background-color: var(--UBC-l4)
-				/* 名前とID */
-				&__tabs__name  // 元margin: 16px 0
-					margin-top: globalVGap
-					margin-bottom: 0
-					h1
-						line-height: ((22px)) - 3px
-					.account-role.bot
-						padding: ((4px)) - 1px ((6px)) - 1px
-						vertical-align: bottom
-				/* プロフィール（メモ、文、補足） */
-				&__extra  // 元margin: 16px 0 0
-					margin-top: globalVGap
-				/* メモ欄（自分には無い） */  // 元margin: 0 0 10px;
-				&__account-note
-					margin-bottom: 0
-					label
-						position: relative
-						> *:first-child  // 「メモ」
-							display: none
-						.inline-alert  // 「保存しました」
-							foreCol = darken(SG, 50%)
-							backCol = lighten(SG, 70%)
-							color: foreCol
-							display: block
-							position: absolute
-							left: 0
-							bottom: 5px
-							border-radius: 4px
-							padding: 3px 8px
-							background: backCol
-							box-shadow: 2px 4px 15px rgba(0, 0, 0, 40%)
-							z-index: 9999
-							&::before
-								content: ""
-								display: block
-								position: absolute
-								bottom: -7px
-								width: 0
-								height: 0
-								border: 0 solid transparent
-								border-width: -@bottom 10px 0 0
-								border-top-color: backCol
-								border-radius: 0
-					textarea
-						// &::placeholder  // 「クリックしてメモを追加」
-						// 	text-align: right
-						background: var(--UBC)
-						textareaExtend = ((10px)) - 5px
-						width: "calc(100% + %s)" % (textareaExtend * 2)
-						margin: 0 (- textareaExtend)
-				/* プロフィール文（無い人は要素ごと無い） */
-				&__content  // 元margin: メモの下の10px
-					margin-top: globalVGap + 1px
-					margin-bottom: -3px
-					&:first-child  // 補足が無い自分の場合
-						margin-top: 0px
-					> p
-						line-height: ((18px)) - 2px
-						&:not(:last-child)  // 空行
-							margin-bottom: ((20px)) - 16px
-				/* 登録日、補足欄 */  // 元margin: 16px 0 0;
-				&__fields
-					variation = 02
-					if variation == 0  // Flexbox版
-						margin-top: globalVGap
-						dl  // 元padding: 11px 16px;
-							padding: 8px 10px
-							display: flex
-							flex-flow: row nowrap
-							column-gap: 5px
-						dt, dd
-							flex: 0 1 auto
-						dt::after
-							display: inline
-							content: ":"  // 見出し名が長すぎる時にこれが出ないのでボツ
-					if variation == 1 or variation == 2  // リスト版（ベタ書きor見出しボックス）
-						if variation == 1  // ベタ書き版
-							background: none
-							padding-left: 1em
-							line-height: ((20px)) - 2px
-							margin-top: globalVGap - 1px
-						else  // 見出しボックス版
-							background-clip: text  // 自身の背景をほぼ消しつつ背景色を子へ継承可能にする小細工
-							-webkit-background-clip: text
-							line-height: ((20px)) + 1px
-							margin-top: globalVGap - 0px
-							margin-bottom: -1px
+    .account__header
+      /* プロフィールを圧縮表示
+        ・各要素間や各行間を詰める。
+        ・文の空行を詰める。
+      */
+      /* 構造（divは省略）
+        .account-timeline__header : ヘッダー、アイコン等、名前とID、補足欄、メモ欄、文、FF、TL切り替え
+          .account__header : ヘッダー、アイコン等、名前とID、補足欄、文、FF
+            .account__header__image
+              .account__header__info : 「フォローされています」等
+              img.parallax : ヘッダー画像
+            .account__header__bar : アイコン等、名前とID、補足欄、メモ欄、文、FF（、メニューボタン背景色）
+              .account__header__tabs
+                a.avatar : アイコン
+                .account__header__tabs__buttons : ボタン類
+              .account__header__tabs__name
+                h1
+                  span : 名前
+                  .account-role.bot : Botバッジ（なおAdminやModのバッジは出ない）
+                  small : ID
+              .account__header__extra
+                .account__header__bio : プロフィール
+                  .account__header__account-note : メモ欄
+                    label
+                      span : 「メモ」
+                      span.inline-alert : 編集終了時の「保存しました」
+                    textarea : メモ編集欄
+                  .account__header__content : プロフィール文（無い人は要素ごと無い）
+                    p
+                  .account__header__fields : 登録日、補足欄
+                    dl : 登録日の親
+                      dt : 「登録日」
+                      dd : 登録年月日
+                    dl : 補足1
+                      dt : 見出し
+                      dd : 中身
+                    ... : 補足2...
+                .account__header__extra__links : FF
+                  a : 投稿数
+                  a : フォロー数
+                  a : フォロワー数
+          .account__section-headline : TL切り替え
+            a : 投稿TL
+            a : 投稿と返信TL
+            a : メディアTL
+      */
+      if smallenProfile
+        // background: var(--UBC-l4)
+        /* ヘッダー */
+        &__image
+          height: ((145px)) + 44px  // ((固定値)) は「元のデザインで用いられている値」の意味
+          width: 100%
+          position: absolute
+          mask-image: linear-gradient(to bottom, #000, #000 50%, transparent 95%)
+          -webkit-mask-image: @mask-image
+          img
+            opacity: 0.3  // 可変にしようかと思ったけどやめた
+        &__info
+          left: initial
+          right: ((10px))
+          z-index: 10
+          width: 190px
+          text-align: right
+          .relationship-tag
+            display: inline-block
+            padding-top: ((4px)) - 2px
+            padding-bottom: @padding-top
+            &:not(:first-child)
+              margin-left: .4em
+        // &__bar
+        //   background: none
+        /* アイコン等 */
+        &__tabs
+          padding-top: 0
+          margin-top: globalVGap + 0px  // 全体の上端の空白
+          /* メニューボタン */
+          &__buttons button[aria-label]
+            background-color: var(--UBC-l4)
+        /* 名前とID */
+        &__tabs__name  // 元margin: 16px 0
+          margin-top: globalVGap
+          margin-bottom: 0
+          h1
+            line-height: ((22px)) - 3px
+          .account-role.bot
+            padding: ((4px)) - 1px ((6px)) - 1px
+            vertical-align: bottom
+        /* プロフィール（メモ、文、補足） */
+        &__extra  // 元margin: 16px 0 0
+          margin-top: globalVGap
+        /* メモ欄（自分には無い） */  // 元margin: 0 0 10px;
+        &__account-note
+          margin-bottom: 0
+          label
+            position: relative
+            > *:first-child  // 「メモ」
+              display: none
+            .inline-alert  // 「保存しました」
+              foreCol = darken(SG, 50%)
+              backCol = lighten(SG, 70%)
+              color: foreCol
+              display: block
+              position: absolute
+              left: 0
+              bottom: 5px
+              border-radius: 4px
+              padding: 3px 8px
+              background: backCol
+              box-shadow: 2px 4px 15px rgba(0, 0, 0, 40%)
+              z-index: 9999
+              &::before
+                content: ""
+                display: block
+                position: absolute
+                bottom: -7px
+                width: 0
+                height: 0
+                border: 0 solid transparent
+                border-width: -@bottom 10px 0 0
+                border-top-color: backCol
+                border-radius: 0
+          textarea
+            // &::placeholder  // 「クリックしてメモを追加」
+            //   text-align: right
+            background: var(--UBC)
+            textareaExtend = ((10px)) - 5px
+            width: "calc(100% + %s)" % (textareaExtend * 2)
+            margin: 0 (- textareaExtend)
+        /* プロフィール文（無い人は要素ごと無い） */
+        &__content  // 元margin: メモの下の10px
+          margin-top: globalVGap + 1px
+          margin-bottom: -3px
+          &:first-child  // 補足が無い自分の場合
+            margin-top: 0px
+          > p
+            line-height: ((18px)) - 2px
+            &:not(:last-child)  // 空行
+              margin-bottom: ((20px)) - 16px
+        /* 登録日、補足欄 */  // 元margin: 16px 0 0;
+        &__fields
+          variation = 02
+          if variation == 0  // Flexbox版
+            margin-top: globalVGap
+            dl  // 元padding: 11px 16px;
+              padding: 8px 10px
+              display: flex
+              flex-flow: row nowrap
+              column-gap: 5px
+            dt, dd
+              flex: 0 1 auto
+            dt::after
+              display: inline
+              content: ":"  // 見出し名が長すぎる時にこれが出ないのでボツ
+          if variation == 1 or variation == 2  // リスト版（ベタ書きor見出しボックス）
+            if variation == 1  // ベタ書き版
+              background: none
+              padding-left: 1em
+              line-height: ((20px)) - 2px
+              margin-top: globalVGap - 1px
+            else  // 見出しボックス版
+              background-clip: text  // 自身の背景をほぼ消しつつ背景色を子へ継承可能にする小細工
+              -webkit-background-clip: text
+              line-height: ((20px)) + 1px
+              margin-top: globalVGap - 0px
+              margin-bottom: -1px
 
-						dl
-							padding: 0
-							border: none
-							background: none  // 確認済みリンクでも背景色を着けない
-							if variation == 1  // ベタ書き版
-								display: list-item
-								&::marker  // 遠いのを直せない（text-indentは1行目にしか効かない）
-									color: var(--DTC)
-							else  // 見出しボックス版
-								background-clip: text
-								-webkit-background-clip: text
-								background-color: inherit
-							/* 登録日 */
-							&:first-of-type
-								if variation == 1  // ベタ書き版
-									list-style: square
-								else  // 見出しボックス版
-									dd::before
-										display: inline
-										content: " "  // スペースの取り扱いの都合上
-							/* 補足欄 */
-							if variation == 1  // ベタ書き版
-								&:not(:first-of-type)
-									list-style: circle
-						dt, dd
-							display: inline
-							max-height: unset
-							overflow: unset
-							white-space: unset
-							text-overflow: unset
-						dt
-							if variation == 1  // ベタ書き版
-								font-weight: bold  // 薄い色なので読みづらすぎ
-								margin-right: 4px
-								&::after
-									display: inline
-									content: ": "
-							else  // 見出しボックス版
-								// background-color: var(--UBC-d4)
-								background-color: inherit
-								border-radius: 5px
-								padding: 2px 5px
-								margin: 0 3px 0 -2px
-				/* プロフィール文や補足欄のURLリンクおよびユーザーIDリンク */
-				&__content, &__fields
-					a:not(.hashtag)  // リンク内の英単語保持なんて気にしない
-					dd[title^="@"]   // ユーザーID（がなぜかリンク化されてないもの）も然り
-						overflow-wrap: break-word
-						word-break: break-all
-						line-break: anywhere
-					if showFullUrl
-						a:not(.hashtag) > .ellipsis
-							&::after
-								display: none
-							+ .invisible
-								display: inline
-								font-size: inherit
-								line-height: inherit
-								width: auto
-								height: auto
-								position: static
-				/* 投稿数・FF数 */
-				&__extra__links  // 元padding: 16px 0 10px
-					// line-height: 0
-					padding: 0  // paddingをmarginに
-					margin-top: globalVGap
-					margin-bottom: globalVGap + 0px  // 全体の下端の空白
-					a
-						padding-top: 0
-						padding-bottom: 0
+            dl
+              padding: 0
+              border: none
+              background: none  // 確認済みリンクでも背景色を着けない
+              if variation == 1  // ベタ書き版
+                display: list-item
+                &::marker  // 遠いのを直せない（text-indentは1行目にしか効かない）
+                  color: var(--DTC)
+              else  // 見出しボックス版
+                background-clip: text
+                -webkit-background-clip: text
+                background-color: inherit
+              /* 登録日 */
+              &:first-of-type
+                if variation == 1  // ベタ書き版
+                  list-style: square
+                else  // 見出しボックス版
+                  dd::before
+                    display: inline
+                    content: " "  // スペースの取り扱いの都合上
+              /* 補足欄 */
+              if variation == 1  // ベタ書き版
+                &:not(:first-of-type)
+                  list-style: circle
+            dt, dd
+              display: inline
+              max-height: unset
+              overflow: unset
+              white-space: unset
+              text-overflow: unset
+            dt
+              if variation == 1  // ベタ書き版
+                font-weight: bold  // 薄い色なので読みづらすぎ
+                margin-right: 4px
+                &::after
+                  display: inline
+                  content: ": "
+              else  // 見出しボックス版
+                // background-color: var(--UBC-d4)
+                background-color: inherit
+                border-radius: 5px
+                padding: 2px 5px
+                margin: 0 3px 0 -2px
+        /* プロフィール文や補足欄のURLリンクおよびユーザーIDリンク */
+        &__content, &__fields
+          a:not(.hashtag)  // リンク内の英単語保持なんて気にしない
+          dd[title^="@"]   // ユーザーID（がなぜかリンク化されてないもの）も然り
+            overflow-wrap: break-word
+            word-break: break-all
+            line-break: anywhere
+          if showFullUrl
+            a:not(.hashtag) > .ellipsis
+              &::after
+                display: none
+              + .invisible
+                display: inline
+                font-size: inherit
+                line-height: inherit
+                width: auto
+                height: auto
+                position: static
+        /* 投稿数・FF数 */
+        &__extra__links  // 元padding: 16px 0 10px
+          // line-height: 0
+          padding: 0  // paddingをmarginに
+          margin-top: globalVGap
+          margin-bottom: globalVGap + 0px  // 全体の下端の空白
+          a
+            padding-top: 0
+            padding-bottom: 0
 
-		/* TL切り替え部を圧縮表示 */
-		if smallenTab
-			.account__section-headline > a
-				padding-top: ((15px)) - 6px
-				padding-bottom: ((15px)) - 7px
-				&.active
-					&::before, &::after
-						border-width: 0 ((10px)) - 1px ((10px)) - 3px
+    /* TL切り替え部を圧縮表示 */
+    if smallenTab
+      .account__section-headline > a
+        padding-top: ((15px)) - 6px
+        padding-bottom: ((15px)) - 7px
+        &.active
+          &::before, &::after
+            border-width: 0 ((10px)) - 1px ((10px)) - 3px
 
-		/*	固定投稿を畳む
-			・消しはしないので「固定投稿がある」ということはわかる。
-			・日時だけ残すので頻繁に目にする場合は更新があれば気付ける。
-			・「クリックや選択」または「マウスオーバー」で再展開する。
-			（ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、
-			  CSS3では先読みを要する親要素や兄要素への作用はできない）
-			（クリックや選択の場合、投稿内の画像の閲覧注意をクリックで解除すると
-			  投稿自体の選択が解かれてしまう不具合あり。もう一度選択すれば普通に見れる）
-			・カラム内ユーザーページでだけ有効、カラム内単投稿ページや個別ユーザーページなどには効かない。
-		*/
-		if smallenPinned
-			/* 固定投稿全体 */
-			div[data-featured="true"].status__wrapper:not(:{openStylePinned})
-				cursor: pointer
-				border-bottom: 1px solid var(--UBC-l8)  // 全体の下線をこちらに回す
-				padding: /* globalVGap */ ((16px))  // 元の全体paddingをこちらに回す
-				display: flex
-				justify-content: space-between
-				/* 「固定された投稿」ラベル全体 */
-				.status__prepend
-					padding: 0
-					/* 「固定された投稿」 */
-					span
-						display: none  // 消さないとカラム幅次第では日付が長い場合にかぶる
-					&::after
-						content: "固定投稿"  // かぶらない短さ。ほんとはユーザー変数で指定したいけど、日本語文字列を受け付けてくれない…
-				/* ラベル以外の投稿全体（情報、本文、メディア、アクション） */
-				.status
-					display: inline-block
-					padding: 0
-					border: 0        // 全体の下線をなくす
-					min-height: 0px  // 表示に影響はないが、不要な広さが確保されて要素検証時に目障りなので削る
-					/* 日時、名前、アイコン */
-					&__info  // 元margin: 0 0 10px
-						margin-bottom: 0
-						/* 日時以外 */
-						> *:not(.status__relative-time)
-							display: none
-					/* 日時 */
-					&__relative-time
-						height: unset
-					/* 情報以外（本文、メディア、アクション、リンク先のカード） */
-					> *:not(.status__info)
-						display: none
-
-
+    /* 固定投稿を畳む
+      ・消しはしないので「固定投稿がある」ということはわかる。
+      ・日時だけ残すので頻繁に目にする場合は更新があれば気付ける。
+      ・「クリックや選択」または「マウスオーバー」で再展開する。
+      （ほんとはマウスオーバー範囲をピン部分だけとかに限定したいけど、
+        CSS3では先読みを要する親要素や兄要素への作用はできない）
+      （クリックや選択の場合、投稿内の画像の閲覧注意をクリックで解除すると
+        投稿自体の選択が解かれてしまう不具合あり。もう一度選択すれば普通に見れる）
+      ・カラム内ユーザーページでだけ有効、カラム内単投稿ページや個別ユーザーページなどには効かない。
+    */
+    if smallenPinned
+      /* 固定投稿全体 */
+      div[data-featured="true"].status__wrapper:not(:{openStylePinned})
+        cursor: pointer
+        border-bottom: 1px solid var(--UBC-l8)  // 全体の下線をこちらに回す
+        padding: /* globalVGap */ ((16px))  // 元の全体paddingをこちらに回す
+        display: flex
+        justify-content: space-between
+        /* 「固定された投稿」ラベル全体 */
+        .status__prepend
+          padding: 0
+          /* 「固定された投稿」 */
+          span
+            display: none  // 消さないとカラム幅次第では日付が長い場合にかぶる
+          &::after
+            content: "固定投稿"  // かぶらない短さ。ほんとはユーザー変数で指定したいけど、日本語文字列を受け付けてくれない…
+        /* ラベル以外の投稿全体（情報、本文、メディア、アクション） */
+        .status
+          display: inline-block
+          padding: 0
+          border: 0        // 全体の下線をなくす
+          min-height: 0px  // 表示に影響はないが、不要な広さが確保されて要素検証時に目障りなので削る
+          /* 日時、名前、アイコン */
+          &__info  // 元margin: 0 0 10px
+            margin-bottom: 0
+            /* 日時以外 */
+            > *:not(.status__relative-time)
+              display: none
+          /* 日時 */
+          &__relative-time
+            height: unset
+          /* 情報以外（本文、メディア、アクション、リンク先のカード） */
+          > *:not(.status__info)
+            display: none
