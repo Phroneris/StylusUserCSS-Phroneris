@@ -1,60 +1,61 @@
 /* ==UserStyle==
-@name			YouTube長文コメント自動展開
-@description	「続きを読む」のクリック無しで長文コメントを自動展開
-@namespace		https://github.com/Phroneris
-@version		1.2.1
-@author			森の子リスのミーコの大冒険（Phroneris）
-@homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
-@supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
-@updateURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/raw/master/usercss/youtube_expand-long-text.user.styl
-@license		CC0-1.0
-@preprocessor	stylus
+@name         YouTube長文コメント自動展開
+@description  「続きを読む」のクリック無しで長文コメントを自動展開
+@namespace    https://github.com/Phroneris
+@version      1.2.2
+@author       森の子リスのミーコの大冒険（Phroneris）
+@homepageURL  https://github.com/Phroneris/StylusUserCSS-Phroneris
+@supportURL   https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
+@updateURL    https://github.com/Phroneris/StylusUserCSS-Phroneris/raw/master/usercss/youtube_expand-long-text.user.styl
+@license      CC0-1.0
+@preprocessor stylus
 ==/UserStyle== */
 
 /* ==ChangeLog==
 
-	2025/01/12 v1.2.1
-	* URL前方一致ではCSS自体が読み込まれないことがあるので、ドメイン一致に変更
+  2025/07/17 v1.2.2
+  * タブをスペース2個に、末尾空行を1行に変更
 
-	2025/01/09 v1.2.0
-	* YouTubeのHTMLタグ名変更に対応
+  2025/01/12 v1.2.1
+  * URL前方一致ではCSS自体が読み込まれないことがあるので、ドメイン一致に変更
 
-	2022/11/03 v1.1.0
-	* YouTubeのUIリニューアルに対応
-	* リニューアルの影響で動画説明文の展開が不可能に
+  2025/01/09 v1.2.0
+  * YouTubeのHTMLタグ名変更に対応
 
-	2021/02/03 v1.0.0
-	* 作成
+  2022/11/03 v1.1.0
+  * YouTubeのUIリニューアルに対応
+  * リニューアルの影響で動画説明文の展開が不可能に
+
+  2021/02/03 v1.0.0
+  * 作成
 
 */
 
 @-moz-document domain("youtube.com")
 
-	i = !important
-	n()
-		display: none i
+  i = !important
+  n()
+    display: none i
 
-	adjustMainText()  // コメント本文を下処理
-		ytd-expander[class].style-scope > #content.ytd-expander  // 詳細度勝ちするためにこういうのが要る
-			overflow: initial
-			max-height: initial
-			display: block  // これ以下が無いと返信付きの場合に壊れる
-			-webkit-box-orient: initial
-			-webkit-line-clamp: initial
-	hideButton()  // 「続きを読む」も「一部を表示」も消す
-		tp-yt-paper-button.ytd-expander
-			n()
-	expandReplies()  // 返信を自動展開  // どうも「返信を表示」をクリックしないと返信自体が読み込まれないようなので、仕様上無理
-		ytd-comment-replies-renderer
-			ytd-button-renderer.ytd-comment-replies-renderer
-				n()
-			#expander-contents
-				display: block i
+  adjustMainText()  // コメント本文を下処理
+    ytd-expander[class].style-scope > #content.ytd-expander  // 詳細度勝ちするためにこういうのが要る
+      overflow: initial
+      max-height: initial
+      display: block  // これ以下が無いと返信付きの場合に壊れる
+      -webkit-box-orient: initial
+      -webkit-line-clamp: initial
+  hideButton()  // 「続きを読む」も「一部を表示」も消す
+    tp-yt-paper-button.ytd-expander
+      n()
+  expandReplies()  // 返信を自動展開  // どうも「返信を表示」をクリックしないと返信自体が読み込まれないようなので、仕様上無理
+    ytd-comment-replies-renderer
+      ytd-button-renderer.ytd-comment-replies-renderer
+        n()
+      #expander-contents
+        display: block i
 
-	ytd-comments,  // ～v1.1.0
-	ytd-comment-view-model  // v1.2.0～
-		adjustMainText()
-		hideButton()
-		// expandReplies()
-
-
+  ytd-comments,  // ～v1.1.0
+  ytd-comment-view-model  // v1.2.0～
+    adjustMainText()
+    hideButton()
+    // expandReplies()

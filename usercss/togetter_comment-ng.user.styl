@@ -1,88 +1,89 @@
 /* ==UserStyle==
-@name			TogetterコメNG（アイコン、名前、IDを黒塗り）
-@description	Togetterコメント欄の特定ユーザーのアイコンと名前とIDを黒塗りする
-@namespace		https://github.com/Phroneris
-@version		1.1.0
-@author			森の子リスのミーコの大冒険（Phroneris）
-@homepageURL	https://github.com/Phroneris/StylusUserCSS-Phroneris
-@supportURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
-@updateURL		https://github.com/Phroneris/StylusUserCSS-Phroneris/raw/master/usercss/togetter_comment-ng.user.styl
-@license		CC0-1.0
-@preprocessor	stylus
+@name         TogetterコメNG（アイコン、名前、IDを黒塗り）
+@description  Togetterコメント欄の特定ユーザーのアイコンと名前とIDを黒塗りする
+@namespace    https://github.com/Phroneris
+@version      1.1.1
+@author       森の子リスのミーコの大冒険（Phroneris）
+@homepageURL  https://github.com/Phroneris/StylusUserCSS-Phroneris
+@supportURL   https://github.com/Phroneris/StylusUserCSS-Phroneris/issues
+@updateURL    https://github.com/Phroneris/StylusUserCSS-Phroneris/raw/master/usercss/togetter_comment-ng.user.styl
+@license      CC0-1.0
+@preprocessor stylus
 
-@var			text users "ID（カンマ区切り）" TwitterJP, Twitter
-@var			checkbox iconNG "黒塗り：アイコン" 1
-@var			checkbox nameNG "黒塗り：名前" 1
-@var			checkbox idNG "黒塗り：ID" 1
-@var			checkbox disableOnHover "マウスオーバーで解除" 1
+@var          text users "ID（カンマ区切り）" TwitterJP, Twitter
+@var          checkbox iconNG "黒塗り：アイコン" 1
+@var          checkbox nameNG "黒塗り：名前" 1
+@var          checkbox idNG "黒塗り：ID" 1
+@var          checkbox disableOnHover "マウスオーバーで解除" 1
 ==/UserStyle== */
 
 /* ==ChangeLog==
 
-	2022/04/13 v1.1.0
-	* 名前とIDの間に追加していた空白を削除
-		* recyclebin5385氏の『togecutter-alt』でのNG登録時に邪魔なため
-	* 無意味な `!important` 祭りを廃止
-		* ただし変数 `i` は残しておく
-	* デバッグしやすくするため、NG色を変数化
-	* 他の配布UserCSSとの統一のため、CSSプロパティ直後に `:` を付与
+  2025/07/17 v1.1.1
+  * タブをスペース2個に、末尾空行を1行に変更
 
-	2021/02/02 v1.0.3
-	* 各種URLのリポジトリ名を修正
-	* @descriptionから仕様へのぼやきを分離
-	* 親セレクタを簡潔なものに変更
-	* Togetter側の仕様変更（もういつのだよ…）に対応すべく修正
+  2022/04/13 v1.1.0
+  * 名前とIDの間に追加していた空白を削除
+    * recyclebin5385氏の『togecutter-alt』でのNG登録時に邪魔なため
+  * 無意味な `!important` 祭りを廃止
+    * ただし変数 `i` は残しておく
+  * デバッグしやすくするため、NG色を変数化
+  * 他の配布UserCSSとの統一のため、CSSプロパティ直後に `:` を付与
 
-	2019/06/20 v1.0.2
-	* @updateURLを`*.styl`に変更
+  2021/02/02 v1.0.3
+  * 各種URLのリポジトリ名を修正
+  * @descriptionから仕様へのぼやきを分離
+  * 親セレクタを簡潔なものに変更
+  * Togetter側の仕様変更（もういつのだよ…）に対応すべく修正
 
-	2019/02/22 v1.0.1
-	* このChangeLogを追加
-	* リポジトリ整理に伴い@updateURLを修正
+  2019/06/20 v1.0.2
+  * @updateURLを`*.styl`に変更
+
+  2019/02/22 v1.0.1
+  * このChangeLogを追加
+  * リポジトリ整理に伴い@updateURLを修正
 
 */
 
 @-moz-document domain("togetter.com")
-	/*
-		本当はその人のコメント全体やその人への「>>ID」も消したいけど、
-		・CSS3では先読みを要する親要素や兄要素への作用はできないので無理
-		・コメリプに至ってはCSSで掴める範囲にIDが無いので無理
-		つまり無理。JSでやれ。
-	*/
+  /*
+    本当はその人のコメント全体やその人への「>>ID」も消したいけど、
+    ・CSS3では先読みを要する親要素や兄要素への作用はできないので無理
+    ・コメリプに至ってはCSSで掴める範囲にIDが無いので無理
+    つまり無理。JSでやれ。
+  */
 
-	i = !important
-	ngColor = rgba(black, 1)
-	f()
-		for userid in users
-			// ^(\d+[A-Za-z]*)(_\w*)$ みたいなIDが\1と\2に分割された配列になってしまうのを防ぐ。
-			// これのためにusersは半角スペース区切りではなくカンマ区切りにしないといけない。
-			userid = join('', userid)
-			// あとは普通に処理。このuseridの展開にUnknown wordのエラーが出るのが気になるけど…。
-			&[href$=\'\/{userid}\']
-				if iconNG == 1
-					img
-						filter: brightness(0)
-						border-radius: 0
-				if nameNG == 1
-					strong
-						background-color: ngColor
-						color: ngColor
-				if idNG == 1
-					.status_name
-						background-color: ngColor
-						color: ngColor
-						display: inline-block
-	#comment_box
-		.user_link
-			if disableOnHover == 1
-				&:not(:hover)
-					f()
-			else
-					f()
+  i = !important
+  ngColor = rgba(black, 1)
+  f()
+    for userid in users
+      // ^(\d+[A-Za-z]*)(_\w*)$ みたいなIDが\1と\2に分割された配列になってしまうのを防ぐ。
+      // これのためにusersは半角スペース区切りではなくカンマ区切りにしないといけない。
+      userid = join('', userid)
+      // あとは普通に処理。このuseridの展開にUnknown wordのエラーが出るのが気になるけど…。
+      &[href$=\'\/{userid}\']
+        if iconNG == 1
+          img
+            filter: brightness(0)
+            border-radius: 0
+        if nameNG == 1
+          strong
+            background-color: ngColor
+            color: ngColor
+        if idNG == 1
+          .status_name
+            background-color: ngColor
+            color: ngColor
+            display: inline-block
+  #comment_box
+    .user_link
+      if disableOnHover == 1
+        &:not(:hover)
+          f()
+      else
+          f()
 
-	// table
-	// 	for row in 1 2 3 4 5
-	// 		tr:nth-child({row}) // これはエラー出ないのに…。
-	// 			height: 10px * row
-
-
+  // table
+  //   for row in 1 2 3 4 5
+  //     tr:nth-child({row}) // これはエラー出ないのに…。
+  //       height: 10px * row
